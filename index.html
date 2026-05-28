@@ -1,0 +1,1299 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EAPCheck · Alfalog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ══ TOKENS ═══════════════════════════════════════════════════════ */
+:root{
+  --bg:#07111a; --surf:#0c1820; --panel:#101d2b; --p2:#142334; --card:#0d1b28;
+  --b1:rgba(135,175,215,.12); --b2:rgba(135,175,215,.22);
+  --tx:#e4f2ff; --soft:#93b1ca; --muted:#587388;
+  --brand:#2de69a; --blo:rgba(45,230,154,.11); --bhi:rgba(45,230,154,.22);
+  --blue:#34bcf0; --bllo:rgba(52,188,240,.1);
+  --amber:#f7c23a; --alo:rgba(247,194,58,.1); --ahi:rgba(247,194,58,.22);
+  --red:#f0606c; --rlo:rgba(240,96,108,.09);
+  --violet:#ae9bfa; --vlo:rgba(174,155,250,.09);
+  --shadow:0 22px 64px rgba(0,0,0,.45);
+  --sans:'Space Grotesk',system-ui,sans-serif; --mono:'JetBrains Mono',monospace;
+  --r:13px; --rs:7px; --rl:18px;
+}
+[data-theme="light"]{
+  --bg:#f0f4f8; --surf:#e8edf3; --panel:#ffffff; --p2:#f5f8fb; --card:#fafbfd;
+  --b1:rgba(28,58,90,.1); --b2:rgba(28,58,90,.2);
+  --tx:#111d2a; --soft:#3c5872; --muted:#7d96ae;
+  --brand:#0c9660; --blo:rgba(12,150,96,.09); --bhi:rgba(12,150,96,.2);
+  --blue:#0a78b2; --bllo:rgba(10,120,178,.09);
+  --amber:#8a6000; --alo:rgba(138,96,0,.09); --ahi:rgba(138,96,0,.2);
+  --red:#bf2e38; --rlo:rgba(191,46,56,.07);
+  --violet:#6448c4; --vlo:rgba(100,72,196,.08);
+  --shadow:0 22px 64px rgba(20,48,80,.12);
+}
+
+/* ══ RESET ════════════════════════════════════════════════════════ */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:var(--sans);font-size:14px;color:var(--tx);background:var(--bg);overflow:hidden}
+[data-theme="dark"] body{background:radial-gradient(ellipse 65% 28% at 12% 0,rgba(45,230,154,.055),transparent 55%),radial-gradient(ellipse 50% 22% at 88% 0,rgba(52,188,240,.045),transparent 55%),var(--bg)}
+button,input,select,textarea{font:inherit;color:inherit;border:none;background:none;outline:none}
+button{cursor:pointer}
+.hidden{display:none!important}
+
+/* ══ SHELL ════════════════════════════════════════════════════════ */
+.app{height:100vh;display:grid;grid-template-rows:52px 1fr}
+
+/* ══ TOPBAR ═══════════════════════════════════════════════════════ */
+.topbar{
+  display:flex;align-items:center;gap:7px;padding:0 13px;
+  background:color-mix(in srgb,var(--panel) 92%,transparent);
+  backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);
+  z-index:30;position:relative;
+}
+.brand{display:flex;align-items:center;gap:8px;margin-right:auto;min-width:0}
+.logo{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,var(--brand),var(--blue));display:grid;place-items:center;flex-shrink:0}
+.logo svg{width:13px;height:13px}
+.brand-name{font-size:13.5px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.brand-name em{font-style:normal;color:var(--brand)}
+.brand-client{font-size:11px;color:var(--muted);font-family:var(--mono);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* topbar buttons */
+.tb{display:inline-flex;align-items:center;gap:5px;padding:5.5px 10px;border-radius:999px;font-size:12px;font-weight:600;transition:.13s;cursor:pointer;white-space:nowrap;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 65%,transparent)}
+.tb:hover{border-color:var(--b2);color:var(--tx);transform:translateY(-1px)}
+.tb svg{width:12px;height:12px;flex-shrink:0}
+.tb.icon{padding:5.5px;border-radius:var(--rs);width:30px;justify-content:center}
+.tb.green{background:var(--blo);border-color:var(--bhi);color:var(--brand);font-weight:700;box-shadow:0 3px 14px rgba(45,230,154,.18)}
+.tb.green:hover{filter:brightness(1.08)}
+.tb.green.pulse{animation:p 2s ease-in-out infinite}
+@keyframes p{0%,100%{box-shadow:0 3px 14px rgba(45,230,154,.18)}50%{box-shadow:0 3px 22px rgba(45,230,154,.42)}}
+.tb.danger{color:var(--red);border-color:color-mix(in srgb,var(--red) 26%,var(--b1));background:var(--rlo)}
+
+/* ══ WORKSPACE ════════════════════════════════════════════════════ */
+.workspace{display:grid;grid-template-columns:248px 1fr;min-height:0;overflow:hidden}
+
+/* ══ SIDEBAR ══════════════════════════════════════════════════════ */
+.sidebar{display:flex;flex-direction:column;border-right:1px solid var(--b1);background:color-mix(in srgb,var(--surf) 85%,transparent);overflow:hidden}
+
+.sb-proj{padding:12px 13px 10px;border-bottom:1px solid var(--b1)}
+.sb-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.14em;color:var(--brand);font-weight:600;margin-bottom:3px}
+.sb-title{font-size:14.5px;font-weight:700;letter-spacing:-.03em}
+.sb-meta{font-size:10.5px;color:var(--muted);margin-top:2px;line-height:1.4}
+.sb-stats{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+.sbs{font-size:10.5px;font-weight:600;font-family:var(--mono);padding:2px 7px;border-radius:999px;border:1px solid var(--b1);color:var(--muted)}
+.sbs.g{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
+.sbs.a{color:var(--amber);border-color:var(--ahi);background:var(--alo)}
+.sbs.r{color:var(--red);border-color:color-mix(in srgb,var(--red) 28%,transparent);background:var(--rlo)}
+.sb-bar{height:2.5px;background:var(--b1);margin-top:8px;border-radius:2px;overflow:hidden}
+.sb-fill{height:100%;background:var(--brand);border-radius:2px;transition:width .5s ease}
+
+.sb-search{padding:8px 8px 5px;border-bottom:1px solid var(--b1)}
+.sb-search input{width:100%;height:31px;border:1px solid var(--b1);border-radius:var(--rs);padding:0 9px;background:color-mix(in srgb,var(--panel) 80%,transparent);font-size:12px;transition:.12s}
+.sb-search input:focus{border-color:var(--b2)}
+.sb-search input::placeholder{color:var(--muted)}
+
+.sb-filters{display:flex;gap:3px;padding:5px 8px;border-bottom:1px solid var(--b1);flex-wrap:wrap}
+.chip{padding:3.5px 8px;border-radius:999px;font-size:10.5px;font-weight:600;color:var(--muted);border:1px solid var(--b1);cursor:pointer;transition:.12s}
+.chip:hover{color:var(--soft)}
+.chip.active{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
+
+.areas-list{flex:1;overflow-y:auto;padding:4px 4px;display:flex;flex-direction:column;gap:1px}
+.areas-list::-webkit-scrollbar{width:3px}
+.areas-list::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+
+.ab{width:100%;text-align:left;border:1px solid transparent;border-radius:var(--r);padding:7.5px 9px;cursor:pointer;transition:.12s}
+.ab:hover{background:color-mix(in srgb,var(--panel) 48%,transparent);border-color:var(--b1)}
+.ab.active{background:var(--blo);border-color:var(--bhi)}
+.ab-top{display:flex;justify-content:space-between;align-items:baseline;gap:4px;margin-bottom:3.5px}
+.ab-name{font-size:12.5px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0}
+.ab.active .ab-name{color:var(--brand)}
+.ab-pct{font-family:var(--mono);font-size:9.5px;font-weight:600;color:var(--muted);flex-shrink:0}
+.ab.active .ab-pct{color:var(--brand)}
+.ab-bar{height:2px;border-radius:2px;background:var(--b1);overflow:hidden;margin-bottom:3px}
+.ab-fill{height:100%;border-radius:2px;background:var(--brand);transition:width .4s ease}
+.ab-fill.issue{background:var(--red)}
+.ab-fill.pend{background:var(--amber)}
+.ab-sub{font-size:10.5px;color:var(--muted)}
+.ab.active .ab-sub{color:color-mix(in srgb,var(--brand) 60%,var(--muted))}
+
+.sb-foot{padding:8px;border-top:1px solid var(--b1)}
+.sb-add{width:100%;padding:6.5px;border-radius:var(--r);border:1px dashed var(--b1);font-size:11.5px;font-weight:600;color:var(--muted);display:flex;align-items:center;justify-content:center;gap:5px;transition:.12s}
+.sb-add:hover{border-color:var(--b2);color:var(--soft)}
+.sb-add svg{width:12px;height:12px}
+
+/* ══ MAIN ═════════════════════════════════════════════════════════ */
+.main{display:flex;flex-direction:column;overflow:hidden;background:color-mix(in srgb,var(--panel) 55%,transparent)}
+
+/* area header */
+.ah{padding:13px 17px 11px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--panel) 85%,transparent);flex-shrink:0}
+.ah-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.ah-left{min-width:0}
+.ah-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:3px}
+.ah-title{font-size:21px;font-weight:700;letter-spacing:-.05em;line-height:1.1}
+.ah-desc{font-size:12px;color:var(--soft);margin-top:3px;line-height:1.4;max-width:620px}
+.ah-right{display:flex;gap:6px;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+
+.abtn{display:inline-flex;align-items:center;gap:5px;padding:5.5px 11px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--b1);transition:.12s;color:var(--soft);background:color-mix(in srgb,var(--p2) 70%,transparent)}
+.abtn:hover{border-color:var(--b2);color:var(--tx)}
+.abtn svg{width:11px;height:11px;flex-shrink:0}
+.abtn.green{background:var(--blo);border-color:var(--bhi);color:var(--brand)}
+.abtn.green:hover{background:var(--bhi)}
+
+/* stats row */
+.ah-stats{display:flex;align-items:center;gap:6px;margin-top:9px;padding-top:9px;border-top:1px solid var(--b1);flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:600;border:1px solid var(--b1);border-radius:999px;padding:2px 7px;color:var(--muted)}
+.badge.g{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
+.badge.a{color:var(--amber);border-color:var(--ahi);background:var(--alo)}
+.badge.r{color:var(--red);border-color:color-mix(in srgb,var(--red) 28%,transparent);background:var(--rlo)}
+.badge.v{color:var(--violet);border-color:color-mix(in srgb,var(--violet) 28%,transparent);background:var(--vlo)}
+.badge.b{color:var(--blue);border-color:color-mix(in srgb,var(--blue) 28%,transparent);background:var(--bllo)}
+
+/* ══ CONTENT ══════════════════════════════════════════════════════ */
+.content{flex:1;overflow-y:auto;padding:11px 15px 24px;display:flex;flex-direction:column;gap:8px}
+.content::-webkit-scrollbar{width:4px}
+.content::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+
+/* area notes */
+.area-notes{padding:0 0 2px}
+.anotes-toggle{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 0;border:none;background:none;transition:.12s}
+.anotes-toggle:hover{color:var(--soft)}
+.anotes-toggle svg{width:10px;height:10px}
+.anotes-ta{display:none;width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:8px 10px;background:color-mix(in srgb,var(--panel) 70%,transparent);font-size:12px;color:var(--tx);resize:vertical;min-height:60px;line-height:1.45;margin-top:4px;transition:.12s}
+.anotes-ta.open{display:block}
+.anotes-ta:focus{border-color:var(--brand)}
+.anotes-ta::placeholder{color:var(--muted)}
+
+/* ══ DISCIPLINE CARD ══════════════════════════════════════════════ */
+.dc{border:1px solid var(--b1);border-radius:var(--rl);overflow:hidden;background:color-mix(in srgb,var(--card) 82%,transparent)}
+.dc-head{display:flex;align-items:center;justify-content:space-between;padding:9px 13px;cursor:pointer;user-select:none;border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:4;background:color-mix(in srgb,var(--card) 97%,transparent);backdrop-filter:blur(8px)}
+.dc-left{display:flex;align-items:center;gap:7px}
+.dc-dot{width:7px;height:7px;border-radius:50%;background:var(--brand);box-shadow:0 0 7px var(--brand)}
+.dc-dot.d{background:var(--blue);box-shadow:0 0 7px var(--blue)}
+.dc-dot.s{background:var(--amber);box-shadow:0 0 7px var(--amber)}
+.dc-dot.h{background:#36d0ca;box-shadow:0 0 7px #36d0ca}
+.dc-dot.i{background:var(--red);box-shadow:0 0 7px var(--red)}
+.dc-dot.e{background:var(--violet);box-shadow:0 0 7px var(--violet)}
+.dc-name{font-size:13px;font-weight:700;letter-spacing:-.025em}
+.dc-right{display:flex;align-items:center;gap:9px}
+.dc-meta{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+.dc-chev{color:var(--muted);transition:transform .18s}
+.dc.collapsed .dc-chev{transform:rotate(-90deg)}
+.dc.collapsed .dc-body{display:none}
+
+/* ══ SUBSYSTEM ════════════════════════════════════════════════════ */
+.sub{border-top:1px solid var(--b1)}
+.sub:first-child{border-top:none}
+.sub-head{display:flex;justify-content:space-between;align-items:center;padding:6px 13px;background:color-mix(in srgb,var(--p2) 32%,transparent)}
+.sub-name{font-size:11.5px;font-weight:600;color:var(--soft);letter-spacing:-.02em}
+.sub-count{font-family:var(--mono);font-size:9.5px;color:var(--muted)}
+
+/* ══ ITEM ROW ═════════════════════════════════════════════════════ */
+.item{
+  display:grid;grid-template-columns:1fr auto;gap:11px;align-items:center;
+  padding:8.5px 13px;border-top:1px solid var(--b1);border-left:2.5px solid transparent;
+  transition:background .1s;
+}
+.item:first-child{border-top:none}
+.item:hover{background:color-mix(in srgb,var(--p2) 22%,transparent)}
+.item.match       {border-left-color:var(--brand); background:color-mix(in srgb,var(--brand)  3%,transparent)}
+.item.eap_only    {border-left-color:var(--amber);  background:color-mix(in srgb,var(--amber)  3%,transparent)}
+.item.project_only{border-left-color:var(--red);    background:color-mix(in srgb,var(--red)    2.5%,transparent)}
+.item.review      {border-left-color:var(--violet); background:color-mix(in srgb,var(--violet) 2.5%,transparent)}
+.item.na          {opacity:.6}
+
+/* item left */
+.il{min-width:0}
+.it-row{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:2px}
+.otag{font-family:var(--mono);font-size:7.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;padding:2px 5px;border-radius:3px;flex-shrink:0}
+.otag.eap    {color:var(--brand);background:var(--blo)}
+.otag.project{color:var(--red);background:var(--rlo)}
+.icode{font-family:var(--mono);font-size:9px;color:var(--muted);background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1px 5px;flex-shrink:0}
+.corr-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;cursor:help}
+.iname{font-size:13.5px;font-weight:600;letter-spacing:-.025em;line-height:1.25}
+/* pencil — visible on row hover */
+.pencil{opacity:0;transition:opacity .12s;padding:2px 5px;border-radius:4px;color:var(--muted);font-size:10px;display:inline-flex;align-items:center;gap:3px;cursor:pointer;flex-shrink:0;border:none;background:none}
+.item:hover .pencil{opacity:1}
+.pencil:hover{color:var(--amber);background:var(--alo)}
+.pencil svg{width:9px;height:9px}
+/* original name when corrected */
+.ioriginal{font-size:10px;color:var(--muted);font-family:var(--mono);margin-top:1px}
+/* inline edit */
+.name-edit-wrap{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.name-input{font-size:13.5px;font-weight:600;letter-spacing:-.025em;border:1.5px solid var(--brand);border-radius:5px;padding:2px 8px;background:color-mix(in srgb,var(--blo) 80%,transparent);color:var(--tx);min-width:160px;flex:1;max-width:440px}
+.name-input::placeholder{color:var(--muted)}
+.edit-ok{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:var(--brand);color:#061016;flex-shrink:0}
+.edit-ok:hover{filter:brightness(1.08)}
+.edit-cancel{padding:3px 7px;border-radius:4px;font-size:11px;font-weight:700;background:var(--rlo);color:var(--red);border:1px solid color-mix(in srgb,var(--red) 22%,transparent);flex-shrink:0}
+
+/* expand row */
+.ix-row{margin-top:3px}
+.ix-toggle{font-size:10.5px;color:var(--muted);cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:3px;background:none;border:none;transition:.12s}
+.ix-toggle:hover{color:var(--soft)}
+.ix-toggle svg{width:10px;height:10px}
+.ix-fields{margin-top:5px;display:none;gap:6px;flex-wrap:wrap}
+.ix-fields.open{display:flex}
+.finput{height:27px;border:1px solid var(--b1);border-radius:var(--rs);padding:0 8px;background:color-mix(in srgb,var(--panel) 70%,transparent);font-size:11.5px;color:var(--tx);flex:1;min-width:120px;max-width:280px;transition:.12s}
+.finput:focus{border-color:var(--brand)}
+.finput::placeholder{color:var(--muted)}
+
+/* ══ STATUS PICKER ════════════════════════════════════════════════ */
+.sp{display:flex;gap:4px;flex-shrink:0;align-items:center}
+.st{display:inline-flex;align-items:center;gap:4px;padding:5px 9px;border-radius:var(--rs);font-size:11.5px;font-weight:600;border:1px solid transparent;cursor:pointer;transition:.12s;white-space:nowrap}
+.st:hover{transform:translateY(-1px);filter:brightness(1.1)}
+.st.match       {color:var(--brand); border-color:color-mix(in srgb,var(--brand)  26%,transparent); background:var(--blo)}
+.st.eap_only    {color:var(--amber); border-color:color-mix(in srgb,var(--amber)  26%,transparent); background:var(--alo)}
+.st.project_only{color:var(--red);   border-color:color-mix(in srgb,var(--red)    26%,transparent); background:var(--rlo)}
+.st.review      {color:var(--violet);border-color:color-mix(in srgb,var(--violet) 26%,transparent); background:var(--vlo)}
+.st.na          {color:var(--muted); border-color:var(--b1); background:color-mix(in srgb,var(--p2) 35%,transparent)}
+.st.pending     {color:var(--muted); border-color:var(--b1); background:transparent; font-size:10.5px; padding:4px 7px; opacity:.7}
+.st.active      {box-shadow:0 0 0 2px currentColor}
+.st.match.active       {background:color-mix(in srgb,var(--brand)  16%,transparent)}
+.st.eap_only.active    {background:color-mix(in srgb,var(--amber)  16%,transparent)}
+.st.project_only.active{background:color-mix(in srgb,var(--red)    16%,transparent)}
+.st.review.active      {background:color-mix(in srgb,var(--violet) 16%,transparent)}
+.st.na.active          {box-shadow:0 0 0 1.5px var(--muted)}
+.st.pending.active     {box-shadow:0 0 0 1.5px var(--muted);opacity:1}
+.st-rm{padding:4.5px 7px;border-radius:var(--rs);font-size:10.5px;font-weight:600;color:var(--red);border:1px solid color-mix(in srgb,var(--red) 22%,transparent);background:var(--rlo);cursor:pointer;transition:.12s}
+.st-rm:hover{background:color-mix(in srgb,var(--red) 14%,transparent)}
+
+/* ══ SUMMARY BAR ══════════════════════════════════════════════════ */
+.sumbar{border-top:1px solid var(--b1);padding:6px 15px;background:color-mix(in srgb,var(--panel) 90%,transparent);backdrop-filter:blur(14px);display:flex;align-items:center;gap:11px;flex-wrap:wrap;font-size:11px;color:var(--muted)}
+.sumbar strong{color:var(--tx)}
+.sum-prog{flex:1;min-width:50px;height:3px;border-radius:2px;background:var(--b1);overflow:hidden}
+.sum-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s ease}
+.sum-sep{width:1px;height:12px;background:var(--b1)}
+
+/* ══ TOAST ════════════════════════════════════════════════════════ */
+.toast{position:fixed;bottom:44px;left:50%;z-index:100;pointer-events:none;transform:translate(-50%,10px);opacity:0;background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--b2);backdrop-filter:blur(16px);border-radius:999px;padding:7px 14px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow);transition:.2s;white-space:nowrap}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+
+/* ══ LAYER (modal backdrop) ═══════════════════════════════════════ */
+.layer{position:fixed;inset:0;z-index:60;background:rgba(3,9,16,.74);backdrop-filter:blur(10px);display:grid;place-items:center;padding:16px}
+
+/* ══ SMALL MODAL ══════════════════════════════════════════════════ */
+.modal{width:min(490px,100%);background:var(--panel);border:1px solid var(--b2);border-radius:19px;padding:19px 21px;box-shadow:var(--shadow)}
+.modal h2{font-size:17px;font-weight:700;letter-spacing:-.04em;margin-bottom:4px}
+.modal p{font-size:12px;color:var(--soft);line-height:1.5;margin-bottom:14px}
+.form{display:grid;gap:10px}
+.field label{display:block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:8px 10px;background:color-mix(in srgb,var(--p2) 70%,transparent);font-size:12.5px;color:var(--tx);transition:.12s}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand)}
+.field textarea{min-height:68px;resize:vertical}
+.mfoot{display:flex;justify-content:flex-end;gap:7px;margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)}
+.mbtn{display:inline-flex;align-items:center;gap:5px;padding:6.5px 12px;border-radius:999px;font-size:12.5px;font-weight:600;transition:.13s;cursor:pointer}
+.mbtn.ghost{border:1px solid var(--b1);color:var(--soft);background:transparent}
+.mbtn.ghost:hover{border-color:var(--b2);color:var(--tx)}
+.mbtn.prim{background:var(--brand);color:#061016;border:none;font-weight:700}
+[data-theme="light"] .mbtn.prim{color:#fff}
+.mbtn.prim:hover{filter:brightness(1.06)}
+.mbtn.sec{background:var(--bllo);color:var(--blue);border:1px solid color-mix(in srgb,var(--blue) 24%,transparent)}
+
+/* ══ REPORT MODAL ═════════════════════════════════════════════════ */
+.rmodal{width:min(860px,100%);max-height:90vh;background:var(--panel);border:1px solid var(--b2);border-radius:19px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+.rhead{padding:14px 19px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
+.rhead h2{font-size:16px;font-weight:700;letter-spacing:-.04em}
+.rprog{font-family:var(--mono);font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:999px;border:1px solid var(--b1);color:var(--muted)}
+.rprog.done{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
+.rinputs{padding:12px 19px;border-bottom:1px solid var(--b1);flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.rwarn{margin:9px 19px 0;padding:7px 11px;background:var(--alo);border:1px solid var(--ahi);border-radius:var(--rs);font-size:11.5px;color:var(--amber);line-height:1.4;flex-shrink:0}
+.rwarn b{font-weight:700}
+.rpreview{flex:1;overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.rta{flex:1;width:100%;resize:none;font-family:var(--mono);font-size:11px;line-height:1.58;padding:13px 19px;border:none;background:color-mix(in srgb,var(--card) 90%,transparent);color:var(--tx);overflow-y:auto;min-height:0}
+.rta::-webkit-scrollbar{width:4px}
+.rta::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+.rfoot{padding:11px 19px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:7px;flex-shrink:0}
+.rfoot small{color:var(--muted);font-size:11px;margin-right:auto}
+
+/* ══ DIFF PANEL ═══════════════════════════════════════════════════ */
+.dlayer{position:fixed;inset:0;z-index:50;pointer-events:none}
+.dlayer.open{pointer-events:auto}
+.dbackdrop{position:absolute;inset:0;background:rgba(3,9,16,.48);opacity:0;transition:opacity .22s}
+.dlayer.open .dbackdrop{opacity:1}
+.dpanel{position:absolute;right:0;top:0;bottom:0;width:min(370px,100vw);background:var(--panel);border-left:1px solid var(--b2);box-shadow:-14px 0 48px rgba(0,0,0,.26);transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column;overflow:hidden}
+.dlayer.open .dpanel{transform:translateX(0)}
+.dhead{padding:13px 15px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center}
+.dtitle{font-size:13.5px;font-weight:700;letter-spacing:-.03em}
+.dclose{width:26px;height:26px;border-radius:6px;border:1px solid var(--b1);display:grid;place-items:center;color:var(--muted);cursor:pointer;transition:.12s}
+.dclose:hover{color:var(--tx);border-color:var(--b2)}
+.dclose svg{width:12px;height:12px}
+.dbody{flex:1;overflow-y:auto;padding:9px 11px;display:flex;flex-direction:column;gap:5px}
+.dbody::-webkit-scrollbar{width:3px}
+.dbody::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+.di{border:1px solid var(--b1);border-radius:var(--r);padding:8px 10px;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--card) 80%,transparent)}
+.di:hover{border-color:var(--b2);transform:translateX(-2px)}
+.ditag{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:2.5px}
+.ditag.a{color:var(--amber)} .ditag.r{color:var(--red)} .ditag.v{color:var(--violet)}
+.diname{font-size:12px;font-weight:600;margin-bottom:1.5px}
+.disub{font-size:10.5px;color:var(--muted)}
+.dempty{text-align:center;color:var(--muted);padding:26px 12px;font-size:12px}
+.dfoot{padding:10px 11px;border-top:1px solid var(--b1)}
+
+/* ══ EMPTY ════════════════════════════════════════════════════════ */
+.empty{border:1px dashed var(--b2);border-radius:var(--r);padding:22px 16px;text-align:center;color:var(--muted);font-size:12.5px}
+
+/* ══ RESPONSIVE ═══════════════════════════════════════════════════ */
+@media(max-width:1060px){.workspace{grid-template-columns:210px 1fr}.sp{flex-wrap:wrap}.rinputs{grid-template-columns:1fr}}
+@media(max-width:760px){body{overflow:auto}.app{height:auto;min-height:100vh;grid-template-rows:52px auto}.workspace{grid-template-columns:1fr;overflow:visible}.sidebar{max-height:270px;border-right:none;border-bottom:1px solid var(--b1)}.main{overflow:visible}.content{overflow:visible}.item{grid-template-columns:1fr;gap:6px}.sp{flex-wrap:wrap;justify-content:flex-start}.dpanel{width:100vw}.topbar{flex-wrap:wrap;height:auto;padding:7px 11px}.brand-client{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ── TOPBAR ──────────────────────────────────────────────────── -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 13 13" fill="none"><path d="M2 4h9M2 6.5h5.5M2 9h7" stroke="#061016" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </div>
+      <span class="brand-name">EAPCheck <em>·</em></span>
+      <span class="brand-client">N.E. LOGÍSTICA LTDA.</span>
+    </div>
+
+    <button class="tb" id="diffBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><rect x="1" y="1" width="10" height="10" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M3.5 6h5M3.5 4h5M3.5 8h3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Divergências
+    </button>
+
+    <button class="tb" id="nextBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Próxima pendência
+    </button>
+
+    <button class="tb green" id="reportBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M2 2h8v1.5L7.5 6 10 8.5V10H2V8.5L4.5 6 2 3.5V2z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Gerar Relatório
+    </button>
+
+    <button class="tb icon" id="themeBtn" title="Alternar tema" type="button">
+      <svg id="themeIco" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="2.8" stroke="currentColor" stroke-width="1.4"/><path d="M7 1v1M7 12v1M1 7h1M12 7h1M2.93 2.93l.7.7M10.37 10.37l.7.7M2.93 11.07l.7-.7M10.37 3.63l.7-.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+    </button>
+
+    <button class="tb danger" id="resetBtn" type="button">Zerar</button>
+  </header>
+
+  <div class="workspace">
+    <!-- ── SIDEBAR ───────────────────────────────────────────────── -->
+    <aside class="sidebar">
+      <div class="sb-proj">
+        <div class="sb-eye">EAP Real · BiasiHub</div>
+        <div class="sb-title">Alfalog</div>
+        <div class="sb-meta">N.E. LOGÍSTICA LTDA. · Goiânia, GO<br>Recebido em 28/05/2026</div>
+        <div class="sb-stats" id="sbStats"></div>
+        <div class="sb-bar"><div class="sb-fill" id="sbFill" style="width:0%"></div></div>
+      </div>
+      <div class="sb-search">
+        <input id="areaSearch" placeholder="Buscar área…" autocomplete="off">
+      </div>
+      <div class="sb-filters" id="sbFilters">
+        <button class="chip active" data-filter="all" type="button">Todas</button>
+        <button class="chip" data-filter="pending" type="button">Pendentes</button>
+        <button class="chip" data-filter="issue" type="button">Divergências</button>
+        <button class="chip" data-filter="ok" type="button">Concluídas</button>
+      </div>
+      <div class="areas-list" id="areasList"></div>
+      <div class="sb-foot">
+        <button class="sb-add" data-add-area type="button">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Área encontrada no projeto
+        </button>
+      </div>
+    </aside>
+
+    <!-- ── MAIN ─────────────────────────────────────────────────── -->
+    <main class="main" id="mainArea"></main>
+  </div>
+</div>
+
+<!-- SUMMARY BAR -->
+<div class="sumbar" id="sumBar"></div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- DIFF PANEL -->
+<div class="dlayer" id="diffLayer">
+  <div class="dbackdrop" id="diffBack"></div>
+  <div class="dpanel">
+    <div class="dhead">
+      <span class="dtitle">Divergências abertas</span>
+      <button class="dclose" id="diffClose" type="button">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="dbody" id="diffBody"></div>
+    <div class="dfoot">
+      <button class="mbtn sec" style="width:100%;justify-content:center" data-open-report type="button">Gerar Relatório completo</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD ITEM MODAL -->
+<div class="layer hidden" id="itemModal">
+  <form class="modal" id="itemForm">
+    <h2>Adicionar item</h2>
+    <p>Encontrou algo no projeto que não estava na EAP? Registre aqui.</p>
+    <div class="form">
+      <div class="field">
+        <label>Origem</label>
+        <select id="iOrigin">
+          <option value="project">Projeto tem — EAP não tem</option>
+          <option value="eap">Item da EAP (inserção manual)</option>
+        </select>
+      </div>
+      <div class="field"><label>Nome do item</label><input id="iName" required placeholder="Ex.: Eletrocalha, Quadro, CFTV"></div>
+      <div class="field">
+        <label>Disciplina</label>
+        <select id="iDisc">
+          <option>Elétrica</option><option>Instrumentação</option><option>SPDA</option>
+          <option>Ar Comprimido</option><option>Incêndio</option><option>Outros</option>
+        </select>
+      </div>
+      <div class="field"><label>Etapa / Subsistema</label><input id="iSub" placeholder="Ex.: Iluminação, Tomadas, Quadros"></div>
+      <div class="field"><label>Prancha / referência</label><input id="iRef" placeholder="Ex.: ELE-003, folha 7"></div>
+      <div class="field"><label>Observação</label><textarea id="iNote" placeholder="O que você viu no projeto…"></textarea></div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="itemModal">Cancelar</button>
+      <button class="mbtn prim" type="submit">Salvar item</button>
+    </div>
+  </form>
+</div>
+
+<!-- ADD AREA MODAL -->
+<div class="layer hidden" id="areaModal">
+  <form class="modal" id="areaForm">
+    <h2>Adicionar área</h2>
+    <p>Área encontrada no projeto mas ausente na EAP recebida.</p>
+    <div class="form">
+      <div class="field"><label>Nome da área</label><input id="aaName" required placeholder="Ex.: Sala técnica externa"></div>
+      <div class="field"><label>Tipo</label><input id="aaType" placeholder="Ex.: Técnica, Operacional"></div>
+      <div class="field"><label>Observação</label><textarea id="aaDesc" placeholder="Onde apareceu no projeto?"></textarea></div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="areaModal">Cancelar</button>
+      <button class="mbtn prim" type="submit">Salvar área</button>
+    </div>
+  </form>
+</div>
+
+<!-- REPORT MODAL -->
+<div class="layer hidden" id="reportModal">
+  <div class="rmodal">
+    <div class="rhead">
+      <h2>Gerar Relatório de Conferência</h2>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="rprog" id="rProg">0% conferido</span>
+        <button class="dclose" type="button" data-close="reportModal">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="rinputs">
+      <div class="field"><label>Revisado por</label><input id="rReviewer" placeholder="Seu nome completo"></div>
+      <div class="field"><label>Para (responsável pela EAP)</label><input id="rTo" placeholder="Nome de quem preencheu a EAP"></div>
+    </div>
+    <div id="rWarn" class="rwarn hidden"></div>
+    <div class="rpreview">
+      <textarea class="rta" id="rTa" readonly spellcheck="false"></textarea>
+    </div>
+    <div class="rfoot">
+      <small>Copie o texto e envie por e-mail ou WhatsApp para o responsável</small>
+      <button class="mbtn ghost" type="button" data-close="reportModal">Fechar</button>
+      <button class="mbtn sec" id="rDownload" type="button">⬇ Baixar .txt</button>
+      <button class="mbtn prim" id="rCopy" type="button">Copiar relatório</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ══════════════════════════════════════════════════════════════════
+   REAL EAP DATA — N.E. Logística Ltda. · Alfalog · 14 áreas · 59 itens
+   ══════════════════════════════════════════════════════════════════ */
+const EAP = {
+  subtitle:"Novo Galpão ALFALOG", client:"N.E. LOGÍSTICA LTDA.",
+  totalAreas:14, totalItems:59,
+  areas:[
+    {area:"Galpão",items:[
+      {code:"EAP.01.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay 150W",unidade:"un",aprovacao:"Aguardando",atualizado:"Guilherme Cesar Moreira · 26 de mai.",status:"Confirmado"},
+      {code:"EAP.01.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un",aprovacao:"Solicitar",atualizado:"Biasi Admin · 27 de mai.",status:"Confirmado"},
+      {code:"EAP.01.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto - Biasi Engenharia · 26 de mai.",status:"Confirmado"},
+      {code:"EAP.01.04",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas trifásicas 380V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.01.05",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletrocalha 150x50mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Docas",items:[
+      {code:"EAP.02.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay docas",unidade:"un",aprovacao:"Aguardando",atualizado:"Biasi Admin · 26 de mai.",status:"Confirmado",fotos:"1"},
+      {code:"EAP.02.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação externa (CL.B1 a CL.B11)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.02.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V docas (CL10 a CL14)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Depósito",items:[
+      {code:"EAP.03.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.01 - 8.400W / 14 circuitos",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.03.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.02 - 7.200W",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.03.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.03 - 6.631W",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Carregadores",items:[
+      {code:"EAP.04.01",disciplina:"ELÉTRICA",etapa:"Força",servico:"Pontos carregadores bateria 32.000W (CL00 a CL04)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Portaria",items:[
+      {code:"EAP.05.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V baixa",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V alta",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-03 9kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"Controle de acesso",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.05.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV portaria",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Expedição",items:[
+      {code:"EAP.06.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.04",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 alta",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 baixa",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 piso",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Wireless",servico:"Access Point",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.08",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Rack",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.06.09",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV expedição",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Administração",items:[
+      {code:"EAP.07.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.07.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.07.03",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-01 12kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto - Biasi Engenharia · 26 de mai.",status:"Fora do escopo"},
+      {code:"EAP.07.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-02 12kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.07.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Apoio",items:[
+      {code:"EAP.08.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.08.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.08.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto - Biasi Engenharia · 26 de mai.",status:"Confirmado"},
+      {code:"EAP.08.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"Split / AC",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Refeitório",items:[
+      {code:"EAP.09.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.09.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Casa de Bombas",items:[
+      {code:"EAP.10.01",disciplina:"INCÊNDIO",etapa:"Força",servico:"Bomba de incêndio",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.10.02",disciplina:"ELÉTRICA",etapa:"Força",servico:"Bombas hidráulicas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.10.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação interna",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Área Externa",items:[
+      {code:"EAP.11.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Pétala 150W em poste H=8m",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.11.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Projetor fachada 30W",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Infraestrutura Geral",items:[
+      {code:"EAP.12.01",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Perfilado força/ilum 38x38mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.12.02",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Perfilado rede 38x38mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.12.03",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Eletrocalha rede 150x50mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.12.04",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Kanaflex 4pol força",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.12.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Kanaflex 1/2pol lógica",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.12.06",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletroduto aparente 3/4pol",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"Quadros Elétricos",items:[
+      {code:"EAP.13.01",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Geral",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.02",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Galpão",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.03",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Expedição / CAC / Portaria",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.04",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-ADM (380V + 220-127V x2)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.05",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Servidor / Refeitório",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.06",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Docas / Apoio / Carregadores",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.13.07",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Depósito 01 / 02 / 03",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]},
+    {area:"SPDA",items:[
+      {code:"EAP.14.01",disciplina:"SPDA",etapa:"Infraestrutura",servico:"Cabo NU 50mm² (terra)",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
+      {code:"EAP.14.02",disciplina:"SPDA",etapa:"Sistema",servico:"Sistema SPDA completo",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+    ]}
+  ]
+};
+
+/* ══════════════════════════════════════════════════════════════════
+   CONSTANTS & STATE
+   ══════════════════════════════════════════════════════════════════ */
+const SK = "eapcheck:v9:alfalog";
+const TK = "eapcheck:v9:theme";
+
+const SC = {
+  match:        {label:"EAP e projeto batem",              short:"✓ Bate"},
+  eap_only:     {label:"Na EAP, não achei no projeto",     short:"↑ Só EAP"},
+  project_only: {label:"No projeto, não estava na EAP",    short:"↓ Só Proj"},
+  review:        {label:"Dúvida — revisar",                short:"? Dúvida"},
+  na:           {label:"Não se aplica",                    short:"— N/A"},
+  pending:      {label:"Ainda não conferido",              short:"◯ Pendente"}
+};
+const EAP_KEYS  = ["match","eap_only","review","na","pending"];
+const PROJ_KEYS = ["project_only","match","review","na","pending"];
+const DISC_CLS  = {Elétrica:"",Instrumentação:"d",SPDA:"s","Ar Comprimido":"h",Incêndio:"i",Outros:"e"};
+
+const ST = {
+  proj: null, selId: null, query:"", filter:"all",
+  modalAreaId: null,
+  editingId: null,       // itemId being name-edited
+  openExpands: {},       // {itemId: true} for open ref/obs blocks
+  openAreaNotes: {}      // {areaId: true}
+};
+
+const $  = id => document.getElementById(id);
+function uid(p){ return `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`; }
+function esc(v){ return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }
+function slug(v){ return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"alfalog"; }
+function fmtDisc(raw){ const m={"ELÉTRICA":"Elétrica","AR COMPRIMIDO":"Ar Comprimido","INSTRUMENTAÇÃO":"Instrumentação","INCÊNDIO":"Incêndio","SPDA":"SPDA"}; const k=String(raw||"").trim().toUpperCase(); return m[k]||(k?k.charAt(0)+k.slice(1).toLowerCase():"Outros"); }
+
+/* ── model factories ── */
+function mkItem(name,status,ref,note,origin,custom){
+  return {id:uid("i"),name,correctedName:"",status:status||"pending",ref:ref||"",note:note||"",origin:origin||"eap",custom:Boolean(custom)};
+}
+function mkSub(name,items){ return {id:uid("s"),name,items}; }
+function mkDisc(name,subs){ return {id:uid("d"),name,subsystems:subs}; }
+function mkArea(name,type,count,desc,discs,origin){
+  return {id:uid("a"),name,type,m2:count,description:desc,origin:origin||"eap",notes:"",disciplines:discs};
+}
+
+/* ── seed from real data ── */
+function seed(){
+  const areas = EAP.areas.map(g=>{
+    const dm = new Map();
+    g.items.forEach(r=>{
+      const dn = fmtDisc(r.disciplina);
+      if(!dm.has(dn)) dm.set(dn, mkDisc(dn,[]));
+      const d = dm.get(dn);
+      let s = d.subsystems.find(x=>x.name===r.etapa);
+      if(!s){ s=mkSub(r.etapa||"Geral",[]); d.subsystems.push(s); }
+      const ref = [r.code,r.unidade].filter(Boolean).join(" · ");
+      const note = [
+        r.status&&r.status!=="Confirmado"?"Hub: "+r.status:"",
+        r.aprovacao&&r.aprovacao!=="Solicitar"?"Aprovação: "+r.aprovacao:"",
+        r.fotos&&r.fotos!=="0"?r.fotos+" foto(s)":"",
+        r.atualizado&&r.atualizado!=="—"?r.atualizado:""
+      ].filter(Boolean).join(" · ");
+      s.items.push(mkItem(r.servico||r.code,"pending",ref,note,"eap",false));
+    });
+    return mkArea(g.area,"BiasiHub",g.items.length,g.items.length+" linhas importadas da EAP real.",Array.from(dm.values()),"eap");
+  });
+  return {
+    id:"alfalog",name:"Alfalog",client:EAP.client,city:"Goiânia, GO",
+    revision:"EAP real · BiasiHub",source:"BiasiHub",receivedAt:"28/05/2026",
+    notes:"",reviewer:"",eapAuthor:"",areas
+  };
+}
+
+function norm(p){
+  p.notes=p.notes||""; p.reviewer=p.reviewer||""; p.eapAuthor=p.eapAuthor||"";
+  p.areas=p.areas||[];
+  p.areas.forEach(a=>{
+    a.notes=a.notes||""; a.disciplines=a.disciplines||[];
+    a.disciplines.forEach(d=>{
+      d.subsystems=d.subsystems||[];
+      d.subsystems.forEach(s=>{
+        s.items=s.items||[];
+        s.items.forEach(i=>{
+          i.id=i.id||uid("i"); i.status=i.status||"pending"; i.origin=i.origin||"eap";
+          i.ref=i.ref||""; i.note=i.note||""; i.correctedName=i.correctedName||""; i.custom=Boolean(i.custom);
+        });
+      });
+    });
+  });
+  return p;
+}
+
+/* ── persistence ── */
+function load(){
+  document.documentElement.dataset.theme = localStorage.getItem(TK)||"dark";
+  syncThemeIcon();
+  try{
+    const s=JSON.parse(localStorage.getItem(SK)||"null");
+    if(s&&s.id==="alfalog"&&Array.isArray(s.areas)){ ST.proj=norm(s); return; }
+  }catch(e){ console.warn(e); }
+  ST.proj=seed();
+}
+function save(){ localStorage.setItem(SK,JSON.stringify(ST.proj)); }
+
+/* ── traversal & counts ── */
+function walk(cb){ ST.proj.areas.forEach(a=>a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>cb(i,a,d,s))))); }
+function aItems(a){ const o=[]; a?.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>o.push({item:i,disc:d,sub:s})))); return o; }
+function cnt(list){
+  const c={total:list.length,pending:0,match:0,eap_only:0,project_only:0,review:0,na:0,done:0,issues:0};
+  list.forEach(({item})=>{c[item.status]=(c[item.status]||0)+1; if(item.status!=="pending")c.done++; if(["eap_only","project_only","review"].includes(item.status))c.issues++;});
+  c.progress=c.total?Math.round(c.done/c.total*100):0;
+  return c;
+}
+function projCnt(){ const l=[]; walk(i=>l.push({item:i})); return cnt(l); }
+function aCnt(a){ return cnt(aItems(a)); }
+function health(c){ return c.issues?"issue":c.pending?"pending":"ok"; }
+function statLabel(c){ if(c.issues)return`${c.issues} divergência${c.issues===1?"":"s"}`; if(c.pending)return`${c.pending} pendente${c.pending===1?"":"s"}`; return"Conferido"; }
+function selArea(){ return ST.proj.areas.find(a=>a.id===ST.selId)||ST.proj.areas[0]||null; }
+function findItem(id){ let f=null; walk((i,a,d,s)=>{ if(i.id===id) f={item:i,area:a,disc:d,sub:s}; }); return f; }
+function findOrDisc(a,n){ let d=a.disciplines.find(x=>x.name===n); if(!d){d=mkDisc(n,[]);a.disciplines.push(d);} return d; }
+function findOrSub(d,n){ const k=(n||"").trim()||"Outros"; let s=d.subsystems.find(x=>x.name.toLowerCase()===k.toLowerCase()); if(!s){s=mkSub(k,[]);d.subsystems.push(s);} return s; }
+function filteredAreas(){
+  const q=ST.query.trim().toLowerCase();
+  return ST.proj.areas.filter(a=>{
+    const c=aCnt(a),h=health(c);
+    return (!q||`${a.name} ${a.type}`.toLowerCase().includes(q))&&(ST.filter==="all"||h===ST.filter);
+  });
+}
+function diffs(){ const o=[]; walk((item,area,disc,sub)=>{ if(["eap_only","project_only","review"].includes(item.status)) o.push({item,area,disc,sub}); }); return o; }
+
+/* ── theme ── */
+function syncThemeIcon(){
+  const dark=document.documentElement.dataset.theme==="dark";
+  const ico=$("themeIco"); if(!ico) return;
+  ico.innerHTML=dark
+    ?`<circle cx="7" cy="7" r="2.8" stroke="currentColor" stroke-width="1.4"/><path d="M7 1v1M7 12v1M1 7h1M12 7h1M2.93 2.93l.7.7M10.37 10.37l.7.7M2.93 11.07l.7-.7M10.37 3.63l.7-.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>`
+    :`<path d="M9.5 7.5a4 4 0 01-6.6-2.1A4.5 4.5 0 009.5 7.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+}
+function toggleTheme(){
+  const n=document.documentElement.dataset.theme==="dark"?"light":"dark";
+  document.documentElement.dataset.theme=n; localStorage.setItem(TK,n); syncThemeIcon(); render();
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   RENDER
+   ══════════════════════════════════════════════════════════════════ */
+function render(){
+  if(!ST.selId||!ST.proj.areas.some(a=>a.id===ST.selId)) ST.selId=ST.proj.areas[0]?.id||null;
+  document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter===ST.filter));
+  renderSidebar();
+  renderMain();
+  renderSumBar();
+  updateReportBtn();
+  // restore open states
+  Object.keys(ST.openExpands).forEach(id=>{ document.getElementById("ix-"+id)?.classList.add("open"); });
+  Object.keys(ST.openAreaNotes).forEach(id=>{ const el=document.getElementById("anotes-"+id); if(el)el.classList.add("open"); });
+  // restore editing
+  if(ST.editingId){
+    const inp=document.getElementById("neinput-"+ST.editingId);
+    if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
+    else ST.editingId=null;
+  }
+  // rebind live inputs
+  document.getElementById("areaSearch")?.addEventListener("input",e=>{
+    ST.query=e.target.value; renderSidebar();
+    const inp=$("areaSearch"); inp?.focus(); inp?.setSelectionRange?.(inp.value.length,inp.value.length);
+  });
+}
+
+function renderSidebar(){
+  const c=projCnt();
+  // update stats widgets
+  const sbStats=$("sbStats");
+  if(sbStats){
+    sbStats.innerHTML=[
+      c.match?`<span class="sbs g">✓ ${c.match}</span>`:"",
+      c.pending?`<span class="sbs a">◯ ${c.pending}</span>`:"",
+      c.issues?`<span class="sbs r">⚠ ${c.issues}</span>`:""
+    ].filter(Boolean).join("")||`<span class="sbs">0% iniciado</span>`;
+  }
+  const sbFill=$("sbFill"); if(sbFill) sbFill.style.width=c.progress+"%";
+  // areas
+  const list=$("areasList"); if(!list) return;
+  const areas=filteredAreas();
+  if(!areas.length){ list.innerHTML=`<div class="empty" style="margin:6px">Nenhuma área encontrada.</div>`; return; }
+  list.innerHTML=areas.map(a=>{
+    const c=aCnt(a),h=health(c);
+    const fc=h==="issue"?"issue":h==="pending"?"pend":"";
+    return `<button class="ab ${a.id===ST.selId?"active":""}" data-area="${a.id}" type="button">
+      <div class="ab-top"><span class="ab-name">${esc(a.name)}</span><span class="ab-pct">${c.progress}%</span></div>
+      <div class="ab-bar"><div class="ab-fill ${fc}" style="width:${c.progress}%"></div></div>
+      <div class="ab-sub">${esc(statLabel(c))}</div>
+    </button>`;
+  }).join("");
+}
+
+function renderMain(){
+  const area=selArea();
+  const main=$("mainArea"); if(!main) return;
+  if(!area){ main.innerHTML=`<div style="padding:32px 18px"><div class="empty">Nenhuma área cadastrada.</div></div>`; return; }
+  const c=aCnt(area);
+  const badges=[
+    c.match?       `<span class="badge g">✓ ${c.match} batem</span>`:"",
+    c.pending?     `<span class="badge a">◯ ${c.pending} a conferir</span>`:"",
+    c.eap_only?    `<span class="badge a">↑ ${c.eap_only} só EAP</span>`:"",
+    c.project_only?`<span class="badge r">↓ ${c.project_only} só projeto</span>`:"",
+    c.review?      `<span class="badge v">? ${c.review} dúvida</span>`:"",
+    c.na?          `<span class="badge b">— ${c.na} N/A</span>`:""
+  ].filter(Boolean).join("");
+  main.innerHTML=`
+    <div class="ah">
+      <div class="ah-top">
+        <div class="ah-left">
+          <div class="ah-eye">${esc(area.type)} · ${area.m2||0} linhas</div>
+          <h2 class="ah-title">${esc(area.name)}</h2>
+          <p class="ah-desc">${esc(area.description||"")}</p>
+        </div>
+        <div class="ah-right">
+          <button class="abtn" data-mark-ok type="button">✓ Tudo bate</button>
+          <button class="abtn green" data-add-item type="button">
+            <svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+            Item encontrado no projeto
+          </button>
+        </div>
+      </div>
+      ${badges?`<div class="ah-stats">${badges}</div>`:""}
+    </div>
+    <div class="content">
+      ${area.disciplines.map(d=>renderDisc(d)).join("")||`<div class="empty">Nenhum item. Use "Item encontrado no projeto" para adicionar.</div>`}
+      <div class="area-notes">
+        <button class="anotes-toggle" data-toggle-anotes="${area.id}" type="button">
+          <svg viewBox="0 0 10 10" fill="none"><path d="M1 2h8M1 5h5M1 8h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Notas desta área
+        </button>
+        <textarea class="anotes-ta" id="anotes-${area.id}" data-area-notes="${area.id}" placeholder="Observações sobre ${esc(area.name)}…">${esc(area.notes||"")}</textarea>
+      </div>
+    </div>`;
+}
+
+function renderDisc(disc){
+  const tot=disc.subsystems.reduce((n,s)=>n+s.items.length,0);
+  const done=disc.subsystems.reduce((n,s)=>n+s.items.filter(i=>i.status!=="pending").length,0);
+  const iss=disc.subsystems.reduce((n,s)=>n+s.items.filter(i=>["eap_only","project_only","review"].includes(i.status)).length,0);
+  const cl=DISC_CLS[disc.name]??"";
+  const meta=iss?`<span style="color:var(--red)">${iss} divergência${iss===1?"":"s"}</span>`:`${done}/${tot} verificados`;
+  return `<div class="dc" id="dc-${disc.id}">
+    <div class="dc-head" data-tog-disc="${disc.id}">
+      <div class="dc-left"><span class="dc-dot ${cl}"></span><span class="dc-name">${esc(disc.name)}</span></div>
+      <div class="dc-right">
+        <span class="dc-meta">${meta}</span>
+        <svg class="dc-chev" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7L8.5 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+    <div class="dc-body">${disc.subsystems.map(s=>renderSub(s)).join("")}</div>
+  </div>`;
+}
+
+function renderSub(sub){
+  return `<div class="sub">
+    <div class="sub-head"><span class="sub-name">${esc(sub.name)}</span><span class="sub-count">${sub.items.length}</span></div>
+    <div>${sub.items.map(i=>renderItem(i)).join("")}</div>
+  </div>`;
+}
+
+function renderItem(item){
+  if(ST.editingId===item.id) return renderItemEditing(item);
+  const keys=item.origin==="project"?PROJ_KEYS:EAP_KEYS;
+  const otag=item.origin==="project"
+    ?`<span class="otag project">Achado no projeto</span>`
+    :`<span class="otag eap">Linha EAP</span>`;
+  const codeHtml=item.ref?`<span class="icode">${esc(item.ref)}</span>`:"";
+  const hasCorrected=item.correctedName&&item.correctedName!==item.name;
+  const corrDot=hasCorrected?`<span class="corr-dot" title="Nomenclatura corrigida"></span>`:"";
+  const displayName=esc(hasCorrected?item.correctedName:item.name);
+  const origHtml=hasCorrected?`<div class="ioriginal">EAP original: ${esc(item.name)}</div>`:"";
+  const hasExtra=item.ref||item.note;
+  const expandBtn=`<button class="ix-toggle" data-tog-expand="${item.id}" type="button">
+    <svg viewBox="0 0 10 10" fill="none"><path d="M1 3h8M1 6h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    ref / obs
+  </button>`;
+  const fieldsHtml=`<div class="ix-fields" id="ix-${item.id}">
+    <input class="finput" data-field="ref" data-iid="${item.id}" value="${esc(item.ref)}" placeholder="Prancha / onde conferiu">
+    <input class="finput" data-field="note" data-iid="${item.id}" value="${esc(item.note)}" placeholder="Observação da conferência">
+  </div>`;
+  const picker=keys.map(k=>`<button class="st ${k} ${item.status===k?"active":""}" title="${esc(SC[k].label)}" data-st="${k}" data-iid="${item.id}" type="button">${esc(SC[k].short)}</button>`).join("");
+  const removeBtn=item.custom?`<button class="st-rm" data-rm="${item.id}" type="button">✕</button>`:"";
+  return `<div class="item ${item.status}" id="item-${item.id}">
+    <div class="il">
+      <div class="it-row">${otag}${codeHtml}${corrDot}<span class="iname">${displayName}</span>
+        <button class="pencil" data-edit-name="${item.id}" type="button" title="Corrigir nomenclatura">
+          <svg viewBox="0 0 10 10" fill="none"><path d="M7 1.5L8.5 3 3.5 8H2V6.5L7 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          editar
+        </button>
+      </div>
+      ${origHtml}
+      <div class="ix-row">${expandBtn}</div>
+      ${fieldsHtml}
+    </div>
+    <div class="sp">${picker}${removeBtn}</div>
+  </div>`;
+}
+
+function renderItemEditing(item){
+  const keys=item.origin==="project"?PROJ_KEYS:EAP_KEYS;
+  const hasCorrected=item.correctedName&&item.correctedName!==item.name;
+  const currentVal=hasCorrected?item.correctedName:item.name;
+  const otag=item.origin==="project"?`<span class="otag project">Achado no projeto</span>`:`<span class="otag eap">Linha EAP</span>`;
+  const codeHtml=item.ref?`<span class="icode">${esc(item.ref)}</span>`:"";
+  const picker=keys.map(k=>`<button class="st ${k} ${item.status===k?"active":""}" title="${esc(SC[k].label)}" data-st="${k}" data-iid="${item.id}" type="button">${esc(SC[k].short)}</button>`).join("");
+  const removeBtn=item.custom?`<button class="st-rm" data-rm="${item.id}" type="button">✕</button>`:"";
+  return `<div class="item ${item.status}" id="item-${item.id}">
+    <div class="il">
+      <div class="it-row">${otag}${codeHtml}
+        <div class="name-edit-wrap">
+          <input class="name-input" id="neinput-${item.id}" value="${esc(currentVal)}" placeholder="Nome corrigido" data-ne-id="${item.id}">
+          <button class="edit-ok" data-save-name="${item.id}" type="button">✓ Salvar</button>
+          <button class="edit-cancel" data-cancel-name="${item.id}" type="button">✕</button>
+        </div>
+      </div>
+      ${item.name?`<div class="ioriginal">Original EAP: ${esc(item.name)}</div>`:""}
+    </div>
+    <div class="sp">${picker}${removeBtn}</div>
+  </div>`;
+}
+
+function renderSumBar(){
+  const bar=$("sumBar"); if(!bar) return;
+  const c=projCnt(), d=diffs().length;
+  bar.innerHTML=`
+    <strong>${c.done}/${c.total}</strong> verificados
+    <div class="sum-prog"><div class="sum-fill" style="width:${c.progress}%"></div></div>
+    <span>${c.progress}%</span>
+    <div class="sum-sep"></div>
+    <span><strong style="color:var(--brand)">${c.match}</strong> batem</span>
+    <span><strong style="color:var(--amber)">${c.pending}</strong> pendentes</span>
+    ${d?`<span style="color:var(--red)"><strong>${d}</strong> divergência${d===1?"":"s"}</span>`:`<span style="color:var(--brand)">✓ sem divergências</span>`}
+    <div class="sum-sep"></div>
+    <span style="color:var(--muted)">${ST.proj.areas.length} áreas · ${c.total} itens</span>`;
+}
+
+function updateReportBtn(){
+  const c=projCnt(), btn=$("reportBtn"); if(!btn) return;
+  btn.classList.toggle("pulse", c.progress===100&&c.issues===0);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   ACTIONS
+   ══════════════════════════════════════════════════════════════════ */
+function showModal(id){ $(id)?.classList.remove("hidden"); setTimeout(()=>$(id)?.querySelector("input,select,textarea")?.focus(),20); }
+function closeModal(id){ $(id)?.classList.add("hidden"); if(id==="reportModal"){ const s=ST.proj; s.reviewer=$("rReviewer")?.value||s.reviewer; s.eapAuthor=$("rTo")?.value||s.eapAuthor; save(); } }
+
+function markAreaOk(){
+  const a=selArea(); if(!a) return;
+  if(!confirm(`Marcar todos os itens pendentes de "${a.name}" como "Bate"?`)) return;
+  aItems(a).forEach(({item})=>{ if(item.status==="pending") item.status="match"; });
+  save(); render(); toast("Pendentes marcados como Bate ✓");
+}
+
+function nextPending(){
+  const ci=ST.proj.areas.findIndex(a=>a.id===ST.selId);
+  const ord=[...ST.proj.areas.slice(ci+1),...ST.proj.areas.slice(0,ci+1)];
+  const t=ord.find(a=>{ const c=aCnt(a); return c.pending||c.issues; });
+  if(t){ ST.selId=t.id; ST.filter="all"; render(); toast(`→ ${t.name}`); }
+  else toast("✓ Tudo conferido — nenhuma pendência!");
+}
+
+function removeItem(id){
+  const f=findItem(id); if(!f||!f.item.custom) return;
+  if(!confirm(`Remover "${f.item.name}"?`)) return;
+  f.sub.items=f.sub.items.filter(i=>i.id!==id);
+  f.disc.subsystems=f.disc.subsystems.filter(s=>s.items.length);
+  f.area.disciplines=f.area.disciplines.filter(d=>d.subsystems.length);
+  save(); render(); toast("Item removido.");
+}
+
+function addItem(e){
+  e.preventDefault();
+  const area=ST.proj.areas.find(a=>a.id===ST.modalAreaId)||selArea(); if(!area) return;
+  const name=$("iName").value.trim(); if(!name) return;
+  const origin=$("iOrigin").value;
+  const d=findOrDisc(area,$("iDisc").value);
+  const s=findOrSub(d,$("iSub").value);
+  s.items.push(mkItem(name,origin==="project"?"project_only":"pending",$("iRef").value.trim(),$("iNote").value.trim(),origin,true));
+  save(); closeModal("itemModal"); render(); toast(origin==="project"?"Item do projeto registrado.":"Item adicionado.");
+}
+
+function addArea(e){
+  e.preventDefault();
+  const name=$("aaName").value.trim(); if(!name) return;
+  const a=mkArea(name,$("aaType").value.trim()||"Encontrada no projeto",0,$("aaDesc").value.trim()||"Área encontrada no projeto, ausente na EAP.",[],  "project");
+  ST.proj.areas.push(a); ST.selId=a.id;
+  save(); closeModal("areaModal"); render(); toast("Área adicionada.");
+}
+
+/* ══ NOMENCLATURE EDIT ══════════════════════════════════════════ */
+function startEdit(itemId){
+  ST.editingId=itemId; render();
+}
+function saveEdit(itemId){
+  const inp=document.getElementById("neinput-"+itemId); if(!inp) return;
+  const newVal=inp.value.trim();
+  const f=findItem(itemId); if(!f) return;
+  if(newVal&&newVal!==f.item.name){
+    f.item.correctedName=newVal;
+  } else {
+    f.item.correctedName="";
+  }
+  ST.editingId=null; save(); render(); toast("Nomenclatura salva.");
+}
+function cancelEdit(){ ST.editingId=null; render(); }
+
+/* ══ DIFF PANEL ════════════════════════════════════════════════ */
+function openDiff(){
+  const body=$("diffBody"); if(!body) return;
+  const ds=diffs();
+  if(!ds.length){ body.innerHTML=`<div class="dempty">✓ Nenhuma divergência aberta.<br>Tudo conferido até agora.</div>`; }
+  else {
+    body.innerHTML=ds.map(d=>{
+      const tagCls=d.item.status==="project_only"?"r":d.item.status==="eap_only"?"a":"v";
+      const tagLbl=SC[d.item.status].short;
+      const name=d.item.correctedName||d.item.name;
+      return `<div class="di" data-jump="${d.area.id}">
+        <div class="ditag ${tagCls}">${esc(tagLbl)}</div>
+        <div class="diname">${esc(d.area.name)} → ${esc(name)}</div>
+        <div class="disub">${esc(d.disc.name)} / ${esc(d.sub.name)}${d.item.ref?` · ${esc(d.item.ref)}`:""}</div>
+      </div>`;
+    }).join("");
+  }
+  $("diffLayer").classList.add("open");
+}
+function closeDiff(){ $("diffLayer")?.classList.remove("open"); }
+
+/* ══ REPORT ═════════════════════════════════════════════════════ */
+function buildReport(){
+  const p=ST.proj, c=projCnt();
+  const reviewer=$("rReviewer")?.value||p.reviewer||"";
+  const to=$("rTo")?.value||p.eapAuthor||"";
+  const date=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+  const S="━".repeat(56);
+  const L=[
+    "CONFERÊNCIA EAP — "+p.name.toUpperCase()+" ("+EAP.subtitle+")",S,
+    "Cliente: "+p.client+" | "+p.city,
+    "EAP recebida em: "+p.receivedAt,
+    reviewer?"Revisado por: "+reviewer:"",
+    to?"Para: "+to:"",
+    "Data: "+date,
+    "",S,"RESUMO EXECUTIVO",S,
+    "• Total de itens: "+c.total,
+    "• ✓  Batem com o projeto: "+c.match+(c.total?` (${Math.round(c.match/c.total*100)}%)`:""),
+    "• ↑  Só na EAP (não encontrei no projeto): "+c.eap_only,
+    "• ↓  Só no projeto (não estava na EAP): "+c.project_only,
+    "• ?  Dúvidas / revisão pendente: "+c.review,
+    "• —  N/A: "+c.na,
+    c.pending>0?"• ⏳ AINDA NÃO CONFERIDOS: "+c.pending+" iten"+( c.pending===1?"":"s"):"",
+    ""
+  ].filter(v=>v!==undefined);
+
+  function sec(title, subtitle, statusFilter){
+    const matched=[];
+    p.areas.forEach(a=>{
+      const its=aItems(a).filter(({item})=>item.status===statusFilter);
+      if(its.length){ matched.push({area:a,its}); }
+    });
+    if(!matched.length) return [];
+    const lines=[S,title];
+    if(subtitle) lines.push("  "+subtitle);
+    lines.push(S);
+    matched.forEach(({area,its})=>{
+      lines.push("\n"+area.name.toUpperCase());
+      its.forEach(({item,disc,sub})=>{
+        const name=item.correctedName||item.name;
+        const ref=item.ref?` (${item.ref})`:"";
+        const obs=item.note?` | Obs: ${item.note}`:"";
+        lines.push(`  ${SC[statusFilter].short.replace(/✓|↑|↓|\?|—|◯/g,s=>s)}  ${name}${ref}${obs} — ${disc.name} / ${sub.name}`);
+      });
+    });
+    lines.push("");
+    return lines;
+  }
+
+  L.push(...sec("ITENS CONFIRMADOS — BATEM COM O PROJETO","",  "match"));
+  L.push(...sec("DIVERGÊNCIAS — ITEM NA EAP, NÃO ENCONTREI NO PROJETO","(Recomendado: revisar no projeto ou remover da EAP)","eap_only"));
+  L.push(...sec("DIVERGÊNCIAS — ITEM NO PROJETO, NÃO ESTAVA NA EAP","(Recomendado: incluir estes itens na EAP)","project_only"));
+  L.push(...sec("DÚVIDAS — ITENS PARA REVISÃO","","review"));
+
+  // corrections
+  const corrs=[];
+  walk((item)=>{ if(item.correctedName&&item.correctedName!==item.name) corrs.push(item); });
+  if(corrs.length){
+    L.push(S,"CORREÇÕES DE NOMENCLATURA","  (sugestão de atualização dos nomes na EAP)",S);
+    corrs.forEach(item=>{
+      const code=item.ref?item.ref.split(" ·")[0].trim():"";
+      L.push(`  ${code?code+": ":""}"${item.name}"  →  "${item.correctedName}"`);
+    });
+    L.push("");
+  }
+
+  // area notes
+  const aN=p.areas.filter(a=>a.notes&&a.notes.trim());
+  if(aN.length){
+    L.push(S,"OBSERVAÇÕES POR ÁREA",S);
+    aN.forEach(a=>{ L.push("\n"+a.name.toUpperCase()); L.push("  "+a.notes); });
+    L.push("");
+  }
+
+  if(p.notes&&p.notes.trim()){
+    L.push(S,"NOTAS GERAIS",S,p.notes,"");
+  }
+
+  L.push(S,"Relatório gerado pelo EAPCheck · Biasi Engenharia","Projeto: "+EAP.subtitle+" | "+EAP.client,S);
+  return L.join("\n");
+}
+
+function openReport(){
+  const modal=$("reportModal"); modal.classList.remove("hidden");
+  $("rReviewer").value=ST.proj.reviewer||"";
+  $("rTo").value=ST.proj.eapAuthor||"";
+  refreshReport();
+  setTimeout(()=>$("rReviewer").focus(),20);
+
+  // live update on input
+  const upd=()=>refreshReport();
+  $("rReviewer").addEventListener("input",upd);
+  $("rTo").addEventListener("input",upd);
+}
+
+function refreshReport(){
+  const c=projCnt();
+  const done=c.pending===0;
+  const prog=$("rProg"); if(prog){ prog.textContent=c.progress+"% conferido"; prog.classList.toggle("done",done); }
+  const warn=$("rWarn");
+  if(!done&&warn){
+    warn.classList.remove("hidden");
+    warn.innerHTML=`<b>⚠ Atenção:</b> ${c.pending} ite${c.pending===1?"m":"ns"} ainda não conferido${c.pending===1?"":"s"}. O relatório pode estar incompleto.`;
+  } else { warn?.classList.add("hidden"); }
+  const ta=$("rTa"); if(ta) ta.value=buildReport();
+}
+
+async function copyReport(){
+  const txt=$("rTa")?.value||buildReport();
+  try{ await navigator.clipboard.writeText(txt); }
+  catch{ const t=document.createElement("textarea"); t.value=txt; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }
+  toast("Relatório copiado ✓");
+}
+
+function downloadReport(){
+  const txt=$("rTa")?.value||buildReport();
+  const blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=`eapcheck-${slug(ST.proj.name)}-relatorio.txt`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+  toast("Relatório baixado ✓");
+}
+
+function resetAll(){
+  if(!confirm("Zerar toda a conferência e voltar tudo para pendente?")) return;
+  localStorage.removeItem(SK);
+  ST.proj=seed(); ST.selId=ST.proj.areas[0]?.id||null; ST.query=""; ST.filter="all";
+  ST.openExpands={}; ST.openAreaNotes={}; ST.editingId=null;
+  render(); toast("Conferência zerada.");
+}
+
+function toast(msg){
+  const el=$("toast"); el.textContent=msg; el.classList.add("show");
+  clearTimeout(window.__tt); window.__tt=setTimeout(()=>el.classList.remove("show"),2600);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   EVENT BINDING
+   ══════════════════════════════════════════════════════════════════ */
+function bind(){
+  document.addEventListener("click",e=>{
+    const t=e.target;
+
+    if(t.closest("#themeBtn"))  { toggleTheme(); return; }
+    if(t.closest("#diffBtn"))   { openDiff(); return; }
+    if(t.closest("#diffClose")||t.closest("#diffBack")){ closeDiff(); return; }
+    if(t.closest("#nextBtn"))   { nextPending(); return; }
+    if(t.closest("#reportBtn")||t.closest("[data-open-report]")){ openReport(); return; }
+    if(t.closest("#resetBtn"))  { resetAll(); return; }
+    if(t.closest("#rCopy"))     { copyReport(); return; }
+    if(t.closest("#rDownload")) { downloadReport(); return; }
+
+    // filter chips
+    const fc=t.closest("[data-filter]");
+    if(fc){ ST.filter=fc.dataset.filter; render(); return; }
+
+    // area select
+    const ab=t.closest("[data-area]");
+    if(ab){ ST.selId=ab.dataset.area; render(); return; }
+
+    // area found in project
+    if(t.closest("[data-add-area]")){ $("areaForm").reset(); showModal("areaModal"); return; }
+
+    // add item
+    if(t.closest("[data-add-item]")){ ST.modalAreaId=ST.selId; $("itemForm").reset(); showModal("itemModal"); return; }
+
+    // mark all ok
+    if(t.closest("[data-mark-ok]")){ markAreaOk(); return; }
+
+    // status picker
+    const stb=t.closest("[data-st]");
+    if(stb){
+      const f=findItem(stb.dataset.iid);
+      if(f){ f.item.status=stb.dataset.st; save(); render(); }
+      return;
+    }
+
+    // remove custom item
+    const rmb=t.closest("[data-rm]");
+    if(rmb){ removeItem(rmb.dataset.rm); return; }
+
+    // jump to area from diff panel
+    const jb=t.closest("[data-jump]");
+    if(jb){ ST.selId=jb.dataset.jump; ST.filter="all"; render(); closeDiff(); return; }
+
+    // close modal
+    const cb=t.closest("[data-close]");
+    if(cb){ closeModal(cb.dataset.close); return; }
+    if(t.classList.contains("layer")){ closeModal(t.id); return; }
+
+    // disc toggle
+    const dt=t.closest("[data-tog-disc]");
+    if(dt){ document.getElementById("dc-"+dt.dataset.togDisc)?.classList.toggle("collapsed"); return; }
+
+    // expand toggle
+    const et=t.closest("[data-tog-expand]");
+    if(et){
+      const id=et.dataset.togExpand;
+      const el=document.getElementById("ix-"+id);
+      if(el){ const o=el.classList.toggle("open"); if(o) ST.openExpands[id]=true; else delete ST.openExpands[id]; }
+      return;
+    }
+
+    // area notes toggle
+    const ant=t.closest("[data-toggle-anotes]");
+    if(ant){
+      const id=ant.dataset.toggleAnotes;
+      const el=document.getElementById("anotes-"+id);
+      if(el){ const o=el.classList.toggle("open"); if(o) ST.openAreaNotes[id]=true; else delete ST.openAreaNotes[id]; }
+      return;
+    }
+
+    // pencil edit name
+    const pen=t.closest("[data-edit-name]");
+    if(pen){ startEdit(pen.dataset.editName); return; }
+
+    // save/cancel name edit
+    const sn=t.closest("[data-save-name]");
+    if(sn){ saveEdit(sn.dataset.saveName); return; }
+
+    const cn=t.closest("[data-cancel-name]");
+    if(cn){ cancelEdit(); return; }
+  });
+
+  // field inputs (ref / obs)
+  document.addEventListener("input",e=>{
+    const f=e.target.closest("[data-field]");
+    if(f){
+      const found=findItem(f.dataset.iid);
+      if(found){ found.item[f.dataset.field]=f.value; save(); }
+      return;
+    }
+    // area notes textarea
+    const an=e.target.closest("[data-area-notes]");
+    if(an){
+      const a=ST.proj.areas.find(x=>x.id===an.dataset.areaNotes);
+      if(a){ a.notes=an.value; save(); }
+    }
+  });
+
+  // name edit: Enter = save, Escape = cancel
+  document.addEventListener("keydown",e=>{
+    if(ST.editingId){
+      if(e.key==="Enter"){ e.preventDefault(); saveEdit(ST.editingId); return; }
+      if(e.key==="Escape"){ e.preventDefault(); cancelEdit(); return; }
+    }
+    if(e.key==="Escape"){ closeModal("itemModal"); closeModal("areaModal"); closeModal("reportModal"); closeDiff(); }
+  });
+
+  $("itemForm").addEventListener("submit",addItem);
+  $("areaForm").addEventListener("submit",addArea);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   BOOT
+   ══════════════════════════════════════════════════════════════════ */
+load();
+ST.selId=ST.proj.areas[0]?.id||null;
+bind();
+render();
+</script>
+</body>
+</html>
