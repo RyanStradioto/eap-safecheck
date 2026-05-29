@@ -854,6 +854,28 @@ button{cursor:pointer}
   </div>
 </div>
 
+<!-- DELETE AREA MODAL (gestor) -->
+<div class="layer hidden" id="delAreaModal">
+  <div class="modal">
+    <h2 style="color:var(--red)">Excluir área</h2>
+    <p>Essa ação é irreversível e só deve ser feita por um gestor. Todos os itens dentro da área serão excluídos permanentemente.</p>
+    <div style="padding:12px 14px;border-radius:var(--r);background:var(--rlo);border:1px solid var(--rhi);margin-bottom:14px">
+      <div style="font-size:11px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.1em;color:var(--red);font-weight:700;margin-bottom:6px">Área que será excluída</div>
+      <div style="font-size:17px;font-weight:700" id="delAreaName">—</div>
+      <div style="font-size:12px;color:var(--soft);margin-top:3px" id="delAreaInfo">—</div>
+    </div>
+    <div class="field">
+      <label>Para confirmar, digite "excluir" abaixo</label>
+      <input id="delAreaConfirm" placeholder='digite "excluir"' autocomplete="off" spellcheck="false" style="border-color:var(--rhi)">
+      <span class="field-hint" style="color:var(--red)">Somente gestores devem realizar esta ação.</span>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="delAreaModal">Cancelar</button>
+      <button class="mbtn danger" id="delAreaBtn" type="button" disabled>Excluir área</button>
+    </div>
+  </div>
+</div>
+
 <!-- REPORT MODAL -->
 <div class="layer hidden" id="reportModal">
   <div class="rmodal">
@@ -1504,6 +1526,9 @@ function renderMain(){
             <svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
             Achei no projeto
           </button>
+          <button class="abtn" data-del-area="${area.id}" type="button" style="color:var(--red);border-color:var(--rhi);opacity:.7" title="Excluir área (gestor)">
+            <svg viewBox="0 0 11 11" fill="none"><path d="M2 3h7M4 3V2h3v1M3.5 3l.4 6h3.2l.4-6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
       </div>
       ${badges?`<div class="ah-badges" style="margin-top:9px">${badges}</div>`:""}
@@ -1797,6 +1822,35 @@ async function addAreaImg(areaId,file){
     a.imageData=await compressImage(file,900,0.72);
     save(); render(); toast("Imagem anexada à área ✓");
   }catch(err){ console.error(err); toast("Erro ao processar imagem."); }
+}
+
+/* ── DELETE AREA (gestor) ────────────────────────────────────────── */
+function openDelAreaModal(areaId){
+  ST.delAreaId=areaId;
+  const a=ST.proj.areas.find(x=>x.id===areaId); if(!a) return;
+  const its=aItems(a);
+  $("delAreaName").textContent=a.name;
+  $("delAreaInfo").textContent=`${its.length} itens · ${a.disciplines.length} disciplinas · rev. ${a.addedInRev||"R0"}`;
+  $("delAreaConfirm").value="";
+  $("delAreaBtn").disabled=true;
+  showModal("delAreaModal");
+  // watch input
+  $("delAreaConfirm").oninput=()=>{
+    const v=$("delAreaConfirm").value.trim().toLowerCase();
+    $("delAreaBtn").disabled=(v!=="excluir");
+  };
+}
+function confirmDelArea(){
+  const v=$("delAreaConfirm").value.trim().toLowerCase();
+  if(v!=="excluir"){ toast("Digite 'excluir' para confirmar."); return; }
+  const aid=ST.delAreaId;
+  const a=ST.proj.areas.find(x=>x.id===aid);
+  if(!a){ toast("Área não encontrada."); return; }
+  const name=a.name;
+  ST.proj.areas=ST.proj.areas.filter(x=>x.id!==aid);
+  if(ST.selId===aid) ST.selId=ST.proj.areas[0]?.id||null;
+  save(); closeModal("delAreaModal"); render();
+  toast(`Área "${name}" excluída permanentemente.`);
 }
 
 /* ── NOMENCLATURE EDIT ──────────────────────────────────────────── */
@@ -2293,6 +2347,8 @@ function bind(){
       showModal("itemModal"); return;
     }
     if(t.closest("[data-mark-ok]")){ markAreaOk(); return; }
+    const delArea=t.closest("[data-del-area]"); if(delArea){ openDelAreaModal(delArea.dataset.delArea); return; }
+    if(t.closest("#delAreaBtn")){ confirmDelArea(); return; }
 
     const stb=t.closest("[data-st]");
     if(stb){ const f=findItem(stb.dataset.iid); if(f){ f.item.status=f.item.status===stb.dataset.st?"pending":stb.dataset.st; save(); render(); } return; }
@@ -2340,7 +2396,7 @@ function bind(){
       if(e.key==="Escape"){ e.preventDefault(); cancelEdit(); return; }
     }
     if(e.key==="Escape"){
-      ["itemModal","areaModal","reportModal","splitModal","revisionModal","projModal","importModal"].forEach(closeModal);
+      ["itemModal","areaModal","reportModal","splitModal","revisionModal","projModal","importModal","delAreaModal"].forEach(closeModal);
       closeDiff();
     }
   });
