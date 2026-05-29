@@ -2547,9 +2547,15 @@ function printFallback(){
 /* ── MISC ───────────────────────────────────────────────────────── */
 function resetProject(){
   if(!ST.proj) return;
-  if(!confirm(`Zerar a conferência de "${ST.proj.name}"?\nTodos os status voltam para pendente. Áreas adicionadas, splits e revisões permanecem.`)) return;
-  walk(item=>{ item.status="pending"; });
-  ST.editingId=null; save(); render(); toast("Conferência zerada.");
+  if(!confirm(`Zerar a conferência de "${ST.proj.name}"?\n\nTudo volta ao original:\n• Status → pendente\n• Nomenclaturas corrigidas → removidas\n• Notas e observações → limpas\n\nÁreas, splits e revisões permanecem.`)) return;
+  walk(item=>{
+    item.status="pending";
+    item.correctedName="";
+    item.note="";
+    item.revNote="";
+  });
+  ST.proj.areas.forEach(a=>{ a.notes=""; });
+  ST.editingId=null; save(); render(); toast("Conferência zerada — tudo voltou ao original.");
 }
 function toast(msg){
   const el=$("toast"); el.textContent=msg; el.classList.add("show");
