@@ -1471,20 +1471,26 @@ function renderMain(){
     c.na?           `<span class="badge b">— ${c.na} N/A</span>`:""
   ].filter(Boolean).join("");
 
-  let projRefHtml="";
-  if(area.origin==="project"||area.projectRef||area.imageData){
-    const refTxt=area.projectRef?esc(area.projectRef):"<i style='color:var(--muted)'>sem prancha informada</i>";
-    projRefHtml=`<div class="proj-ref-strip">
-      <svg viewBox="0 0 13 13" fill="none"><path d="M2 2h7l2 2v7H2V2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h4M5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <span><strong>Prancha:</strong> ${refTxt}</span>
-      <span class="ref-edit" data-edit-projref="${area.id}">editar</span>
+  /* prancha + image strip — available for ALL areas */
+  const refTxt=area.projectRef?esc(area.projectRef):"<i style='color:var(--muted)'>clique editar para informar</i>";
+  let projRefHtml=`<div class="proj-ref-strip">
+    <svg viewBox="0 0 13 13" fill="none"><path d="M2 2h7l2 2v7H2V2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h4M5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+    <span><strong>Prancha:</strong> ${refTxt}</span>
+    <span class="ref-edit" data-edit-projref="${area.id}">editar</span>
+  </div>`;
+  if(area.imageData){
+    projRefHtml+=`<div class="proj-image-wrap">
+      <img src="${area.imageData}" alt="Marcação da área">
+      <button class="proj-image-rm" data-rm-img="${area.id}" type="button" title="Remover imagem">✕</button>
     </div>`;
-    if(area.imageData){
-      projRefHtml+=`<div class="proj-image-wrap">
-        <img src="${area.imageData}" alt="Marcação da área">
-        <button class="proj-image-rm" data-rm-img="${area.id}" type="button" title="Remover imagem">✕</button>
-      </div>`;
-    }
+  }
+  if(!area.imageData){
+    projRefHtml+=`<div class="img-drop" style="margin-top:8px;max-width:520px" data-add-area-img="${area.id}">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 17V19a2 2 0 002 2h14a2 2 0 002-2v-2M7 9l5-5 5 5M12 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <strong>Anexar print da planta</strong>
+      <span>JPG ou PNG — aparece na área e no relatório PDF</span>
+    </div>
+    <input type="file" id="areaImgFile-${area.id}" accept="image/*" style="display:none" data-area-img-input="${area.id}">`;
   }
 
   main.innerHTML=`
@@ -1784,6 +1790,14 @@ function removeAreaImg(areaId){
   if(!confirm("Remover a imagem desta área?")) return;
   a.imageData=null; save(); render(); toast("Imagem removida.");
 }
+async function addAreaImg(areaId,file){
+  const a=ST.proj.areas.find(x=>x.id===areaId); if(!a||!file) return;
+  try{
+    toast("Comprimindo imagem…");
+    a.imageData=await compressImage(file,900,0.72);
+    save(); render(); toast("Imagem anexada à área ✓");
+  }catch(err){ console.error(err); toast("Erro ao processar imagem."); }
+}
 
 /* ── NOMENCLATURE EDIT ──────────────────────────────────────────── */
 function startEdit(itemId){ ST.editingId=itemId; render(); }
@@ -1852,18 +1866,45 @@ function renderRevList(){
   const wrap=$("revList"); if(!wrap) return;
   const revs=ST.proj.revisions||[], cur=ST.proj.revision||"R0";
   if(!revs.length){ wrap.innerHTML=`<div class="empty" style="padding:14px">Nenhuma revisão registrada.</div>`; return; }
+  // count items per revision
+  const revCounts={};
+  walkP(ST.proj,(item)=>{ const r=item.addedInRev||"R0"; revCounts[r]=(revCounts[r]||0)+1; });
+  const areaCounts={};
+  ST.proj.areas.forEach(a=>{ const r=a.addedInRev||"R0"; areaCounts[r]=(areaCounts[r]||0)+1; });
+
   wrap.innerHTML=revs.map(r=>{
     const isCur=r.label===cur;
+    const ic=revCounts[r.label]||0;
+    const ac=areaCounts[r.label]||0;
+    const canDel=!isCur && revs.length>1;
     return `<div class="rev-row ${isCur?"current":""}">
       <span class="rev-label">${esc(r.label)}</span>
-      <div class="rev-content">${esc(r.notes||"(sem notas)")}<div class="rev-date">${esc(r.date||"")}</div></div>
-      ${isCur?`<span class="rev-cur-tag">Atual</span>`:`<button class="mbtn ghost" style="padding:3px 9px;font-size:11px" data-set-rev="${esc(r.label)}" type="button">Tornar atual</button>`}
+      <div class="rev-content">
+        ${esc(r.notes||"(sem notas)")}
+        <div class="rev-date">${esc(r.date||"")} · ${ic} itens · ${ac} áreas nesta revisão</div>
+      </div>
+      <div style="display:flex;gap:4px;align-items:center;flex-shrink:0">
+        ${isCur?`<span class="rev-cur-tag">Atual</span>`:`<button class="mbtn ghost" style="padding:3px 9px;font-size:11px" data-set-rev="${esc(r.label)}" type="button">Ativar</button>`}
+        ${canDel?`<button class="mbtn danger" style="padding:3px 8px;font-size:11px" data-del-rev="${esc(r.label)}" type="button" title="Excluir revisão">✕</button>`:""}
+      </div>
     </div>`;
   }).join("");
 }
 function setCurrentRevision(label){
   if(!ST.proj.revisions.some(r=>r.label===label)) return;
   ST.proj.revision=label; save(); render(); renderRevList(); toast(`Revisão atual: ${label}`);
+}
+function deleteRevision(label){
+  const revs=ST.proj.revisions||[];
+  if(label===ST.proj.revision){ toast("Não pode excluir a revisão atual."); return; }
+  if(revs.length<=1){ toast("Precisa ter pelo menos 1 revisão."); return; }
+  if(!confirm(`Excluir revisão "${label}"?\n\nItens e áreas que foram marcados como "${label}" serão movidos para a revisão atual.`)) return;
+  // Move items/areas from deleted rev to current
+  const cur=ST.proj.revision||"R0";
+  walkP(ST.proj,(item)=>{ if(item.addedInRev===label) item.addedInRev=cur; });
+  ST.proj.areas.forEach(a=>{ if(a.addedInRev===label) a.addedInRev=cur; });
+  ST.proj.revisions=revs.filter(r=>r.label!==label);
+  save(); render(); renderRevList(); toast(`Revisão ${label} excluída.`);
 }
 function createRevision(){
   const label=$("revInputLabel").value.trim(), date=$("revInputDate").value.trim()||today(), notes=$("revInputNotes").value.trim();
@@ -2227,6 +2268,7 @@ function bind(){
 
     const rtab=t.closest("[data-rtab]"); if(rtab){ switchReportTab(rtab.dataset.rtab); return; }
     const setRev=t.closest("[data-set-rev]"); if(setRev){ setCurrentRevision(setRev.dataset.setRev); return; }
+    const delRev=t.closest("[data-del-rev]"); if(delRev){ deleteRevision(delRev.dataset.delRev); return; }
     const splitRm=t.closest("[data-split-rm-idx]"); if(splitRm){ splitRemoveInput(parseInt(splitRm.dataset.splitRmIdx,10)); return; }
     const splitItem=t.closest("[data-split-item]"); if(splitItem){ openSplitModal(splitItem.dataset.splitItem); return; }
 
@@ -2236,6 +2278,8 @@ function bind(){
     if(t.closest("[data-add-area]")){ $("areaForm").reset(); ST.pendingImg=null; renderImgPreview(); showModal("areaModal"); return; }
     if(t.closest("#aaImgDrop")){ $("aaImg")?.click(); return; }
     if(t.closest("#aaImgRm")){ ST.pendingImg=null; renderImgPreview(); return; }
+    const areaImgDrop=t.closest("[data-add-area-img]");
+    if(areaImgDrop){ const aid=areaImgDrop.dataset.addAreaImg; document.querySelector(`[data-area-img-input="${aid}"]`)?.click(); return; }
 
     const editPR=t.closest("[data-edit-projref]"); if(editPR){ editProjRef(editPR.dataset.editProjref); return; }
     const rmImg=t.closest("[data-rm-img]"); if(rmImg){ removeAreaImg(rmImg.dataset.rmImg); return; }
@@ -2282,6 +2326,11 @@ function bind(){
       const file=e.target.files[0]; if(!file) return;
       try{ toast("Comprimindo imagem…"); ST.pendingImg=await compressImage(file,900,0.72); renderImgPreview(); toast("Imagem pronta ✓"); }
       catch(err){ console.error(err); toast("Erro ao processar imagem."); }
+    }
+    const areaInput=e.target.closest("[data-area-img-input]");
+    if(areaInput){
+      const file=areaInput.files[0]; if(!file) return;
+      addAreaImg(areaInput.dataset.areaImgInput,file);
     }
   });
 
