@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EAPCheck · Alfalog</title>
+<title>EAPCheck v11 · Alfalog</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -12,272 +12,295 @@
 :root{
   --bg:#060d15; --surf:#0a1720; --panel:#0e1d2c; --p2:#122030; --card:#0c1926;
   --b1:rgba(100,160,220,.1); --b2:rgba(100,160,220,.2); --b3:rgba(100,160,220,.32);
-  --tx:#d8edf8; --soft:#7dafc8; --muted:#3d6880; --dim:#2a4f68;
-  --brand:#2de69a; --blo:rgba(45,230,154,.09); --bhi:rgba(45,230,154,.2);
-  --blue:#34bcf0; --bllo:rgba(52,188,240,.09); --blhi:rgba(52,188,240,.2);
-  --amber:#f5b731; --alo:rgba(245,183,49,.09); --ahi:rgba(245,183,49,.22);
-  --red:#e85c6a; --rlo:rgba(232,92,106,.08); --rhi:rgba(232,92,106,.2);
-  --violet:#a48ff7; --vlo:rgba(164,143,247,.09); --vhi:rgba(164,143,247,.2);
-  --shadow:0 24px 72px rgba(0,0,0,.5);
+  --tx:#e3f1fa; --soft:#85b8ce; --muted:#4d748c; --dim:#2a4f68;
+  --brand:#2de69a; --blo:rgba(45,230,154,.09); --bhi:rgba(45,230,154,.22);
+  --blue:#34bcf0; --bllo:rgba(52,188,240,.09); --blhi:rgba(52,188,240,.22);
+  --amber:#f5b731; --alo:rgba(245,183,49,.09); --ahi:rgba(245,183,49,.24);
+  --red:#e85c6a; --rlo:rgba(232,92,106,.09); --rhi:rgba(232,92,106,.22);
+  --violet:#a48ff7; --vlo:rgba(164,143,247,.1); --vhi:rgba(164,143,247,.22);
+  --orange:#ff8a4d; --olo:rgba(255,138,77,.09); --ohi:rgba(255,138,77,.24);
+  --shadow:0 26px 80px rgba(0,0,0,.55);
   --sans:'Space Grotesk',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
-  --r:12px; --rs:7px; --rl:18px;
+  --r:14px; --rs:9px; --rl:20px;
 }
 [data-theme="light"]{
   --bg:#eef2f7; --surf:#e5eaf1; --panel:#ffffff; --p2:#f4f6fa; --card:#fafbfd;
-  --b1:rgba(20,50,90,.09); --b2:rgba(20,50,90,.18); --b3:rgba(20,50,90,.28);
+  --b1:rgba(20,50,90,.09); --b2:rgba(20,50,90,.18); --b3:rgba(20,50,90,.3);
   --tx:#0f1d2b; --soft:#2c4e6a; --muted:#6a90ab; --dim:#9ab8cc;
-  --brand:#0b9460; --blo:rgba(11,148,96,.08); --bhi:rgba(11,148,96,.18);
-  --blue:#0a78b2; --bllo:rgba(10,120,178,.08); --blhi:rgba(10,120,178,.18);
-  --amber:#8a5e00; --alo:rgba(138,94,0,.08); --ahi:rgba(138,94,0,.18);
-  --red:#bf2e38; --rlo:rgba(191,46,56,.06); --rhi:rgba(191,46,56,.16);
-  --violet:#5c3fc4; --vlo:rgba(92,63,196,.07); --vhi:rgba(92,63,196,.16);
-  --shadow:0 24px 72px rgba(10,30,60,.1);
+  --brand:#0b9460; --blo:rgba(11,148,96,.09); --bhi:rgba(11,148,96,.2);
+  --blue:#0a78b2; --bllo:rgba(10,120,178,.09); --blhi:rgba(10,120,178,.2);
+  --amber:#8a5e00; --alo:rgba(138,94,0,.09); --ahi:rgba(138,94,0,.2);
+  --red:#bf2e38; --rlo:rgba(191,46,56,.07); --rhi:rgba(191,46,56,.18);
+  --violet:#5c3fc4; --vlo:rgba(92,63,196,.08); --vhi:rgba(92,63,196,.18);
+  --orange:#d65a1c; --olo:rgba(214,90,28,.08); --ohi:rgba(214,90,28,.2);
+  --shadow:0 26px 80px rgba(10,30,60,.12);
 }
 
 /* ── RESET ──────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
-body{font-family:var(--sans);font-size:14px;color:var(--tx);background:var(--bg)}
-[data-theme="dark"] body{background:radial-gradient(ellipse 70% 30% at 8% 0%,rgba(45,230,154,.04),transparent 55%),radial-gradient(ellipse 50% 22% at 92% 0%,rgba(52,188,240,.04),transparent 55%),var(--bg)}
+body{font-family:var(--sans);font-size:15px;color:var(--tx);background:var(--bg);line-height:1.45}
+[data-theme="dark"] body{background:radial-gradient(ellipse 70% 30% at 8% 0%,rgba(45,230,154,.045),transparent 55%),radial-gradient(ellipse 50% 22% at 92% 0%,rgba(52,188,240,.045),transparent 55%),var(--bg)}
 button,input,select,textarea{font:inherit;color:inherit;border:none;background:none;outline:none}
 button{cursor:pointer}
 .hidden{display:none!important}
 
 /* ── APP SHELL ──────────────────────────────────────────────────── */
-.app{height:100vh;display:grid;grid-template-rows:52px 1fr 36px}
+.app{height:100vh;display:grid;grid-template-rows:58px 1fr 40px}
 
 /* ── TOPBAR ─────────────────────────────────────────────────────── */
 .topbar{
-  display:flex;align-items:center;gap:6px;padding:0 14px;
-  background:color-mix(in srgb,var(--panel) 90%,transparent);
-  backdrop-filter:blur(20px);border-bottom:1px solid var(--b1);
+  display:flex;align-items:center;gap:7px;padding:0 16px;
+  background:color-mix(in srgb,var(--panel) 92%,transparent);
+  backdrop-filter:blur(22px);border-bottom:1px solid var(--b1);
   position:relative;z-index:30;
 }
-.brand{display:flex;align-items:center;gap:8px;margin-right:auto;min-width:0}
-.logo{width:27px;height:27px;border-radius:8px;background:linear-gradient(135deg,var(--brand),var(--blue));display:grid;place-items:center;flex-shrink:0;box-shadow:0 0 0 1px rgba(45,230,154,.3)}
-.logo svg{width:13px;height:13px}
-.brand-name{font-size:13.5px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
+.brand{display:flex;align-items:center;gap:9px;margin-right:auto;min-width:0}
+.logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--blue));display:grid;place-items:center;flex-shrink:0;box-shadow:0 0 0 1px rgba(45,230,154,.3)}
+.logo svg{width:14px;height:14px}
+.brand-name{font-size:14.5px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
 .brand-name em{font-style:normal;color:var(--brand)}
-.brand-client{font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-client{font-size:11.5px;color:var(--muted);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-rev{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);margin-left:6px;cursor:pointer;transition:.12s}
+.brand-rev:hover{background:color-mix(in srgb,var(--blue) 16%,transparent)}
 
 /* topbar buttons */
-.tb{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);transition:.12s;white-space:nowrap;cursor:pointer}
+.tb{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);transition:.12s;white-space:nowrap;cursor:pointer}
 .tb:hover{border-color:var(--b2);color:var(--tx);background:color-mix(in srgb,var(--p2) 90%,transparent)}
-.tb svg{width:12px;height:12px;flex-shrink:0}
-.tb.ico{padding:5px;width:30px;justify-content:center;border-radius:var(--rs)}
-.tb.green{background:var(--blo);border-color:var(--bhi);color:var(--brand);font-weight:700;box-shadow:0 2px 12px rgba(45,230,154,.15)}
+.tb svg{width:12.5px;height:12.5px;flex-shrink:0}
+.tb.ico{padding:6px;width:32px;justify-content:center;border-radius:var(--rs)}
+.tb.green{background:var(--blo);border-color:var(--bhi);color:var(--brand);font-weight:700;box-shadow:0 2px 14px rgba(45,230,154,.18)}
 .tb.green:hover{filter:brightness(1.08)}
 .tb.green.pulse{animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{box-shadow:0 2px 12px rgba(45,230,154,.15)}50%{box-shadow:0 2px 22px rgba(45,230,154,.4)}}
+@keyframes pulse{0%,100%{box-shadow:0 2px 14px rgba(45,230,154,.18)}50%{box-shadow:0 2px 26px rgba(45,230,154,.45)}}
 .tb.danger{color:var(--red);border-color:var(--rhi);background:var(--rlo)}
 .tb.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent)}
-.tb-sep{width:1px;height:18px;background:var(--b1);flex-shrink:0}
+.tb-sep{width:1px;height:20px;background:var(--b1);flex-shrink:0}
 
 /* ── WORKSPACE ──────────────────────────────────────────────────── */
-.workspace{display:grid;grid-template-columns:252px 1fr;min-height:0;overflow:hidden}
+.workspace{display:grid;grid-template-columns:272px 1fr;min-height:0;overflow:hidden}
 
 /* ── SIDEBAR ────────────────────────────────────────────────────── */
 .sidebar{display:flex;flex-direction:column;border-right:1px solid var(--b1);background:color-mix(in srgb,var(--surf) 80%,transparent);overflow:hidden;min-height:0}
-.sb-proj{padding:12px 13px 10px;border-bottom:1px solid var(--b1);flex-shrink:0}
-.sb-eye{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:3px;font-weight:600}
-.sb-title{font-size:17px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:2px}
-.sb-meta{font-size:11px;color:var(--soft);line-height:1.5;margin-bottom:8px}
-.sb-stats{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:7px}
-.sbs{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.sb-proj{padding:14px 15px 12px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.sb-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin-bottom:4px;font-weight:600}
+.sb-title{font-size:19px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:3px}
+.sb-meta{font-size:12px;color:var(--soft);line-height:1.5;margin-bottom:9px}
+.sb-stats{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}
+.sbs{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:2.5px 7.5px;border-radius:4px}
 .sbs.g{color:var(--brand);background:var(--blo);border:1px solid var(--bhi)}
 .sbs.a{color:var(--soft);background:color-mix(in srgb,var(--p2) 70%,transparent);border:1px solid var(--b1)}
 .sbs.r{color:var(--red);background:var(--rlo);border:1px solid var(--rhi)}
+.sbs.o{color:var(--orange);background:var(--olo);border:1px solid var(--ohi)}
 .sb-bar{height:3px;border-radius:2px;background:var(--b1);overflow:hidden}
 .sb-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s ease}
 
-.sb-search{padding:8px 10px;border-bottom:1px solid var(--b1);flex-shrink:0}
-.sb-search input{width:100%;background:color-mix(in srgb,var(--p2) 70%,transparent);border:1px solid var(--b1);border-radius:var(--rs);padding:5px 9px;font-size:12px;color:var(--tx);transition:.12s}
+.sb-search{padding:10px 12px;border-bottom:1px solid var(--b1);flex-shrink:0}
+.sb-search input{width:100%;background:color-mix(in srgb,var(--p2) 70%,transparent);border:1px solid var(--b1);border-radius:var(--rs);padding:7px 11px;font-size:13px;color:var(--tx);transition:.12s}
 .sb-search input:focus{border-color:var(--b2);background:color-mix(in srgb,var(--p2) 90%,transparent)}
 .sb-search input::placeholder{color:var(--muted)}
 
-.sb-filters{padding:7px 10px;border-bottom:1px solid var(--b1);display:flex;gap:4px;flex-wrap:wrap;flex-shrink:0}
-.chip{display:inline-flex;align-items:center;padding:3.5px 9px;border-radius:999px;font-size:11px;font-weight:600;border:1px solid var(--b1);color:var(--muted);background:transparent;cursor:pointer;transition:.12s}
+.sb-filters{padding:8px 11px;border-bottom:1px solid var(--b1);display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}
+.chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:600;border:1px solid var(--b1);color:var(--muted);background:transparent;cursor:pointer;transition:.12s}
 .chip:hover{color:var(--soft);border-color:var(--b2)}
 .chip.active{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
 
-.areas-list{flex:1;overflow-y:auto;padding:6px 8px}
+.areas-list{flex:1;overflow-y:auto;padding:7px 9px}
 .areas-list::-webkit-scrollbar{width:3px}
 .areas-list::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
 
 /* area button */
-.ab{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;padding:9px 10px;border-radius:var(--r);border:1px solid transparent;margin-bottom:2px;cursor:pointer;transition:.12s;background:transparent;position:relative;padding-left:14px}
-.ab::before{content:"";position:absolute;left:4px;top:50%;transform:translateY(-50%);width:3px;height:60%;border-radius:2px;background:var(--dim);transition:.12s}
+.ab{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;padding:10px 11px;border-radius:var(--r);border:1px solid transparent;margin-bottom:3px;cursor:pointer;transition:.12s;background:transparent;position:relative;padding-left:16px}
+.ab::before{content:"";position:absolute;left:4px;top:50%;transform:translateY(-50%);width:3px;height:62%;border-radius:2px;background:var(--dim);transition:.12s}
 .ab.health-ok::before{background:var(--brand)}
 .ab.health-pending::before{background:var(--amber)}
 .ab.health-issue::before{background:var(--red)}
+.ab.added-rev::after{content:"R+";position:absolute;right:7px;top:6px;font-family:var(--mono);font-size:8.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);padding:1px 4px;border-radius:3px}
 .ab:hover{background:color-mix(in srgb,var(--p2) 60%,transparent);border-color:var(--b1)}
 .ab.active{background:color-mix(in srgb,var(--p2) 90%,transparent);border-color:var(--b2)}
-.ab-top{display:flex;justify-content:space-between;align-items:baseline;gap:6px}
-.ab-name{font-size:12.5px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
-.ab-pct{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--muted);flex-shrink:0}
+.ab-top{display:flex;justify-content:space-between;align-items:baseline;gap:7px}
+.ab-name{font-size:13.5px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+.ab-pct{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--muted);flex-shrink:0}
 .ab.active .ab-pct{color:var(--soft)}
-.ab-bar{height:2px;border-radius:1px;background:var(--b1)}
+.ab-bar{height:2.5px;border-radius:1px;background:var(--b1)}
 .ab-fill{height:100%;border-radius:1px;background:var(--brand);transition:width .4s ease}
 .ab-fill.issue{background:var(--red)}
 .ab-fill.pend{background:var(--amber)}
-.ab-sub{font-size:10.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ab-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-.sb-foot{padding:8px;flex-shrink:0;border-top:1px solid var(--b1)}
-.sb-add{display:flex;align-items:center;gap:6px;width:100%;padding:7px 10px;border-radius:var(--rs);border:1px dashed var(--b2);color:var(--muted);font-size:11.5px;font-weight:600;cursor:pointer;transition:.12s;background:transparent}
+.sb-foot{padding:9px;flex-shrink:0;border-top:1px solid var(--b1);display:flex;flex-direction:column;gap:5px}
+.sb-add{display:flex;align-items:center;gap:7px;width:100%;padding:9px 11px;border-radius:var(--rs);border:1px dashed var(--b2);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s;background:transparent}
 .sb-add:hover{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
-.sb-add svg{width:11px;height:11px;flex-shrink:0}
+.sb-add svg{width:12px;height:12px;flex-shrink:0}
+.sb-add.rev{color:var(--blue);border-color:var(--blhi);background:var(--bllo)}
+.sb-add.rev:hover{filter:brightness(1.08)}
 
 /* ── MAIN AREA ──────────────────────────────────────────────────── */
 .main{display:flex;flex-direction:column;min-height:0;overflow:hidden}
-.content-scroll{flex:1;overflow-y:auto;padding:0 0 20px}
-.content-scroll::-webkit-scrollbar{width:4px}
+.content-scroll{flex:1;overflow-y:auto;padding:0 0 24px}
+.content-scroll::-webkit-scrollbar{width:5px}
 .content-scroll::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
 
 /* area header */
-.ah{padding:18px 22px 14px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--panel) 70%,transparent);flex-shrink:0;position:sticky;top:0;z-index:10;backdrop-filter:blur(14px)}
-.ah-eye{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);font-weight:600;margin-bottom:4px}
-.ah-title{font-size:22px;font-weight:700;letter-spacing:-.05em;line-height:1.1;margin-bottom:6px}
-.ah-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.ah-badges{display:flex;gap:5px;flex-wrap:wrap}
-.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:700;border:1px solid transparent}
+.ah{padding:22px 26px 16px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--panel) 75%,transparent);flex-shrink:0;position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
+.ah-eye{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:600;margin-bottom:5px}
+.ah-title{font-size:26px;font-weight:700;letter-spacing:-.05em;line-height:1.1;margin-bottom:7px}
+.ah-row{display:flex;align-items:center;justify-content:space-between;gap:13px;flex-wrap:wrap}
+.ah-badges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:12px;font-weight:700;border:1px solid transparent}
 .badge.g{color:var(--brand);background:var(--blo);border-color:var(--bhi)}
 .badge.a{color:var(--amber);background:var(--alo);border-color:var(--ahi)}
 .badge.r{color:var(--red);background:var(--rlo);border-color:var(--rhi)}
 .badge.v{color:var(--violet);background:var(--vlo);border-color:var(--vhi)}
+.badge.o{color:var(--orange);background:var(--olo);border-color:var(--ohi)}
 .badge.b{color:var(--muted);background:color-mix(in srgb,var(--p2) 50%,transparent);border-color:var(--b1)}
-.ah-actions{display:flex;gap:6px;align-items:center;flex-shrink:0}
-.abtn{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:999px;font-size:12px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 50%,transparent);transition:.12s;cursor:pointer}
+.ah-actions{display:flex;gap:7px;align-items:center;flex-shrink:0}
+.abtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 50%,transparent);transition:.12s;cursor:pointer}
 .abtn:hover{border-color:var(--b2);color:var(--tx)}
-.abtn svg{width:11px;height:11px}
+.abtn svg{width:12px;height:12px}
 .abtn.green{background:var(--blo);border-color:var(--bhi);color:var(--brand);font-weight:700}
 .abtn.green:hover{filter:brightness(1.08)}
 
+/* area project ref strip */
+.proj-ref-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:var(--rs);background:var(--bllo);border:1px solid var(--blhi);font-size:12px}
+.proj-ref-strip svg{width:13px;height:13px;color:var(--blue);flex-shrink:0}
+.proj-ref-strip strong{color:var(--blue);font-weight:700}
+.proj-ref-strip .ref-edit{margin-left:auto;font-size:10.5px;color:var(--muted);cursor:pointer;text-decoration:underline;text-decoration-style:dotted}
+.proj-ref-strip .ref-edit:hover{color:var(--blue)}
+.proj-image-wrap{margin-top:8px;border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);background:var(--p2);position:relative;max-width:520px}
+.proj-image-wrap img{display:block;width:100%;height:auto;max-height:280px;object-fit:contain;background:#000}
+.proj-image-rm{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:13px;cursor:pointer}
+.proj-image-rm:hover{background:var(--red)}
+
 /* ── CONTENT ────────────────────────────────────────────────────── */
-.content{padding:14px 22px 8px}
+.content{padding:16px 26px 10px}
 
 /* discipline card */
-.dc{border:1px solid var(--b1);border-radius:var(--r);margin-bottom:10px;overflow:hidden;background:color-mix(in srgb,var(--card) 70%,transparent)}
-.dc-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;cursor:pointer;user-select:none;transition:.12s;gap:10px}
+.dc{border:1px solid var(--b1);border-radius:var(--r);margin-bottom:12px;overflow:hidden;background:color-mix(in srgb,var(--card) 72%,transparent)}
+.dc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:.12s;gap:11px}
 .dc-head:hover{background:color-mix(in srgb,var(--p2) 50%,transparent)}
-.dc-left{display:flex;align-items:center;gap:8px}
-.dc-dot{width:8px;height:8px;border-radius:50%;background:var(--brand);flex-shrink:0}
+.dc-left{display:flex;align-items:center;gap:10px}
+.dc-dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex-shrink:0}
 .dc-dot.d{background:var(--blue)}
 .dc-dot.s{background:var(--amber)}
 .dc-dot.h{background:#2dccc8}
 .dc-dot.i{background:var(--red)}
 .dc-dot.e{background:var(--violet)}
-.dc-name{font-size:13px;font-weight:700;letter-spacing:-.02em}
-.dc-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
-.dc-meta{font-size:11px;color:var(--muted);font-family:var(--mono)}
+.dc-name{font-size:14.5px;font-weight:700;letter-spacing:-.02em}
+.dc-right{display:flex;align-items:center;gap:9px;flex-shrink:0}
+.dc-meta{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
 .dc-meta.has-issues{color:var(--red)}
 .dc-chev{color:var(--muted);transition:transform .18s;flex-shrink:0}
 .dc.collapsed .dc-body{display:none}
 .dc.collapsed .dc-chev{transform:rotate(-90deg)}
-.dc-body{padding:0 10px 10px}
+.dc-body{padding:0 12px 12px}
 
 /* subsystem */
-.sub{margin-top:8px}
-.sub-head{display:flex;align-items:center;justify-content:space-between;padding:0 4px 6px;border-bottom:1px solid var(--b1);margin-bottom:4px}
-.sub-name{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
-.sub-right{display:flex;align-items:center;gap:6px}
-.sub-count{font-family:var(--mono);font-size:10px;color:var(--dim);background:color-mix(in srgb,var(--p2) 60%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1px 5px}
-.sub-add{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:5px;font-size:10.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);cursor:pointer;transition:.12s;opacity:.7}
-.sub-add:hover{opacity:1;background:color-mix(in srgb,var(--blue) 12%,transparent)}
-.sub-add svg{width:9px;height:9px}
+.sub{margin-top:10px}
+.sub-head{display:flex;align-items:center;justify-content:space-between;padding:0 5px 7px;border-bottom:1px solid var(--b1);margin-bottom:5px}
+.sub-name{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
+.sub-right{display:flex;align-items:center;gap:7px}
+.sub-count{font-family:var(--mono);font-size:10.5px;color:var(--dim);background:color-mix(in srgb,var(--p2) 60%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1.5px 6px}
+.sub-add{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);cursor:pointer;transition:.12s;opacity:.75}
+.sub-add:hover{opacity:1;background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.sub-add svg{width:10px;height:10px}
 
 /* ── ITEM CARD ──────────────────────────────────────────────────── */
-.item{border:1px solid var(--b1);border-left:3px solid var(--dim);border-radius:var(--r);padding:11px 13px;margin-bottom:5px;background:color-mix(in srgb,var(--card) 50%,transparent);transition:border-left-color .15s,background .15s}
+.item{border:1px solid var(--b1);border-left:3px solid var(--dim);border-radius:var(--r);padding:13px 15px;margin-bottom:6px;background:color-mix(in srgb,var(--card) 50%,transparent);transition:border-left-color .15s,background .15s}
 .item.match       {border-left-color:var(--brand); background:color-mix(in srgb,var(--brand) 3%,transparent)}
 .item.eap_only    {border-left-color:var(--amber); background:color-mix(in srgb,var(--amber) 3%,transparent)}
 .item.project_only{border-left-color:var(--red);   background:color-mix(in srgb,var(--red)   3%,transparent)}
-.item.review      {border-left-color:var(--violet); background:color-mix(in srgb,var(--violet) 3%,transparent)}
+.item.review      {border-left-color:var(--violet);background:color-mix(in srgb,var(--violet) 3%,transparent)}
+.item.out_of_scope{border-left-color:var(--orange);background:color-mix(in srgb,var(--orange) 3%,transparent)}
 .item.na          {border-left-color:var(--dim); opacity:.65}
+.item.split-source{border-left-color:var(--blue); background:color-mix(in srgb,var(--blue) 4%,transparent);opacity:.85}
+.item.split-source .it-name{text-decoration:line-through;text-decoration-color:var(--muted);text-decoration-thickness:1px}
 
 /* item top row */
-.it-top{display:flex;align-items:center;gap:5px;margin-bottom:6px;flex-wrap:wrap}
-.otag{font-family:var(--mono);font-size:7.5px;text-transform:uppercase;letter-spacing:.11em;font-weight:700;padding:2px 5px;border-radius:3px;flex-shrink:0}
+.it-top{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
+.otag{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.11em;font-weight:700;padding:2.5px 6px;border-radius:4px;flex-shrink:0}
 .otag.eap{color:var(--brand);background:var(--blo);border:1px solid var(--bhi)}
 .otag.project{color:var(--red);background:var(--rlo);border:1px solid var(--rhi)}
-.icode{font-family:var(--mono);font-size:9px;color:var(--muted);background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1px 5px;flex-shrink:0}
-.corr-dot{width:5px;height:5px;border-radius:50%;background:var(--amber);flex-shrink:0;cursor:help}
+.otag.split{color:var(--blue);background:var(--bllo);border:1px solid var(--blhi)}
+.icode{font-family:var(--mono);font-size:9.5px;color:var(--muted);background:color-mix(in srgb,var(--panel) 80%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1.5px 6px;flex-shrink:0}
+.corr-dot{width:6px;height:6px;border-radius:50%;background:var(--amber);flex-shrink:0;cursor:help}
+.rev-tag{font-family:var(--mono);font-size:8.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);padding:1.5px 5px;border-radius:3px;flex-shrink:0}
 .it-spacer{flex:1}
-.it-btns{display:flex;align-items:center;gap:3px}
-.pencil{display:inline-flex;align-items:center;gap:3px;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0;transition:.12s}
+.it-btns{display:flex;align-items:center;gap:4px}
+.pencil{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0;transition:.12s}
 .item:hover .pencil{opacity:1}
 .pencil:hover{color:var(--amber);background:var(--alo)}
-.pencil svg{width:9px;height:9px}
-.item-rm{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:4px;font-size:10px;color:var(--muted);cursor:pointer;transition:.12s;opacity:0}
+.pencil.split-btn:hover{color:var(--blue);background:var(--bllo)}
+.pencil svg{width:10px;height:10px}
+.item-rm{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:11px;color:var(--muted);cursor:pointer;transition:.12s;opacity:0}
 .item:hover .item-rm{opacity:1}
 .item-rm:hover{color:var(--red);background:var(--rlo)}
 
 /* item name */
-.it-name{font-size:14px;font-weight:600;letter-spacing:-.025em;line-height:1.3;margin-bottom:8px}
-.it-corrected{font-size:10px;color:var(--muted);font-family:var(--mono);margin-bottom:6px}
+.it-name{font-size:15.5px;font-weight:600;letter-spacing:-.025em;line-height:1.32;margin-bottom:9px}
+.it-corrected{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:7px;line-height:1.4}
+.it-split-info{font-size:11.5px;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);border-radius:var(--rs);padding:6px 9px;margin-bottom:8px;line-height:1.4}
+.it-split-info b{color:var(--blue)}
 
 /* inline edit */
-.name-edit-wrap{display:flex;align-items:center;gap:5px;flex-wrap:wrap;margin-bottom:8px}
-.name-input{font-size:14px;font-weight:600;letter-spacing:-.025em;border:1.5px solid var(--brand);border-radius:6px;padding:3px 9px;background:color-mix(in srgb,var(--blo) 70%,transparent);color:var(--tx);min-width:160px;flex:1;max-width:460px}
-.edit-ok{padding:3px 9px;border-radius:5px;font-size:11.5px;font-weight:700;background:var(--brand);color:#051409;cursor:pointer;flex-shrink:0}
+.name-edit-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px}
+.name-input{font-size:15.5px;font-weight:600;letter-spacing:-.025em;border:1.5px solid var(--brand);border-radius:7px;padding:5px 11px;background:color-mix(in srgb,var(--blo) 70%,transparent);color:var(--tx);min-width:180px;flex:1;max-width:520px}
+.edit-ok{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--brand);color:#051409;cursor:pointer;flex-shrink:0}
 .edit-ok:hover{filter:brightness(1.08)}
-.edit-cancel{padding:3px 8px;border-radius:5px;font-size:11.5px;font-weight:700;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);cursor:pointer;flex-shrink:0}
+.edit-cancel{padding:5px 11px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);cursor:pointer;flex-shrink:0}
 
 /* status picker — below the name */
-.spk{display:flex;align-items:center;gap:4px;flex-wrap:wrap}
-.spk-btn{display:inline-flex;align-items:center;gap:4px;padding:5px 10px;border-radius:6px;font-size:11.5px;font-weight:600;border:1.5px solid transparent;cursor:pointer;transition:.12s;white-space:nowrap;background:color-mix(in srgb,var(--p2) 50%,transparent);color:var(--muted)}
+.spk{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.spk-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-size:12.5px;font-weight:600;border:1.5px solid transparent;cursor:pointer;transition:.12s;white-space:nowrap;background:color-mix(in srgb,var(--p2) 50%,transparent);color:var(--muted)}
 .spk-btn:hover{transform:translateY(-1px)}
-.spk-btn.match       {color:var(--brand); border-color:color-mix(in srgb,var(--brand) 30%,transparent); background:var(--blo)}
-.spk-btn.eap_only    {color:var(--amber); border-color:color-mix(in srgb,var(--amber) 30%,transparent); background:var(--alo)}
-.spk-btn.project_only{color:var(--red);   border-color:color-mix(in srgb,var(--red)   30%,transparent); background:var(--rlo)}
-.spk-btn.review      {color:var(--violet);border-color:color-mix(in srgb,var(--violet) 30%,transparent);background:var(--vlo)}
+.spk-btn.match       {color:var(--brand); border-color:color-mix(in srgb,var(--brand) 32%,transparent); background:var(--blo)}
+.spk-btn.eap_only    {color:var(--amber); border-color:color-mix(in srgb,var(--amber) 32%,transparent); background:var(--alo)}
+.spk-btn.project_only{color:var(--red);   border-color:color-mix(in srgb,var(--red)   32%,transparent); background:var(--rlo)}
+.spk-btn.review      {color:var(--violet);border-color:color-mix(in srgb,var(--violet) 32%,transparent);background:var(--vlo)}
+.spk-btn.out_of_scope{color:var(--orange);border-color:color-mix(in srgb,var(--orange) 32%,transparent);background:var(--olo)}
 .spk-btn.na          {color:var(--muted); border-color:var(--b1); background:color-mix(in srgb,var(--p2) 30%,transparent)}
-/* inactive (not selected) */
 .spk-btn.inactive{color:var(--muted);border-color:var(--b1);background:transparent}
 .spk-btn.inactive:hover{border-color:var(--b2);color:var(--soft)}
-/* active ring */
 .spk-btn.active-ring{box-shadow:0 0 0 2px currentColor}
-/* expand ref */
-.spk-sep{width:1px;height:16px;background:var(--b2);margin:0 2px}
-.spk-ref{display:inline-flex;align-items:center;gap:3px;padding:5px 9px;border-radius:6px;font-size:10.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--b1);background:transparent;cursor:pointer;transition:.12s}
+.spk-sep{width:1px;height:18px;background:var(--b2);margin:0 2px}
+.spk-ref{display:inline-flex;align-items:center;gap:4px;padding:7px 11px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--b1);background:transparent;cursor:pointer;transition:.12s}
 .spk-ref:hover{color:var(--soft);border-color:var(--b2)}
 .spk-ref.open{color:var(--blue);border-color:var(--blhi);background:var(--bllo)}
-.spk-ref svg{width:10px;height:10px}
+.spk-ref svg{width:11px;height:11px}
 
 /* ref/obs fields */
-.ix-fields{display:none;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px solid var(--b1)}
+.ix-fields{display:none;gap:7px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--b1)}
 .ix-fields.open{display:flex}
-.finput{height:28px;border:1px solid var(--b1);border-radius:var(--rs);padding:0 9px;background:color-mix(in srgb,var(--panel) 65%,transparent);font-size:11.5px;color:var(--tx);flex:1;min-width:120px;max-width:300px;transition:.12s}
+.finput{height:32px;border:1px solid var(--b1);border-radius:var(--rs);padding:0 11px;background:color-mix(in srgb,var(--panel) 65%,transparent);font-size:12.5px;color:var(--tx);flex:1;min-width:140px;max-width:340px;transition:.12s}
 .finput:focus{border-color:var(--brand)}
 .finput::placeholder{color:var(--muted)}
 
-/* ── "PROJECT FOUND" BANNER ─────────────────────────────────────── */
-/* shown at bottom of each subsystem when there are project_only items */
-.proj-item-label{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--red);font-weight:700;padding:6px 4px 2px;opacity:.7}
-
 /* ── SUMMARY BAR ────────────────────────────────────────────────── */
-.sumbar{border-top:1px solid var(--b1);padding:0 16px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(12px);display:flex;align-items:center;gap:10px;flex-wrap:nowrap;font-size:11px;color:var(--muted);overflow:hidden;height:36px}
+.sumbar{border-top:1px solid var(--b1);padding:0 18px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(14px);display:flex;align-items:center;gap:12px;flex-wrap:nowrap;font-size:11.5px;color:var(--muted);overflow:hidden;height:40px}
 .sumbar strong{color:var(--tx)}
-.sum-prog{flex:1;max-width:120px;height:3px;border-radius:2px;background:var(--b1);overflow:hidden;flex-shrink:0}
+.sum-prog{flex:1;max-width:140px;height:3.5px;border-radius:2px;background:var(--b1);overflow:hidden;flex-shrink:0}
 .sum-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s ease}
-.sum-sep{width:1px;height:14px;background:var(--b1);flex-shrink:0}
+.sum-sep{width:1px;height:16px;background:var(--b1);flex-shrink:0}
 
 /* ── TOAST ──────────────────────────────────────────────────────── */
-.toast{position:fixed;bottom:48px;left:50%;z-index:100;pointer-events:none;transform:translate(-50%,8px);opacity:0;background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--b2);backdrop-filter:blur(16px);border-radius:999px;padding:7px 15px;font-size:12.5px;font-weight:600;box-shadow:var(--shadow);transition:.18s;white-space:nowrap}
+.toast{position:fixed;bottom:54px;left:50%;z-index:100;pointer-events:none;transform:translate(-50%,8px);opacity:0;background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--b2);backdrop-filter:blur(18px);border-radius:999px;padding:9px 17px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow);transition:.18s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 
 /* ── LAYER & MODALS ─────────────────────────────────────────────── */
-.layer{position:fixed;inset:0;z-index:60;background:rgba(2,8,16,.76);backdrop-filter:blur(10px);display:grid;place-items:center;padding:16px}
-.modal{width:min(500px,100%);background:var(--panel);border:1px solid var(--b2);border-radius:20px;padding:20px 22px;box-shadow:var(--shadow)}
-.modal h2{font-size:17px;font-weight:700;letter-spacing:-.04em;margin-bottom:3px}
-.modal p{font-size:12px;color:var(--soft);line-height:1.5;margin-bottom:14px}
-.form{display:grid;gap:10px}
-.field label{display:block;font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:4px}
-.field input,.field select,.field textarea{width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:8px 10px;background:color-mix(in srgb,var(--p2) 65%,transparent);font-size:12.5px;color:var(--tx);transition:.12s}
+.layer{position:fixed;inset:0;z-index:60;background:rgba(2,8,16,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px}
+.modal{width:min(560px,100%);background:var(--panel);border:1px solid var(--b2);border-radius:22px;padding:22px 24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
+.modal h2{font-size:19px;font-weight:700;letter-spacing:-.04em;margin-bottom:4px}
+.modal p{font-size:13px;color:var(--soft);line-height:1.55;margin-bottom:16px}
+.form{display:grid;gap:12px}
+.field label{display:block;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:5px}
+.field input,.field select,.field textarea{width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;background:color-mix(in srgb,var(--p2) 65%,transparent);font-size:13.5px;color:var(--tx);transition:.12s}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand)}
-.field textarea{min-height:64px;resize:vertical}
+.field textarea{min-height:74px;resize:vertical;line-height:1.5}
 .field select option{background:var(--panel)}
-.mfoot{display:flex;justify-content:flex-end;gap:7px;margin-top:14px;padding-top:12px;border-top:1px solid var(--b1)}
-.mbtn{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s}
+.field .field-hint{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}
+.mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--b1)}
+.mbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
 .mbtn.ghost{border:1px solid var(--b1);color:var(--soft);background:transparent}
 .mbtn.ghost:hover{border-color:var(--b2);color:var(--tx)}
 .mbtn.prim{background:var(--brand);color:#041209;border:none;font-weight:700}
@@ -286,76 +309,112 @@ button{cursor:pointer}
 .mbtn.sec{background:var(--bllo);color:var(--blue);border:1px solid var(--blhi)}
 .mbtn.sec:hover{filter:brightness(1.08)}
 
+/* image upload */
+.img-drop{border:1.5px dashed var(--b2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--p2) 40%,transparent)}
+.img-drop:hover{border-color:var(--brand);background:var(--blo)}
+.img-drop svg{width:24px;height:24px;color:var(--muted);margin-bottom:6px}
+.img-drop strong{display:block;font-size:13px;color:var(--tx);margin-bottom:3px}
+.img-drop span{display:block;font-size:11px;color:var(--muted)}
+.img-preview{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);max-height:240px;background:#000}
+.img-preview img{display:block;width:100%;height:auto;max-height:240px;object-fit:contain}
+.img-preview-rm{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px;cursor:pointer}
+.img-preview-rm:hover{background:var(--red)}
+
+/* split modal */
+.split-orig{padding:11px 13px;border:1px solid var(--blhi);background:var(--bllo);border-radius:var(--r);margin-bottom:14px}
+.split-orig .so-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-weight:700;margin-bottom:3px}
+.split-orig .so-name{font-size:14.5px;font-weight:600;color:var(--tx)}
+.split-orig .so-code{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:3px}
+.split-list{display:flex;flex-direction:column;gap:8px;margin-bottom:10px}
+.split-row{display:flex;align-items:center;gap:7px}
+.split-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--blue);width:22px;flex-shrink:0;text-align:center}
+.split-row input{flex:1;border:1px solid var(--b1);border-radius:var(--rs);padding:9px 11px;background:color-mix(in srgb,var(--p2) 65%,transparent);font-size:13.5px;color:var(--tx);transition:.12s}
+.split-row input:focus{border-color:var(--brand)}
+.split-row .split-rm{width:30px;height:30px;border-radius:6px;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);display:grid;place-items:center;cursor:pointer;flex-shrink:0;font-size:13px}
+.split-row .split-rm:hover{background:color-mix(in srgb,var(--red) 16%,transparent)}
+.split-add-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);background:var(--bllo);border:1px dashed var(--blhi);cursor:pointer;transition:.12s}
+.split-add-btn:hover{background:color-mix(in srgb,var(--blue) 14%,transparent)}
+.split-add-btn svg{width:10px;height:10px}
+
+/* revision modal */
+.rev-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:220px;overflow-y:auto}
+.rev-row{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:1px solid var(--b1);border-radius:var(--rs);background:color-mix(in srgb,var(--p2) 40%,transparent)}
+.rev-row.current{border-color:var(--bhi);background:var(--blo)}
+.rev-label{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--brand);min-width:36px;flex-shrink:0}
+.rev-content{flex:1;font-size:12px;color:var(--soft);line-height:1.45}
+.rev-content .rev-date{font-size:10px;color:var(--muted);margin-top:2px}
+.rev-cur-tag{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--brand);background:var(--blo);border:1px solid var(--bhi);padding:2px 6px;border-radius:3px;flex-shrink:0}
+
 /* ── REPORT MODAL ───────────────────────────────────────────────── */
-.rmodal{width:min(880px,100%);max-height:90vh;background:var(--panel);border:1px solid var(--b2);border-radius:20px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
-.rhead{padding:15px 20px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0}
-.rhead h2{font-size:16px;font-weight:700;letter-spacing:-.04em}
-.rhead-right{display:flex;align-items:center;gap:7px}
-.rprog{font-family:var(--mono);font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:999px;border:1px solid var(--b1);color:var(--muted)}
+.rmodal{width:min(940px,100%);max-height:92vh;background:var(--panel);border:1px solid var(--b2);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+.rhead{padding:17px 22px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:13px;flex-shrink:0}
+.rhead h2{font-size:18px;font-weight:700;letter-spacing:-.04em}
+.rhead-right{display:flex;align-items:center;gap:8px}
+.rprog{font-family:var(--mono);font-size:11.5px;font-weight:700;padding:4px 11px;border-radius:999px;border:1px solid var(--b1);color:var(--muted)}
 .rprog.done{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
-.rinputs{padding:12px 20px;border-bottom:1px solid var(--b1);flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.rwarn{margin:9px 20px 0;padding:8px 11px;background:var(--alo);border:1px solid var(--ahi);border-radius:var(--rs);font-size:11.5px;color:var(--amber);line-height:1.4;flex-shrink:0}
+.rinputs{padding:13px 22px;border-bottom:1px solid var(--b1);flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.rwarn{margin:10px 22px 0;padding:10px 13px;background:var(--alo);border:1px solid var(--ahi);border-radius:var(--rs);font-size:12.5px;color:var(--amber);line-height:1.45;flex-shrink:0}
 .rpreview{flex:1;overflow:hidden;min-height:0;display:flex;flex-direction:column}
-.rta{flex:1;width:100%;resize:none;font-family:var(--mono);font-size:11px;line-height:1.6;padding:14px 20px;border:none;background:color-mix(in srgb,var(--card) 90%,transparent);color:var(--tx);overflow-y:auto}
-.rta::-webkit-scrollbar{width:4px}
+.rta{flex:1;width:100%;resize:none;font-family:var(--mono);font-size:11.5px;line-height:1.65;padding:16px 22px;border:none;background:color-mix(in srgb,var(--card) 90%,transparent);color:var(--tx);overflow-y:auto}
+.rta::-webkit-scrollbar{width:5px}
 .rta::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
-.rfoot{padding:11px 20px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:7px;flex-shrink:0}
-.rfoot small{color:var(--muted);font-size:11px;margin-right:auto}
+.rfoot{padding:13px 22px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.rfoot small{color:var(--muted);font-size:11.5px;margin-right:auto}
+.dclose{width:30px;height:30px;border-radius:8px;border:1px solid var(--b1);display:grid;place-items:center;color:var(--muted);cursor:pointer;transition:.12s;background:transparent}
+.dclose:hover{color:var(--tx);border-color:var(--b2)}
+.dclose svg{width:13px;height:13px}
 
 /* ── DIFF PANEL ─────────────────────────────────────────────────── */
 .dlayer{position:fixed;inset:0;z-index:50;pointer-events:none}
 .dlayer.open{pointer-events:auto}
 .dbackdrop{position:absolute;inset:0;background:rgba(2,8,16,.5);opacity:0;transition:opacity .22s}
 .dlayer.open .dbackdrop{opacity:1}
-.dpanel{position:absolute;right:0;top:0;bottom:0;width:min(380px,100vw);background:var(--panel);border-left:1px solid var(--b2);box-shadow:-16px 0 56px rgba(0,0,0,.3);transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column;overflow:hidden}
+.dpanel{position:absolute;right:0;top:0;bottom:0;width:min(400px,100vw);background:var(--panel);border-left:1px solid var(--b2);box-shadow:-18px 0 60px rgba(0,0,0,.32);transform:translateX(100%);transition:transform .24s ease;display:flex;flex-direction:column;overflow:hidden}
 .dlayer.open .dpanel{transform:translateX(0)}
-.dhead{padding:14px 16px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
-.dtitle{font-size:13.5px;font-weight:700;letter-spacing:-.03em}
-.dclose{width:27px;height:27px;border-radius:7px;border:1px solid var(--b1);display:grid;place-items:center;color:var(--muted);cursor:pointer;transition:.12s}
-.dclose:hover{color:var(--tx);border-color:var(--b2)}
-.dclose svg{width:12px;height:12px}
-.dbody{flex:1;overflow-y:auto;padding:8px 10px;display:flex;flex-direction:column;gap:4px}
+.dhead{padding:15px 17px;border-bottom:1px solid var(--b1);display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.dtitle{font-size:14.5px;font-weight:700;letter-spacing:-.03em}
+.dbody{flex:1;overflow-y:auto;padding:9px 11px;display:flex;flex-direction:column;gap:5px}
 .dbody::-webkit-scrollbar{width:3px}
 .dbody::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
-.di{border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--card) 80%,transparent)}
+.di{border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--card) 80%,transparent)}
 .di:hover{border-color:var(--b2);transform:translateX(-3px)}
-.ditag{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:3px}
-.ditag.a{color:var(--amber)} .ditag.r{color:var(--red)} .ditag.v{color:var(--violet)}
-.diname{font-size:12.5px;font-weight:600;margin-bottom:2px}
-.disub{font-size:10.5px;color:var(--muted)}
-.dempty{text-align:center;color:var(--muted);padding:28px 12px;font-size:12px;line-height:1.6}
-.dfoot{padding:10px;border-top:1px solid var(--b1);flex-shrink:0}
+.ditag{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:4px}
+.ditag.a{color:var(--amber)} .ditag.r{color:var(--red)} .ditag.v{color:var(--violet)} .ditag.o{color:var(--orange)}
+.diname{font-size:13.5px;font-weight:600;margin-bottom:3px}
+.disub{font-size:11px;color:var(--muted)}
+.dempty{text-align:center;color:var(--muted);padding:30px 14px;font-size:13px;line-height:1.6}
+.dfoot{padding:11px;border-top:1px solid var(--b1);flex-shrink:0}
 
 /* ── AREA NOTES ─────────────────────────────────────────────────── */
-.area-notes{margin:8px 22px 4px}
-.anotes-toggle{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;font-size:11px;font-weight:600;color:var(--muted);border:1px solid var(--b1);background:transparent;cursor:pointer;transition:.12s;margin-bottom:4px}
+.area-notes{margin:10px 26px 4px}
+.anotes-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:11.5px;font-weight:600;color:var(--muted);border:1px solid var(--b1);background:transparent;cursor:pointer;transition:.12s;margin-bottom:5px}
 .anotes-toggle:hover{color:var(--soft);border-color:var(--b2)}
-.anotes-toggle svg{width:11px;height:11px}
-.anotes-ta{display:none;width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:9px 11px;background:color-mix(in srgb,var(--p2) 60%,transparent);font-size:12px;color:var(--tx);resize:vertical;min-height:68px;transition:.12s;line-height:1.5}
+.anotes-toggle svg{width:12px;height:12px}
+.anotes-ta{display:none;width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:10px 13px;background:color-mix(in srgb,var(--p2) 60%,transparent);font-size:13px;color:var(--tx);resize:vertical;min-height:78px;transition:.12s;line-height:1.5}
 .anotes-ta.open{display:block}
 .anotes-ta:focus{border-color:var(--brand)}
 .anotes-ta::placeholder{color:var(--muted)}
 
 /* ── EMPTY ──────────────────────────────────────────────────────── */
-.empty{border:1px dashed var(--b2);border-radius:var(--r);padding:24px 18px;text-align:center;color:var(--muted);font-size:12.5px;line-height:1.6}
+.empty{border:1px dashed var(--b2);border-radius:var(--r);padding:28px 20px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.6}
 
 /* ── LEGEND STRIP ───────────────────────────────────────────────── */
-.legend{display:flex;align-items:center;gap:12px;padding:8px 22px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--p2) 30%,transparent);flex-wrap:wrap;flex-shrink:0}
-.legend-label{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;flex-shrink:0}
-.leg-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--soft);white-space:nowrap}
-.leg-dot{width:7px;height:7px;border-radius:2px;flex-shrink:0}
-.leg-dot.g{background:var(--brand)} .leg-dot.a{background:var(--amber)} .leg-dot.r{background:var(--red)} .leg-dot.v{background:var(--violet)} .leg-dot.m{background:var(--muted)}
+.legend{display:flex;align-items:center;gap:14px;padding:10px 26px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--p2) 32%,transparent);flex-wrap:wrap;flex-shrink:0}
+.legend-label{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;flex-shrink:0}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--soft);white-space:nowrap}
+.leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.leg-dot.g{background:var(--brand)} .leg-dot.a{background:var(--amber)} .leg-dot.r{background:var(--red)} .leg-dot.v{background:var(--violet)} .leg-dot.o{background:var(--orange)} .leg-dot.m{background:var(--muted)}
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
-@media(max-width:1060px){
-  .workspace{grid-template-columns:220px 1fr}
+@media(max-width:1100px){
+  .workspace{grid-template-columns:240px 1fr}
   .rinputs{grid-template-columns:1fr}
 }
 @media(max-width:760px){
   html,body{overflow:auto}
-  .app{height:auto;min-height:100vh;grid-template-rows:52px auto 36px}
+  .app{height:auto;min-height:100vh;grid-template-rows:58px auto 40px}
   .workspace{grid-template-columns:1fr;overflow:visible}
-  .sidebar{max-height:260px;border-right:none;border-bottom:1px solid var(--b1)}
+  .sidebar{max-height:280px;border-right:none;border-bottom:1px solid var(--b1)}
   .main{overflow:visible}
   .content-scroll{overflow:visible}
   .brand-client{display:none}
@@ -375,6 +434,10 @@ button{cursor:pointer}
     </div>
     <span class="brand-name">EAPCheck <em>·</em></span>
     <span class="brand-client">N.E. LOGÍSTICA LTDA.</span>
+    <button class="brand-rev" id="revBtn" type="button" title="Controle de revisões">
+      <svg viewBox="0 0 12 12" fill="none" style="width:10px;height:10px"><path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span id="revLabel">R0</span>
+    </button>
   </div>
 
   <button class="tb" id="diffBtn" type="button">
@@ -426,7 +489,11 @@ button{cursor:pointer}
     <div class="sb-foot">
       <button class="sb-add" data-add-area type="button">
         <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Área encontrada no projeto
+        Área faltou na EAP
+      </button>
+      <button class="sb-add rev" id="newRevBtn" type="button">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M2 6a4 4 0 117 2.6M9 5V2M9 5h-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Nova revisão (R1, R2…)
       </button>
     </div>
   </aside>
@@ -466,13 +533,13 @@ button{cursor:pointer}
 <div class="layer hidden" id="itemModal">
   <form class="modal" id="itemForm">
     <h2>Registrar item</h2>
-    <p>Encontrou algo no projeto que não está na EAP? Registre aqui.</p>
+    <p>Encontrou algo no projeto que não estava na EAP? Registre aqui — vai virar uma orientação no relatório.</p>
     <div class="form">
       <div class="field">
-        <label>Origem</label>
+        <label>Origem do item</label>
         <select id="iOrigin">
-          <option value="project">🔍 Só no projeto — não estava na EAP</option>
-          <option value="eap">📋 Item da EAP (inserção manual)</option>
+          <option value="project">Achei no projeto — não estava na EAP</option>
+          <option value="eap">Linha da EAP (inserção manual)</option>
         </select>
       </div>
       <div class="field"><label>Nome do item</label><input id="iName" required placeholder="Ex.: Eletrocalha, Quadro, CFTV…"></div>
@@ -484,7 +551,7 @@ button{cursor:pointer}
         </select>
       </div>
       <div class="field"><label>Etapa / Subsistema</label><input id="iSub" placeholder="Ex.: Iluminação, Tomadas, Quadros…"></div>
-      <div class="field"><label>Prancha / Referência</label><input id="iRef" placeholder="Ex.: ELE-003, folha 7"></div>
+      <div class="field"><label>Prancha / Referência no projeto</label><input id="iRef" placeholder="Ex.: ELE-003, folha 7"></div>
       <div class="field"><label>Observação</label><textarea id="iNote" placeholder="O que você encontrou no projeto…"></textarea></div>
     </div>
     <div class="mfoot">
@@ -497,12 +564,23 @@ button{cursor:pointer}
 <!-- ADD AREA MODAL -->
 <div class="layer hidden" id="areaModal">
   <form class="modal" id="areaForm">
-    <h2>Adicionar área</h2>
-    <p>Área encontrada no projeto mas ausente na EAP recebida.</p>
+    <h2>Área que faltou na EAP</h2>
+    <p>Achou uma área no projeto que não está na EAP? Cadastra aqui — anexa o print da marcação na planta e diga em qual prancha ela aparece. Tudo isso vai pro relatório.</p>
     <div class="form">
-      <div class="field"><label>Nome da área</label><input id="aaName" required placeholder="Ex.: Sala técnica externa"></div>
-      <div class="field"><label>Tipo</label><input id="aaType" placeholder="Ex.: Técnica, Operacional"></div>
-      <div class="field"><label>Observação</label><textarea id="aaDesc" placeholder="Onde apareceu no projeto?"></textarea></div>
+      <div class="field"><label>Nome da área</label><input id="aaName" required placeholder="Ex.: Sala técnica externa, Mezanino..."></div>
+      <div class="field"><label>Tipo / categoria</label><input id="aaType" placeholder="Ex.: Técnica, Operacional, Pavimento"></div>
+      <div class="field">
+        <label>Em qual projeto / prancha está?</label>
+        <input id="aaProjRef" placeholder="Ex.: Arquitetônico R02 — Planta Pavto. Superior, prancha A-04">
+        <span class="field-hint">Anota onde você viu essa área marcada (nome do arquivo, prancha, página).</span>
+      </div>
+      <div class="field">
+        <label>Print da marcação na planta (opcional)</label>
+        <div id="aaImgWrap"></div>
+        <input id="aaImg" type="file" accept="image/*" style="display:none">
+        <span class="field-hint">Anexa um print da planta com a área destacada/circulada — vira anexo do relatório.</span>
+      </div>
+      <div class="field"><label>Observação</label><textarea id="aaDesc" placeholder="Por que estava faltando? O que tem nessa área?"></textarea></div>
     </div>
     <div class="mfoot">
       <button class="mbtn ghost" type="button" data-close="areaModal">Cancelar</button>
@@ -511,11 +589,54 @@ button{cursor:pointer}
   </form>
 </div>
 
+<!-- SPLIT ITEM MODAL -->
+<div class="layer hidden" id="splitModal">
+  <div class="modal" id="splitWrap">
+    <h2>Dividir item em vários</h2>
+    <p>Exemplo: <i>"Pétala em poste"</i> deveria ser <b>"Pétala 150W"</b> + <b>"Poste H=8m"</b> separados. Cada item vira uma linha nova; o original fica marcado como "dividido" no relatório, com a orientação de correção.</p>
+    <div class="split-orig">
+      <div class="so-eye">Item original (será dividido)</div>
+      <div class="so-name" id="splitOrigName">—</div>
+      <div class="so-code" id="splitOrigCode"></div>
+    </div>
+    <div class="split-list" id="splitItemsContainer"></div>
+    <button class="split-add-btn" id="splitAddBtn" type="button">
+      <svg viewBox="0 0 10 10" fill="none"><path d="M5 1v8M1 5h8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Adicionar mais um item
+    </button>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="splitModal">Cancelar</button>
+      <button class="mbtn prim" id="splitSaveBtn" type="button">Dividir</button>
+    </div>
+  </div>
+</div>
+
+<!-- REVISION MODAL -->
+<div class="layer hidden" id="revisionModal">
+  <div class="modal">
+    <h2>Controle de revisões</h2>
+    <p>Quando o projeto subir de revisão (R0 → R1 → R2…), registre aqui o que mudou. Os itens já marcados ficam com o selo da revisão em que foram conferidos.</p>
+    <div class="field"><label>Revisões já registradas</label>
+      <div class="rev-list" id="revList"></div>
+    </div>
+    <div class="form" style="border-top:1px solid var(--b1);padding-top:14px;margin-top:8px">
+      <div style="font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Criar nova revisão</div>
+      <div class="field"><label>Rótulo (ex.: R1, R2, REV-A)</label><input id="revInputLabel" placeholder="R1"></div>
+      <div class="field"><label>Data (DD/MM/AAAA)</label><input id="revInputDate" placeholder="28/05/2026"></div>
+      <div class="field"><label>O que mudou nesta revisão?</label><textarea id="revInputNotes" placeholder="Ex.: Removeu o pavimento técnico; alterou luminária do galpão para 180W; incluiu Mezanino."></textarea></div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="revisionModal">Fechar</button>
+      <button class="mbtn prim" id="revSaveBtn" type="button">Criar revisão</button>
+    </div>
+  </div>
+</div>
+
 <!-- REPORT MODAL -->
 <div class="layer hidden" id="reportModal">
   <div class="rmodal">
     <div class="rhead">
-      <h2>Gerar Relatório de Conferência</h2>
+      <h2>Manual de mudanças — Conferência EAP × Projeto</h2>
       <div class="rhead-right">
         <span class="rprog" id="rProg">0% conferido</span>
         <button class="dclose" type="button" data-close="reportModal">
@@ -532,7 +653,7 @@ button{cursor:pointer}
       <textarea class="rta" id="rTa" readonly spellcheck="false"></textarea>
     </div>
     <div class="rfoot">
-      <small>Copie o texto e envie por e-mail ou WhatsApp</small>
+      <small>Copie o texto e envie por e-mail ou WhatsApp — é um guia do que o responsável precisa corrigir.</small>
       <button class="mbtn ghost" type="button" data-close="reportModal">Fechar</button>
       <button class="mbtn sec" id="rDownload" type="button">⬇ Baixar .txt</button>
       <button class="mbtn prim" id="rCopy" type="button">Copiar relatório</button>
@@ -547,117 +668,118 @@ const EAP = {
   totalAreas:14, totalItems:59,
   areas:[
     {area:"Galpão",items:[
-      {code:"EAP.01.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay 150W",unidade:"un",aprovacao:"Aguardando",atualizado:"Guilherme Cesar Moreira · 26 mai.",status:"Confirmado"},
-      {code:"EAP.01.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un",aprovacao:"Solicitar",atualizado:"Biasi Admin · 27 mai.",status:"Confirmado"},
-      {code:"EAP.01.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto · 26 mai.",status:"Confirmado"},
-      {code:"EAP.01.04",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas trifásicas 380V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.01.05",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletrocalha 150x50mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.01.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay 150W",unidade:"un"},
+      {code:"EAP.01.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un"},
+      {code:"EAP.01.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un"},
+      {code:"EAP.01.04",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas trifásicas 380V",unidade:"un"},
+      {code:"EAP.01.05",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletrocalha 150x50mm",unidade:"m"}
     ]},
     {area:"Docas",items:[
-      {code:"EAP.02.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay docas",unidade:"un",aprovacao:"Aguardando",atualizado:"Biasi Admin · 26 mai.",status:"Confirmado",fotos:"1"},
-      {code:"EAP.02.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação externa (CL.B1 a CL.B11)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.02.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V docas (CL10 a CL14)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.02.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay docas",unidade:"un"},
+      {code:"EAP.02.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação externa (CL.B1 a CL.B11)",unidade:"un"},
+      {code:"EAP.02.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V docas (CL10 a CL14)",unidade:"un"}
     ]},
     {area:"Depósito",items:[
-      {code:"EAP.03.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.01 — 8.400W / 14 circuitos",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.03.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.02 — 7.200W",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.03.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.03 — 6.631W",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.03.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.01 — 8.400W / 14 circuitos",unidade:"cj"},
+      {code:"EAP.03.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.02 — 7.200W",unidade:"cj"},
+      {code:"EAP.03.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Highbay Dep.03 — 6.631W",unidade:"cj"}
     ]},
     {area:"Carregadores",items:[
-      {code:"EAP.04.01",disciplina:"ELÉTRICA",etapa:"Força",servico:"Pontos carregadores bateria 32.000W (CL00 a CL04)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.04.01",disciplina:"ELÉTRICA",etapa:"Força",servico:"Pontos carregadores bateria 32.000W (CL00 a CL04)",unidade:"un"}
     ]},
     {area:"Portaria",items:[
-      {code:"EAP.05.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V baixa",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V alta",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-03 9kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"Controle de acesso",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.05.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV portaria",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.05.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un"},
+      {code:"EAP.05.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V baixa",unidade:"un"},
+      {code:"EAP.05.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V alta",unidade:"un"},
+      {code:"EAP.05.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-03 9kBTU",unidade:"un"},
+      {code:"EAP.05.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt"},
+      {code:"EAP.05.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"Controle de acesso",unidade:"un"},
+      {code:"EAP.05.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV portaria",unidade:"un"}
     ]},
     {area:"Expedição",items:[
-      {code:"EAP.06.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.04",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 alta",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 baixa",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 piso",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Wireless",servico:"Access Point",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.08",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Rack",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.06.09",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV expedição",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.06.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un"},
+      {code:"EAP.06.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 127V",unidade:"un"},
+      {code:"EAP.06.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas 220V",unidade:"un"},
+      {code:"EAP.06.04",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 alta",unidade:"pt"},
+      {code:"EAP.06.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 baixa",unidade:"pt"},
+      {code:"EAP.06.06",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"RJ45 piso",unidade:"pt"},
+      {code:"EAP.06.07",disciplina:"INSTRUMENTAÇÃO",etapa:"Wireless",servico:"Access Point",unidade:"un"},
+      {code:"EAP.06.08",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Rack",unidade:"un"},
+      {code:"EAP.06.09",disciplina:"INSTRUMENTAÇÃO",etapa:"Segurança",servico:"CFTV expedição",unidade:"un"}
     ]},
     {area:"Administração",items:[
-      {code:"EAP.07.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.07.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.07.03",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-01 12kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto · 26 mai.",status:"Fora do escopo"},
-      {code:"EAP.07.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-02 12kBTU",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.07.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.07.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un"},
+      {code:"EAP.07.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un"},
+      {code:"EAP.07.03",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-01 12kBTU",unidade:"un"},
+      {code:"EAP.07.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"UC-02 12kBTU",unidade:"un"},
+      {code:"EAP.07.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Lógica",servico:"Ponto RJ45",unidade:"pt"}
     ]},
     {area:"Apoio",items:[
-      {code:"EAP.08.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.08.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.08.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"Ryan Stradioto · 26 mai.",status:"Confirmado"},
-      {code:"EAP.08.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"Split / AC",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.08.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária embutir",unidade:"un"},
+      {code:"EAP.08.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária emergência",unidade:"un"},
+      {code:"EAP.08.03",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un"},
+      {code:"EAP.08.04",disciplina:"AR COMPRIMIDO",etapa:"Climatização",servico:"Split / AC",unidade:"un"}
     ]},
     {area:"Refeitório",items:[
-      {code:"EAP.09.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.09.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.09.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária",unidade:"un"},
+      {code:"EAP.09.02",disciplina:"ELÉTRICA",etapa:"Tomadas",servico:"Tomadas",unidade:"un"}
     ]},
     {area:"Casa de Bombas",items:[
-      {code:"EAP.10.01",disciplina:"INCÊNDIO",etapa:"Força",servico:"Bomba de incêndio",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.10.02",disciplina:"ELÉTRICA",etapa:"Força",servico:"Bombas hidráulicas",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.10.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação interna",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.10.01",disciplina:"INCÊNDIO",etapa:"Força",servico:"Bomba de incêndio",unidade:"un"},
+      {code:"EAP.10.02",disciplina:"ELÉTRICA",etapa:"Força",servico:"Bombas hidráulicas",unidade:"un"},
+      {code:"EAP.10.03",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Iluminação interna",unidade:"cj"}
     ]},
     {area:"Área Externa",items:[
-      {code:"EAP.11.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Pétala 150W em poste H=8m",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.11.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Projetor fachada 30W",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.11.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Pétala 150W em poste H=8m",unidade:"un"},
+      {code:"EAP.11.02",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Projetor fachada 30W",unidade:"un"}
     ]},
     {area:"Infraestrutura Geral",items:[
-      {code:"EAP.12.01",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Perfilado força/ilum 38x38mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.12.02",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Perfilado rede 38x38mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.12.03",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Eletrocalha rede 150x50mm",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.12.04",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Kanaflex 4pol força",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.12.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Kanaflex 1/2pol lógica",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.12.06",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletroduto aparente 3/4pol",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.12.01",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Perfilado força/ilum 38x38mm",unidade:"m"},
+      {code:"EAP.12.02",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Perfilado rede 38x38mm",unidade:"m"},
+      {code:"EAP.12.03",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Eletrocalha rede 150x50mm",unidade:"m"},
+      {code:"EAP.12.04",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Kanaflex 4pol força",unidade:"m"},
+      {code:"EAP.12.05",disciplina:"INSTRUMENTAÇÃO",etapa:"Infraestrutura",servico:"Kanaflex 1/2pol lógica",unidade:"m"},
+      {code:"EAP.12.06",disciplina:"ELÉTRICA",etapa:"Infraestrutura",servico:"Eletroduto aparente 3/4pol",unidade:"m"}
     ]},
     {area:"Quadros Elétricos",items:[
-      {code:"EAP.13.01",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Geral",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.02",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Galpão",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.03",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Expedição / CAC / Portaria",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.04",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-ADM (380V + 220-127V x2)",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.05",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Servidor / Refeitório",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.06",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Docas / Apoio / Carregadores",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.13.07",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Depósito 01 / 02 / 03",unidade:"un",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.13.01",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Geral",unidade:"un"},
+      {code:"EAP.13.02",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QGBT-Galpão",unidade:"un"},
+      {code:"EAP.13.03",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Expedição / CAC / Portaria",unidade:"un"},
+      {code:"EAP.13.04",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-ADM (380V + 220-127V x2)",unidade:"un"},
+      {code:"EAP.13.05",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Servidor / Refeitório",unidade:"un"},
+      {code:"EAP.13.06",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Docas / Apoio / Carregadores",unidade:"un"},
+      {code:"EAP.13.07",disciplina:"ELÉTRICA",etapa:"Quadros",servico:"QD-Depósito 01 / 02 / 03",unidade:"un"}
     ]},
     {area:"SPDA",items:[
-      {code:"EAP.14.01",disciplina:"SPDA",etapa:"Infraestrutura",servico:"Cabo NU 50mm² (terra)",unidade:"m",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"},
-      {code:"EAP.14.02",disciplina:"SPDA",etapa:"Sistema",servico:"Sistema SPDA completo",unidade:"cj",aprovacao:"Solicitar",atualizado:"—",status:"Confirmado"}
+      {code:"EAP.14.01",disciplina:"SPDA",etapa:"Infraestrutura",servico:"Cabo NU 50mm² (terra)",unidade:"m"},
+      {code:"EAP.14.02",disciplina:"SPDA",etapa:"Sistema",servico:"Sistema SPDA completo",unidade:"cj"}
     ]}
   ]
 };
 
-/* ── STATE ──────────────────────────────────────────────────────── */
-const SK = "eapcheck:v10:alfalog";
-const TK = "eapcheck:v10:theme";
+/* ── STATE / CONFIG ─────────────────────────────────────────────── */
+const SK = "eapcheck:v11:alfalog";
+const TK = "eapcheck:v11:theme";
 
 const SC = {
   match:        {label:"EAP e projeto batem — confirmado",          short:"Confirmado"},
-  eap_only:     {label:"Está na EAP mas não achei no projeto",      short:"Não no projeto"},
-  project_only: {label:"Achei no projeto, mas não estava na EAP",   short:"Só no projeto"},
+  eap_only:     {label:"Está só na EAP — não achei no projeto",     short:"Só na EAP"},
+  project_only: {label:"Achei no projeto — não estava na EAP",      short:"Só no projeto"},
   review:       {label:"Dúvida — precisa revisar",                  short:"Dúvida"},
+  out_of_scope: {label:"Fora do escopo Biasi",                      short:"Fora do escopo"},
   na:           {label:"Não se aplica a este projeto",              short:"N/A"},
   pending:      {label:"Ainda não conferido",                       short:"Pendente"}
 };
-const EAP_KEYS  = ["match","eap_only","review","na"];
-const PROJ_KEYS = ["project_only","match","review","na"];
+const EAP_KEYS  = ["match","eap_only","project_only","review","out_of_scope","na"];
+const PROJ_KEYS = ["project_only","match","review","out_of_scope","na"];
 const DISC_CLS  = {Elétrica:"",Instrumentação:"d",SPDA:"s","Ar Comprimido":"h",Incêndio:"i",Outros:"e"};
 
 const ST = {
   proj:null, selId:null, query:"", filter:"all",
   modalAreaId:null, modalDiscName:null,
-  editingId:null,
-  openExpands:{},
-  openAreaNotes:{}
+  editingId:null, splitTargetId:null,
+  pendingImg:null,
+  openExpands:{}, openAreaNotes:{}
 };
 
 /* ── HELPERS ────────────────────────────────────────────────────── */
@@ -666,15 +788,26 @@ function uid(p){ return `${p}-${Date.now().toString(36)}-${Math.random().toStrin
 function esc(v){ return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }
 function slug(v){ return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"alfalog"; }
 function fmtDisc(raw){ const m={"ELÉTRICA":"Elétrica","AR COMPRIMIDO":"Ar Comprimido","INSTRUMENTAÇÃO":"Instrumentação","INCÊNDIO":"Incêndio","SPDA":"SPDA"}; const k=String(raw||"").trim().toUpperCase(); return m[k]||(k?k.charAt(0)+k.slice(1).toLowerCase():"Outros"); }
+function today(){ return new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"}); }
 
 /* ── MODEL ──────────────────────────────────────────────────────── */
 function mkItem(name,status,ref,note,origin,custom){
-  return {id:uid("i"),name,correctedName:"",status:status||"pending",ref:ref||"",note:note||"",origin:origin||"eap",custom:Boolean(custom)};
+  return {
+    id:uid("i"), name, correctedName:"", status:status||"pending",
+    ref:ref||"", note:note||"", origin:origin||"eap", custom:Boolean(custom),
+    splitFrom:null, splitChildren:[],
+    revNote:"", addedInRev: ST.proj && ST.proj.revision ? ST.proj.revision : "R0"
+  };
 }
 function mkSub(name,items){ return {id:uid("s"),name,items:items||[]}; }
 function mkDisc(name,subs){ return {id:uid("d"),name,subsystems:subs||[]}; }
-function mkArea(name,type,count,desc,discs,origin){
-  return {id:uid("a"),name,type,m2:count,description:desc,origin:origin||"eap",notes:"",disciplines:discs||[]};
+function mkArea(name,type,count,desc,discs,origin,projectRef,imageData){
+  return {
+    id:uid("a"), name, type, m2:count, description:desc,
+    origin:origin||"eap", notes:"", disciplines:discs||[],
+    projectRef:projectRef||"", imageData:imageData||null,
+    addedInRev: ST.proj && ST.proj.revision ? ST.proj.revision : "R0"
+  };
 }
 
 function seed(){
@@ -687,31 +820,47 @@ function seed(){
       let s=d.subsystems.find(x=>x.name===r.etapa);
       if(!s){ s=mkSub(r.etapa||"Geral",[]); d.subsystems.push(s); }
       const ref=[r.code,r.unidade].filter(Boolean).join(" · ");
-      const note=[
-        r.status&&r.status!=="Confirmado"?"Hub: "+r.status:"",
-        r.aprovacao&&r.aprovacao!=="Solicitar"?"Aproval: "+r.aprovacao:"",
-        r.fotos&&r.fotos!=="0"?r.fotos+" foto(s)":"",
-        r.atualizado&&r.atualizado!=="—"?r.atualizado:""
-      ].filter(Boolean).join(" · ");
-      s.items.push(mkItem(r.servico||r.code,"pending",ref,note,"eap",false));
+      const it=mkItem(r.servico||r.code,"pending",ref,"","eap",false);
+      it.addedInRev="R0";
+      s.items.push(it);
     });
-    return mkArea(g.area,"BiasiHub",g.items.length,g.items.length+" linhas importadas.",Array.from(dm.values()),"eap");
+    const a=mkArea(g.area,"BiasiHub",g.items.length,g.items.length+" linhas importadas.",Array.from(dm.values()),"eap","",null);
+    a.addedInRev="R0";
+    return a;
   });
-  return {id:"alfalog",name:"Alfalog",client:EAP.client,city:"Goiânia, GO",revision:"EAP real · BiasiHub",source:"BiasiHub",receivedAt:"28/05/2026",notes:"",reviewer:"",eapAuthor:"",areas};
+  return {
+    id:"alfalog", name:"Alfalog", client:EAP.client, city:"Goiânia, GO",
+    source:"BiasiHub", receivedAt:"28/05/2026",
+    notes:"", reviewer:"", eapAuthor:"",
+    revision:"R0",
+    revisions:[{label:"R0",date:"28/05/2026",notes:"EAP inicial importada do BiasiHub"}],
+    areas
+  };
 }
 
 function norm(p){
   p.notes=p.notes||""; p.reviewer=p.reviewer||""; p.eapAuthor=p.eapAuthor||"";
+  p.revision=p.revision||"R0";
+  if(!Array.isArray(p.revisions)||!p.revisions.length){
+    p.revisions=[{label:"R0",date:"28/05/2026",notes:"EAP inicial importada do BiasiHub"}];
+  }
   p.areas=p.areas||[];
   p.areas.forEach(a=>{
     a.notes=a.notes||""; a.disciplines=a.disciplines||[];
+    a.projectRef=a.projectRef||""; a.imageData=a.imageData||null;
+    a.addedInRev=a.addedInRev||"R0";
     a.disciplines.forEach(d=>{
       d.subsystems=d.subsystems||[];
       d.subsystems.forEach(s=>{
         s.items=s.items||[];
         s.items.forEach(i=>{
           i.id=i.id||uid("i"); i.status=i.status||"pending"; i.origin=i.origin||"eap";
-          i.ref=i.ref||""; i.note=i.note||""; i.correctedName=i.correctedName||""; i.custom=Boolean(i.custom);
+          i.ref=i.ref||""; i.note=i.note||""; i.correctedName=i.correctedName||"";
+          i.custom=Boolean(i.custom);
+          i.splitFrom=i.splitFrom||null;
+          i.splitChildren=Array.isArray(i.splitChildren)?i.splitChildren:[];
+          i.revNote=i.revNote||"";
+          i.addedInRev=i.addedInRev||"R0";
         });
       });
     });
@@ -729,14 +878,25 @@ function load(){
   }catch(e){ console.warn(e); }
   ST.proj=seed();
 }
-function save(){ localStorage.setItem(SK,JSON.stringify(ST.proj)); }
+function save(){
+  try{ localStorage.setItem(SK,JSON.stringify(ST.proj)); }
+  catch(e){
+    console.warn("storage cheio",e);
+    toast("Storage cheio — imagens muito grandes. Remova alguma.");
+  }
+}
 
 /* ── TRAVERSAL & COUNTS ─────────────────────────────────────────── */
 function walk(cb){ ST.proj.areas.forEach(a=>a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>cb(i,a,d,s))))); }
-function aItems(a){ const o=[]; a?.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>o.push({item:i,disc:d,sub:s})))); return o; }
+function aItems(a){ const o=[]; a&&a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>o.push({item:i,disc:d,sub:s})))); return o; }
 function cnt(list){
-  const c={total:list.length,pending:0,match:0,eap_only:0,project_only:0,review:0,na:0,done:0,issues:0};
-  list.forEach(({item})=>{ c[item.status]=(c[item.status]||0)+1; if(item.status!=="pending")c.done++; if(["eap_only","project_only","review"].includes(item.status))c.issues++; });
+  const c={total:list.length,pending:0,match:0,eap_only:0,project_only:0,review:0,out_of_scope:0,na:0,done:0,issues:0,split:0};
+  list.forEach(({item})=>{
+    c[item.status]=(c[item.status]||0)+1;
+    if(item.status!=="pending")c.done++;
+    if(["eap_only","project_only","review"].includes(item.status))c.issues++;
+    if(item.splitChildren && item.splitChildren.length) c.split++;
+  });
   c.progress=c.total?Math.round(c.done/c.total*100):0;
   return c;
 }
@@ -754,7 +914,7 @@ function filteredAreas(){
   const q=ST.query.trim().toLowerCase();
   return ST.proj.areas.filter(a=>{
     const c=aCnt(a),h=health(c);
-    return(!q||`${a.name} ${a.type}`.toLowerCase().includes(q))&&(ST.filter==="all"||h===ST.filter||(ST.filter==="pending"&&h==="pending")||(ST.filter==="issue"&&h==="issue")||(ST.filter==="ok"&&h==="ok"));
+    return(!q||`${a.name} ${a.type||""}`.toLowerCase().includes(q))&&(ST.filter==="all"||h===ST.filter);
   });
 }
 
@@ -775,6 +935,7 @@ function toggleTheme(){
 function render(){
   if(!ST.selId||!ST.proj.areas.some(a=>a.id===ST.selId)) ST.selId=ST.proj.areas[0]?.id||null;
   document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter===ST.filter));
+  $("revLabel").textContent=ST.proj.revision||"R0";
   renderSidebar();
   renderMain();
   renderSumBar();
@@ -799,17 +960,20 @@ function renderSidebar(){
     sbStats.innerHTML=[
       c.match?`<span class="sbs g">✓ ${c.match}</span>`:"",
       c.pending?`<span class="sbs a">◯ ${c.pending}</span>`:"",
-      c.issues?`<span class="sbs r">⚠ ${c.issues}</span>`:""
+      c.issues?`<span class="sbs r">⚠ ${c.issues}</span>`:"",
+      c.out_of_scope?`<span class="sbs o">⊘ ${c.out_of_scope}</span>`:""
     ].filter(Boolean).join("")||`<span class="sbs">0% iniciado</span>`;
   }
   const sbFill=$("sbFill"); if(sbFill) sbFill.style.width=c.progress+"%";
   const list=$("areasList"); if(!list) return;
   const areas=filteredAreas();
   if(!areas.length){ list.innerHTML=`<div class="empty" style="margin:8px">Nenhuma área.</div>`; return; }
+  const curRev=ST.proj.revision||"R0";
   list.innerHTML=areas.map(a=>{
     const ac=aCnt(a),h=health(ac);
     const fc=h==="issue"?"issue":h==="pending"?"pend":"";
-    return `<button class="ab health-${h} ${a.id===ST.selId?"active":""}" data-area="${a.id}" type="button">
+    const addedHere=a.addedInRev&&a.addedInRev!=="R0"&&a.addedInRev===curRev?"added-rev":"";
+    return `<button class="ab health-${h} ${addedHere} ${a.id===ST.selId?"active":""}" data-area="${a.id}" type="button">
       <div class="ab-top"><span class="ab-name">${esc(a.name)}</span><span class="ab-pct">${ac.progress}%</span></div>
       <div class="ab-bar"><div class="ab-fill ${fc}" style="width:${ac.progress}%"></div></div>
       <div class="ab-sub">${esc(statLabel(ac))}</div>
@@ -825,15 +989,32 @@ function renderMain(){
   const badges=[
     c.match?        `<span class="badge g">✓ ${c.match} confirmado${c.match===1?"":"s"}</span>`:"",
     c.pending?      `<span class="badge a">◯ ${c.pending} a conferir</span>`:"",
-    c.eap_only?     `<span class="badge a">↑ ${c.eap_only} não no projeto</span>`:"",
+    c.eap_only?     `<span class="badge a">↑ ${c.eap_only} só na EAP</span>`:"",
     c.project_only? `<span class="badge r">↓ ${c.project_only} só no projeto</span>`:"",
     c.review?       `<span class="badge v">? ${c.review} dúvida${c.review===1?"":"s"}</span>`:"",
+    c.out_of_scope? `<span class="badge o">⊘ ${c.out_of_scope} fora do escopo</span>`:"",
     c.na?           `<span class="badge b">— ${c.na} N/A</span>`:""
   ].filter(Boolean).join("");
 
+  let projRefHtml="";
+  if(area.origin==="project"||area.projectRef||area.imageData){
+    const refTxt=area.projectRef?esc(area.projectRef):"<i style='color:var(--muted)'>sem prancha informada</i>";
+    projRefHtml=`<div class="proj-ref-strip">
+      <svg viewBox="0 0 13 13" fill="none"><path d="M2 2h7l2 2v7H2V2z" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h4M5 8h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <span><strong>Prancha:</strong> ${refTxt}</span>
+      <span class="ref-edit" data-edit-projref="${area.id}">editar</span>
+    </div>`;
+    if(area.imageData){
+      projRefHtml+=`<div class="proj-image-wrap">
+        <img src="${area.imageData}" alt="Marcação da área">
+        <button class="proj-image-rm" data-rm-img="${area.id}" type="button" title="Remover imagem">✕</button>
+      </div>`;
+    }
+  }
+
   main.innerHTML=`
     <div class="ah">
-      <div class="ah-eye">${esc(area.type)} · ${area.m2||0} itens</div>
+      <div class="ah-eye">${esc(area.type||"")} · ${area.m2||0} itens${area.origin==="project"?" · ACHADO NO PROJETO":""}${area.addedInRev&&area.addedInRev!=="R0"?` · incluído em ${esc(area.addedInRev)}`:""}</div>
       <div class="ah-row">
         <h2 class="ah-title">${esc(area.name)}</h2>
         <div class="ah-actions">
@@ -844,20 +1025,22 @@ function renderMain(){
           </button>
         </div>
       </div>
-      ${badges?`<div class="ah-badges" style="margin-top:8px">${badges}</div>`:""}
+      ${badges?`<div class="ah-badges" style="margin-top:9px">${badges}</div>`:""}
+      ${projRefHtml}
     </div>
     <div class="legend">
       <span class="legend-label">Legenda</span>
       <span class="leg-item"><span class="leg-dot g"></span>Confirmado</span>
-      <span class="leg-item"><span class="leg-dot a"></span>Não no projeto</span>
+      <span class="leg-item"><span class="leg-dot a"></span>Só na EAP</span>
       <span class="leg-item"><span class="leg-dot r"></span>Só no projeto</span>
       <span class="leg-item"><span class="leg-dot v"></span>Dúvida</span>
+      <span class="leg-item"><span class="leg-dot o"></span>Fora do escopo Biasi</span>
       <span class="leg-item"><span class="leg-dot m"></span>N/A</span>
-      <span style="margin-left:auto;font-size:10.5px;color:var(--muted)">Clique o status ativo para voltar a pendente</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--muted)">Clique o status ativo para voltar a pendente · ✂ divide item</span>
     </div>
     <div class="content-scroll">
       <div class="content">
-        ${area.disciplines.map(d=>renderDisc(d,area)).join("")||`<div class="empty">Nenhum item. Use "Achei no projeto" para adicionar.</div>`}
+        ${area.disciplines.map(d=>renderDisc(d,area)).join("")||`<div class="empty">Nenhum item nesta área. Use "Achei no projeto" para começar.</div>`}
         <div class="area-notes">
           <button class="anotes-toggle" data-toggle-anotes="${area.id}" type="button">
             <svg viewBox="0 0 10 10" fill="none"><path d="M1 2h8M1 5h5M1 8h6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
@@ -881,7 +1064,7 @@ function renderDisc(disc,area){
       <div class="dc-left"><span class="dc-dot ${cl}"></span><span class="dc-name">${esc(disc.name)}</span></div>
       <div class="dc-right">
         <span class="${metaCls}">${meta}</span>
-        <svg class="dc-chev" width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7L8.5 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="dc-chev" width="12" height="12" viewBox="0 0 11 11" fill="none"><path d="M2.5 4L5.5 7L8.5 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
     </div>
     <div class="dc-body">${disc.subsystems.map(s=>renderSub(s,disc.name)).join("")}</div>
@@ -906,19 +1089,42 @@ function renderSub(sub,discName){
 
 function renderItem(item){
   if(ST.editingId===item.id) return renderItemEditing(item);
+  const isSplitSrc=item.splitChildren && item.splitChildren.length>0;
   const keys=item.origin==="project"?PROJ_KEYS:EAP_KEYS;
-  const otag=item.origin==="project"
-    ?`<span class="otag project">Achado no projeto</span>`
-    :`<span class="otag eap">Linha EAP</span>`;
+  let otag;
+  if(isSplitSrc)        otag=`<span class="otag split">Dividido em ${item.splitChildren.length}</span>`;
+  else if(item.splitFrom) otag=`<span class="otag split">Item dividido (novo)</span>`;
+  else if(item.origin==="project") otag=`<span class="otag project">Achado no projeto</span>`;
+  else                   otag=`<span class="otag eap">Linha EAP</span>`;
   const codeHtml=item.ref?`<span class="icode">${esc(item.ref)}</span>`:"";
   const hasCorrected=item.correctedName&&item.correctedName!==item.name;
   const displayName=esc(hasCorrected?item.correctedName:item.name);
   const corrDot=hasCorrected?`<span class="corr-dot" title="Nomenclatura corrigida"></span>`:"";
-  const origHtml=hasCorrected?`<div class="it-corrected">EAP original: ${esc(item.name)}</div>`:"";
-  const rmBtn=item.custom?`<button class="item-rm" data-rm="${item.id}" title="Remover item" type="button">✕</button>`:"";
+  const origHtml=hasCorrected?`<div class="it-corrected">EAP original: "${esc(item.name)}"</div>`:"";
+  const revTag=(item.addedInRev&&item.addedInRev!=="R0")?`<span class="rev-tag">${esc(item.addedInRev)}</span>`:"";
+  const rmBtn=(item.custom||item.splitFrom)?`<button class="item-rm" data-rm="${item.id}" title="Remover item" type="button">✕</button>`:"";
   const refOpen=ST.openExpands[item.id];
-  const hasContent=item.ref||item.note;
   const refCls=`spk-ref${refOpen?" open":""}`;
+
+  let splitInfoHtml="";
+  if(isSplitSrc){
+    const childNames=item.splitChildren.map(cid=>{
+      const cf=findItem(cid);
+      return cf?(cf.item.correctedName||cf.item.name):null;
+    }).filter(Boolean);
+    splitInfoHtml=`<div class="it-split-info">
+      <b>↪ Item original dividido em:</b> ${childNames.map(n=>esc(n)).join(" · ")}
+      <br><small style="opacity:.8">Use isso para mostrar ao responsável que esta linha precisa virar várias na próxima EAP.</small>
+    </div>`;
+  } else if(item.splitFrom){
+    const parent=findItem(item.splitFrom);
+    if(parent){
+      splitInfoHtml=`<div class="it-split-info">
+        <b>↩ Veio da divisão de:</b> "${esc(parent.item.name)}"
+      </div>`;
+    }
+  }
+
   const picker=keys.map(k=>{
     const isActive=item.status===k;
     const cls=isActive?`spk-btn ${k} active-ring`:`spk-btn inactive`;
@@ -928,11 +1134,16 @@ function renderItem(item){
     <input class="finput" data-field="ref" data-iid="${item.id}" value="${esc(item.ref)}" placeholder="Prancha / onde conferiu">
     <input class="finput" data-field="note" data-iid="${item.id}" value="${esc(item.note)}" placeholder="Observação">
   </div>`;
-  return `<div class="item ${item.status}" id="item-${item.id}">
+  const splitBtn=isSplitSrc?"":`<button class="pencil split-btn" data-split-item="${item.id}" type="button" title="Dividir em vários itens">
+    <svg viewBox="0 0 10 10" fill="none"><path d="M2 1l3 3M2 9l3-3M8 1L5 4M8 9L5 6M5 4v2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    dividir
+  </button>`;
+  return `<div class="item ${item.status} ${isSplitSrc?"split-source":""}" id="item-${item.id}">
     <div class="it-top">
-      ${otag}${codeHtml}${corrDot}
+      ${otag}${codeHtml}${revTag}${corrDot}
       <span class="it-spacer"></span>
       <div class="it-btns">
+        ${splitBtn}
         <button class="pencil" data-edit-name="${item.id}" type="button" title="Corrigir nomenclatura">
           <svg viewBox="0 0 10 10" fill="none"><path d="M7 1.5L8.5 3 3.5 8H2V6.5L7 1.5z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           editar
@@ -942,6 +1153,7 @@ function renderItem(item){
     </div>
     <div class="it-name">${displayName}</div>
     ${origHtml}
+    ${splitInfoHtml}
     <div class="spk">
       ${picker}
       <span class="spk-sep"></span>
@@ -972,7 +1184,7 @@ function renderItemEditing(item){
       <button class="edit-ok" data-save-name="${item.id}" type="button">✓ Salvar</button>
       <button class="edit-cancel" data-cancel-name="${item.id}" type="button">✕</button>
     </div>
-    ${item.name?`<div class="it-corrected">Original EAP: ${esc(item.name)}</div>`:""}
+    ${item.name?`<div class="it-corrected">Original EAP: "${esc(item.name)}"</div>`:""}
     <div class="spk">${picker}</div>
   </div>`;
 }
@@ -987,9 +1199,10 @@ function renderSumBar(){
     <div class="sum-sep"></div>
     <span><strong style="color:var(--brand)">${c.match}</strong> confirmados</span>
     <span><strong style="color:var(--amber)">${c.pending}</strong> pendentes</span>
+    ${c.out_of_scope?`<span><strong style="color:var(--orange)">${c.out_of_scope}</strong> fora escopo</span>`:""}
     ${d?`<span style="color:var(--red)"><strong>${d}</strong> divergência${d===1?"":"s"}</span>`:`<span style="color:var(--brand)">✓ sem divergências</span>`}
     <div class="sum-sep"></div>
-    <span style="color:var(--muted)">${ST.proj.areas.length} áreas · ${c.total} itens</span>`;
+    <span style="color:var(--muted)">${ST.proj.areas.length} áreas · ${c.total} itens · rev. ${esc(ST.proj.revision||"R0")}</span>`;
 }
 
 function updateReportBtn(){
@@ -1007,6 +1220,7 @@ function closeModal(id){
     s.eapAuthor=$("rTo")?.value||s.eapAuthor;
     save();
   }
+  if(id==="areaModal"){ ST.pendingImg=null; renderImgPreview(); }
 }
 
 function markAreaOk(){
@@ -1025,8 +1239,14 @@ function nextPending(){
 }
 
 function removeItem(id){
-  const f=findItem(id); if(!f||!f.item.custom) return;
+  const f=findItem(id); if(!f) return;
+  if(!(f.item.custom||f.item.splitFrom)) return;
   if(!confirm(`Remover "${f.item.name}"?`)) return;
+  // unlink from parent if it was a split child
+  if(f.item.splitFrom){
+    const parent=findItem(f.item.splitFrom);
+    if(parent) parent.item.splitChildren=parent.item.splitChildren.filter(cid=>cid!==id);
+  }
   f.sub.items=f.sub.items.filter(i=>i.id!==id);
   f.disc.subsystems=f.disc.subsystems.filter(s=>s.items.length);
   f.area.disciplines=f.area.disciplines.filter(d=>d.subsystems.length);
@@ -1047,12 +1267,76 @@ function addItem(e){
   toast(origin==="project"?"Item do projeto registrado ✓":"Item adicionado ✓");
 }
 
-function addArea(e){
+/* ── IMAGE COMPRESSION ──────────────────────────────────────────── */
+function compressImage(file,maxW=900,quality=0.72){
+  return new Promise((resolve,reject)=>{
+    if(!file) return resolve(null);
+    const reader=new FileReader();
+    reader.onerror=reject;
+    reader.onload=e=>{
+      const img=new Image();
+      img.onerror=reject;
+      img.onload=()=>{
+        const canvas=document.createElement('canvas');
+        let w=img.width,h=img.height;
+        if(w>maxW){ h=Math.round(h*maxW/w); w=maxW; }
+        canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        resolve(canvas.toDataURL('image/jpeg',quality));
+      };
+      img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderImgPreview(){
+  const wrap=$("aaImgWrap"); if(!wrap) return;
+  if(ST.pendingImg){
+    wrap.innerHTML=`<div class="img-preview">
+      <img src="${ST.pendingImg}" alt="preview">
+      <button class="img-preview-rm" type="button" id="aaImgRm">✕</button>
+    </div>`;
+  } else {
+    wrap.innerHTML=`<div class="img-drop" id="aaImgDrop">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 17V19a2 2 0 002 2h14a2 2 0 002-2v-2M7 9l5-5 5 5M12 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <strong>Clique para anexar print</strong>
+      <span>JPG ou PNG da planta com a área marcada</span>
+    </div>`;
+  }
+}
+
+async function addArea(e){
   e.preventDefault();
   const name=$("aaName").value.trim(); if(!name) return;
-  const a=mkArea(name,$("aaType").value.trim()||"Achado no projeto",0,$("aaDesc").value.trim()||"Área encontrada no projeto, ausente na EAP.",[],  "project");
+  const a=mkArea(
+    name,
+    $("aaType").value.trim()||"Achado no projeto",
+    0,
+    $("aaDesc").value.trim()||"Área encontrada no projeto, ausente na EAP.",
+    [],
+    "project",
+    $("aaProjRef").value.trim(),
+    ST.pendingImg
+  );
+  a.addedInRev=ST.proj.revision||"R0";
   ST.proj.areas.push(a); ST.selId=a.id;
-  save(); closeModal("areaModal"); render(); toast("Área adicionada.");
+  ST.pendingImg=null;
+  save(); closeModal("areaModal"); render(); toast("Área adicionada ✓");
+}
+
+function editProjRef(areaId){
+  const a=ST.proj.areas.find(x=>x.id===areaId); if(!a) return;
+  const v=prompt("Em qual projeto / prancha está essa área?",a.projectRef||"");
+  if(v===null) return;
+  a.projectRef=v.trim();
+  save(); render(); toast("Prancha atualizada.");
+}
+
+function removeAreaImg(areaId){
+  const a=ST.proj.areas.find(x=>x.id===areaId); if(!a) return;
+  if(!confirm("Remover a imagem desta área?")) return;
+  a.imageData=null; save(); render(); toast("Imagem removida.");
 }
 
 /* ── NOMENCLATURE EDIT ──────────────────────────────────────────── */
@@ -1065,6 +1349,126 @@ function saveEdit(itemId){
   ST.editingId=null; save(); render(); toast("Nomenclatura salva.");
 }
 function cancelEdit(){ ST.editingId=null; render(); }
+
+/* ── SPLIT ITEM ─────────────────────────────────────────────────── */
+function openSplitModal(itemId){
+  ST.splitTargetId=itemId;
+  const f=findItem(itemId); if(!f) return;
+  $("splitOrigName").textContent=f.item.correctedName||f.item.name;
+  $("splitOrigCode").textContent=f.item.ref||"";
+  renderSplitInputs(2,f.item.correctedName||f.item.name);
+  showModal("splitModal");
+}
+
+function renderSplitInputs(count,origName){
+  const c=$("splitItemsContainer"); if(!c) return;
+  // Try to pre-split simple "X em Y" or "X com Y" or "X / Y"
+  const presets=[];
+  if(origName){
+    const m=origName.match(/^(.+?)\s+(?:em|com|no|na|sobre|\/|\+)\s+(.+)$/i);
+    if(m){ presets.push(m[1].trim()); presets.push(m[2].trim()); }
+  }
+  let html="";
+  for(let i=0;i<count;i++){
+    const v=presets[i]||"";
+    html+=`<div class="split-row">
+      <span class="split-num">${i+1}</span>
+      <input class="split-name-input" placeholder="Nome do item ${i+1}" value="${esc(v)}">
+      <button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button>
+    </div>`;
+  }
+  c.innerHTML=html;
+}
+
+function splitAddInput(){
+  const c=$("splitItemsContainer"); if(!c) return;
+  const i=c.children.length;
+  const div=document.createElement("div");
+  div.className="split-row";
+  div.innerHTML=`<span class="split-num">${i+1}</span>
+    <input class="split-name-input" placeholder="Nome do item ${i+1}">
+    <button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button>`;
+  c.appendChild(div);
+  div.querySelector("input").focus();
+}
+
+function splitRemoveInput(idx){
+  const c=$("splitItemsContainer"); if(!c) return;
+  if(c.children.length<=2){ toast("Mínimo de 2 itens."); return; }
+  c.children[idx]?.remove();
+  // renumber
+  [...c.children].forEach((row,i)=>{
+    row.querySelector(".split-num").textContent=i+1;
+    row.querySelector(".split-rm").dataset.splitRmIdx=i;
+    row.querySelector("input").placeholder=`Nome do item ${i+1}`;
+  });
+}
+
+function saveSplit(){
+  const f=findItem(ST.splitTargetId); if(!f){ toast("Erro: item não encontrado."); return; }
+  const names=[...document.querySelectorAll(".split-name-input")].map(i=>i.value.trim()).filter(Boolean);
+  if(names.length<2){ toast("Informe pelo menos 2 itens novos."); return; }
+  // Mark original
+  f.item.splitChildren=[];
+  // Add new items right after the original in the same sub
+  const idx=f.sub.items.findIndex(i=>i.id===f.item.id);
+  const newItems=names.map(n=>{
+    const ni=mkItem(n,"pending",f.item.ref,"",f.item.origin,true);
+    ni.splitFrom=f.item.id;
+    ni.addedInRev=ST.proj.revision||"R0";
+    f.item.splitChildren.push(ni.id);
+    return ni;
+  });
+  f.sub.items.splice(idx+1,0,...newItems);
+  save(); closeModal("splitModal"); render();
+  toast(`Item dividido em ${names.length} novos itens ✓`);
+}
+
+/* ── REVISIONS ──────────────────────────────────────────────────── */
+function openRevisionModal(){
+  renderRevList();
+  $("revInputLabel").value="";
+  $("revInputDate").value=today();
+  $("revInputNotes").value="";
+  showModal("revisionModal");
+}
+
+function renderRevList(){
+  const wrap=$("revList"); if(!wrap) return;
+  const revs=ST.proj.revisions||[];
+  const cur=ST.proj.revision||"R0";
+  if(!revs.length){ wrap.innerHTML=`<div class="empty" style="padding:14px">Nenhuma revisão registrada.</div>`; return; }
+  wrap.innerHTML=revs.map(r=>{
+    const isCur=r.label===cur;
+    return `<div class="rev-row ${isCur?"current":""}" data-rev-label="${esc(r.label)}">
+      <span class="rev-label">${esc(r.label)}</span>
+      <div class="rev-content">
+        ${esc(r.notes||"(sem notas)")}
+        <div class="rev-date">${esc(r.date||"")}</div>
+      </div>
+      ${isCur?`<span class="rev-cur-tag">Atual</span>`:`<button class="mbtn ghost" style="padding:3px 9px;font-size:11px" data-set-rev="${esc(r.label)}" type="button">Tornar atual</button>`}
+    </div>`;
+  }).join("");
+}
+
+function setCurrentRevision(label){
+  if(!ST.proj.revisions.some(r=>r.label===label)) return;
+  ST.proj.revision=label;
+  save(); render(); renderRevList();
+  toast(`Revisão atual: ${label}`);
+}
+
+function createRevision(){
+  const label=$("revInputLabel").value.trim();
+  const date=$("revInputDate").value.trim()||today();
+  const notes=$("revInputNotes").value.trim();
+  if(!label){ toast("Informe o rótulo (ex.: R1)."); return; }
+  if(ST.proj.revisions.some(r=>r.label.toLowerCase()===label.toLowerCase())){ toast("Já existe uma revisão com esse rótulo."); return; }
+  ST.proj.revisions.push({label,date,notes});
+  ST.proj.revision=label;
+  $("revInputLabel").value=""; $("revInputNotes").value="";
+  save(); renderRevList(); render(); toast(`Revisão ${label} criada e ativada ✓`);
+}
 
 /* ── DIFF PANEL ─────────────────────────────────────────────────── */
 function openDiff(){
@@ -1087,78 +1491,315 @@ function openDiff(){
 }
 function closeDiff(){ $("diffLayer")?.classList.remove("open"); }
 
-/* ── REPORT ─────────────────────────────────────────────────────── */
+/* ── REPORT — "MANUAL DE MUDANÇAS" ──────────────────────────────── */
 function buildReport(){
   const p=ST.proj, c=projCnt();
   const reviewer=$("rReviewer")?.value||p.reviewer||"";
   const to=$("rTo")?.value||p.eapAuthor||"";
-  const date=new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
-  const S="━".repeat(56);
-  const L=[
-    "CONFERÊNCIA EAP — "+p.name.toUpperCase()+" ("+EAP.subtitle+")",S,
-    "Cliente: "+p.client+" | "+p.city,
-    "EAP recebida em: "+p.receivedAt,
-    reviewer?"Revisado por: "+reviewer:"",
-    to?"Para: "+to:"",
-    "Data: "+date,
-    "",S,"RESUMO EXECUTIVO",S,
-    "• Total de itens: "+c.total,
-    "• ✓  Confirmados (EAP e projeto batem): "+c.match+(c.total?` (${Math.round(c.match/c.total*100)}%)`:""),
-    "• ↑  Não no projeto (na EAP mas não achei): "+c.eap_only,
-    "• ↓  Só no projeto (achei mas não estava na EAP): "+c.project_only,
-    "• ?  Dúvidas / revisão pendente: "+c.review,
-    "• —  N/A: "+c.na,
-    c.pending>0?"• ⏳ AINDA NÃO CONFERIDOS: "+c.pending+" iten"+(c.pending===1?"":"s"):"",""
-  ].filter(v=>v!==undefined);
+  const date=today();
+  const S="━".repeat(64);
+  const D="─".repeat(64);
+  const L=[];
 
-  function sec(title,subtitle,statusFilter){
-    const matched=[];
-    p.areas.forEach(a=>{
-      const its=aItems(a).filter(({item})=>item.status===statusFilter);
-      if(its.length) matched.push({area:a,its});
+  // ── CABEÇALHO ─────────────────────────────────────────────────
+  L.push("MANUAL DE MUDANÇAS — CONFERÊNCIA EAP × PROJETO");
+  L.push(p.name.toUpperCase()+" ("+EAP.subtitle+")");
+  L.push(S);
+  L.push("Cliente: "+p.client+" | "+p.city);
+  L.push("EAP recebida em: "+p.receivedAt);
+  L.push("Revisão de projeto conferida: "+(p.revision||"R0"));
+  if(reviewer) L.push("Revisado por: "+reviewer);
+  if(to)       L.push("Para: "+to);
+  L.push("Data do relatório: "+date);
+  L.push("");
+
+  // ── RESUMO EXECUTIVO ──────────────────────────────────────────
+  L.push(S);
+  L.push("1.  RESUMO EXECUTIVO");
+  L.push(S);
+  L.push("Total de itens conferidos: "+c.total);
+  L.push("");
+  L.push("  ✓  Confirmados (EAP e projeto batem) ......... "+c.match+(c.total?` (${Math.round(c.match/c.total*100)}%)`:""));
+  L.push("  ↑  Só na EAP (sumiu do projeto) ............. "+c.eap_only);
+  L.push("  ↓  Só no projeto (faltou na EAP) ............ "+c.project_only);
+  L.push("  ?  Dúvidas / revisão pendente ............... "+c.review);
+  L.push("  ⊘  Fora do escopo Biasi ..................... "+c.out_of_scope);
+  L.push("  —  Não se aplica ............................ "+c.na);
+  if(c.pending) L.push("  ⏳ AINDA NÃO CONFERIDOS ..................... "+c.pending);
+  if(c.split)   L.push("  ✂  Itens DIVIDIDOS em vários ................ "+c.split);
+  L.push("");
+  const verdict =
+    c.pending>0 ? "Relatório PARCIAL — ainda há itens a conferir." :
+    (c.issues===0 && c.split===0 && !corrCount())
+      ? "EAP APROVADA — sem divergências, sem correções, sem itens a dividir."
+      : "EAP COM AJUSTES — leia os tópicos abaixo e atualize a próxima versão.";
+  L.push("Conclusão: "+verdict);
+  L.push("");
+
+  function corrCount(){ let n=0; walk(i=>{ if(i.correctedName&&i.correctedName!==i.name) n++; }); return n; }
+
+  // ── PRINCIPAIS AJUSTES (manual numerado) ──────────────────────
+  const todos=[];
+
+  // 2. Item splits
+  const splitSources=[];
+  walk(item=>{ if(item.splitChildren && item.splitChildren.length) splitSources.push(item); });
+  if(splitSources.length){
+    todos.push({
+      title:"DIVIDIR ITENS COMPOSTOS — UM ITEM PRECISA VIRAR VÁRIOS",
+      why:"Um item está agrupando duas (ou mais) coisas que precisam ser quantificadas separadamente. Na próxima EAP, abra em linhas distintas.",
+      build:()=>{
+        const lines=[];
+        splitSources.forEach(item=>{
+          const found=findItem(item.id);
+          const code=item.ref?item.ref.split(" ·")[0].trim():"";
+          lines.push("");
+          lines.push(`  ► "${item.name}"${code?" ("+code+")":""}`);
+          if(found) lines.push(`    Área: ${found.area.name} / ${found.disc.name} / ${found.sub.name}`);
+          lines.push(`    REMOVER essa linha e CRIAR as seguintes em seu lugar:`);
+          item.splitChildren.forEach(cid=>{
+            const cf=findItem(cid);
+            if(cf){
+              const n=cf.item.correctedName||cf.item.name;
+              lines.push(`      • ${n}`);
+            }
+          });
+        });
+        return lines;
+      }
     });
-    if(!matched.length) return [];
-    const lines=[S,title];
-    if(subtitle) lines.push("  "+subtitle);
-    lines.push(S);
-    matched.forEach(({area,its})=>{
-      lines.push("\n"+area.name.toUpperCase());
-      its.forEach(({item,disc,sub})=>{
-        const name=item.correctedName||item.name;
-        const ref=item.ref?` (${item.ref})`:"";
-        const obs=item.note?` | Obs: ${item.note}`:"";
-        lines.push(`  ${SC[statusFilter].short}  ${name}${ref}${obs} — ${disc.name} / ${sub.name}`);
-      });
-    });
-    lines.push("");
-    return lines;
   }
 
-  L.push(...sec("ITENS CONFIRMADOS — BATEM COM O PROJETO","","match"));
-  L.push(...sec("DIVERGÊNCIAS — ITEM NA EAP, NÃO ENCONTREI NO PROJETO","(Recomendado: revisar no projeto ou remover da EAP)","eap_only"));
-  L.push(...sec("DIVERGÊNCIAS — ITEM NO PROJETO, NÃO ESTAVA NA EAP","(Recomendado: incluir estes itens na EAP)","project_only"));
-  L.push(...sec("DÚVIDAS — ITENS PARA REVISÃO","","review"));
-
+  // 3. Nomenclature corrections
   const corrs=[];
-  walk(item=>{ if(item.correctedName&&item.correctedName!==item.name) corrs.push(item); });
+  walk(item=>{ if(item.correctedName&&item.correctedName!==item.name && !(item.splitChildren&&item.splitChildren.length)) corrs.push(item); });
   if(corrs.length){
-    L.push(S,"CORREÇÕES DE NOMENCLATURA","  (sugestão de atualização dos nomes na EAP)",S);
-    corrs.forEach(item=>{
-      const code=item.ref?item.ref.split(" ·")[0].trim():"";
-      L.push(`  ${code?code+": ":""}"${item.name}"  →  "${item.correctedName}"`);
+    todos.push({
+      title:"CORRIGIR NOMENCLATURA DOS ITENS",
+      why:"Os nomes abaixo estão imprecisos ou incompletos na EAP. Use a nomenclatura à direita na próxima versão — assim a EAP fica idêntica ao projeto.",
+      build:()=>{
+        const lines=[];
+        corrs.forEach(item=>{
+          const code=item.ref?item.ref.split(" ·")[0].trim():"";
+          lines.push("");
+          lines.push(`  ► ${code?code+": ":""}"${item.name}"`);
+          lines.push(`    →  "${item.correctedName}"`);
+        });
+        return lines;
+      }
     });
-    L.push("");
   }
 
+  // 4. Out of scope items
+  const oos=[];
+  walk((item,area,disc,sub)=>{ if(item.status==="out_of_scope") oos.push({item,area,disc,sub}); });
+  if(oos.length){
+    todos.push({
+      title:"ITENS FORA DO ESCOPO BIASI — REMOVER DA EAP",
+      why:"Estes itens estão na EAP mas NÃO são do escopo Biasi (provavelmente outra empresa fornece/instala). Tire da próxima EAP, ou marque claramente como 'sob responsabilidade de terceiros'.",
+      build:()=>{
+        const lines=[];
+        oos.forEach(({item,area,disc,sub})=>{
+          const code=item.ref?item.ref.split(" ·")[0].trim():"";
+          const name=item.correctedName||item.name;
+          lines.push(`  ⊘ ${area.name} / ${disc.name} / ${sub.name}`);
+          lines.push(`    "${name}"${code?" ("+code+")":""}${item.note?" — "+item.note:""}`);
+        });
+        return lines;
+      }
+    });
+  }
+
+  // 5. Items only in EAP (not in project)
+  const eapOnly=[];
+  walk((item,area,disc,sub)=>{ if(item.status==="eap_only") eapOnly.push({item,area,disc,sub}); });
+  if(eapOnly.length){
+    todos.push({
+      title:"ITENS SÓ NA EAP — REVISAR NO PROJETO OU REMOVER",
+      why:"Estes itens aparecem na EAP, mas não achei nenhuma referência no projeto recebido. Confirma se foram retirados, ou se faltou alguma prancha. Se foram retirados de fato, removê-los na próxima EAP.",
+      build:()=>{
+        const lines=[];
+        eapOnly.forEach(({item,area,disc,sub})=>{
+          const code=item.ref?item.ref.split(" ·")[0].trim():"";
+          const name=item.correctedName||item.name;
+          lines.push(`  ↑ ${area.name} / ${disc.name} / ${sub.name}`);
+          lines.push(`    "${name}"${code?" ("+code+")":""}${item.note?" — "+item.note:""}`);
+        });
+        return lines;
+      }
+    });
+  }
+
+  // 6. Items only in project (must be added to EAP)
+  const projOnly=[];
+  walk((item,area,disc,sub)=>{ if(item.status==="project_only" && !item.splitFrom) projOnly.push({item,area,disc,sub}); });
+  if(projOnly.length){
+    todos.push({
+      title:"ITENS SÓ NO PROJETO — INCLUIR NA PRÓXIMA EAP",
+      why:"Encontrei estes itens no projeto, mas a EAP atual não os lista. Precisam entrar na próxima versão da EAP.",
+      build:()=>{
+        const lines=[];
+        projOnly.forEach(({item,area,disc,sub})=>{
+          const name=item.correctedName||item.name;
+          lines.push(`  ↓ ${area.name} / ${disc.name} / ${sub.name}`);
+          lines.push(`    "${name}"${item.ref?" (visto em "+item.ref+")":""}${item.note?" — "+item.note:""}`);
+        });
+        return lines;
+      }
+    });
+  }
+
+  // 7. Areas missing in EAP
+  const missingAreas=ST.proj.areas.filter(a=>a.origin==="project");
+  if(missingAreas.length){
+    todos.push({
+      title:"ÁREAS QUE FALTARAM NA EAP — INCLUIR NA PRÓXIMA VERSÃO",
+      why:"Estas áreas inteiras existem no projeto, mas não estavam na EAP recebida. Precisa adicionar todas elas (e os itens dentro) na próxima EAP.",
+      build:()=>{
+        const lines=[];
+        missingAreas.forEach(a=>{
+          lines.push("");
+          lines.push(`  + ÁREA NOVA: "${a.name}"${a.type?" ("+a.type+")":""}`);
+          if(a.projectRef) lines.push(`    Onde está no projeto: ${a.projectRef}`);
+          if(a.imageData)  lines.push(`    [Print anexado — ver aplicativo / anexo]`);
+          if(a.description) lines.push(`    Obs: ${a.description}`);
+          const its=aItems(a);
+          if(its.length){
+            lines.push(`    Itens identificados nessa área:`);
+            its.forEach(({item,disc,sub})=>{
+              const n=item.correctedName||item.name;
+              lines.push(`      • [${disc.name} / ${sub.name}] ${n}${item.ref?" — "+item.ref:""}`);
+            });
+          }
+        });
+        return lines;
+      }
+    });
+  }
+
+  // 8. Open doubts
+  const reviewItems=[];
+  walk((item,area,disc,sub)=>{ if(item.status==="review") reviewItems.push({item,area,disc,sub}); });
+  if(reviewItems.length){
+    todos.push({
+      title:"DÚVIDAS EM ABERTO — PRECISA DE RESPOSTA",
+      why:"Listei aqui o que precisei pausar a conferência. Responda para fecharmos esses pontos.",
+      build:()=>{
+        const lines=[];
+        reviewItems.forEach(({item,area,disc,sub})=>{
+          const name=item.correctedName||item.name;
+          lines.push(`  ? ${area.name} / ${disc.name} / ${sub.name}`);
+          lines.push(`    "${name}"${item.ref?" ("+item.ref+")":""}${item.note?" — "+item.note:""}`);
+        });
+        return lines;
+      }
+    });
+  }
+
+  // Write numbered sections
+  if(todos.length){
+    L.push(S);
+    L.push("2.  AJUSTES NECESSÁRIOS NA PRÓXIMA EAP (manual)");
+    L.push(S);
+    L.push("Leia cada bloco abaixo e aplique as correções na próxima versão da EAP.");
+    L.push("");
+    todos.forEach((t,i)=>{
+      L.push(D);
+      L.push(`2.${i+1}  ${t.title}`);
+      L.push(D);
+      L.push("Por que: "+t.why);
+      L.push(...t.build());
+      L.push("");
+    });
+  }
+
+  // ── 3. Inventário completo (todo item, com seu status final) ──
+  L.push(S);
+  L.push(`${todos.length?3:2}.  INVENTÁRIO COMPLETO — STATUS DE TODOS OS ITENS`);
+  L.push(S);
+  L.push("Para auditoria: lista todo item conferido com o veredito final.");
+  L.push("");
+
+  p.areas.forEach(a=>{
+    const its=aItems(a);
+    if(!its.length) return;
+    L.push("");
+    L.push("▸ "+a.name.toUpperCase()+(a.origin==="project"?"  [ÁREA NOVA — não estava na EAP]":""));
+    if(a.projectRef) L.push("    Prancha: "+a.projectRef);
+    its.forEach(({item,disc,sub})=>{
+      const n=item.correctedName||item.name;
+      const tag=SC[item.status]?SC[item.status].short:item.status;
+      const ref=item.ref?" ["+item.ref+"]":"";
+      const note=item.note?" — "+item.note:"";
+      let marker;
+      switch(item.status){
+        case "match": marker="✓"; break;
+        case "eap_only": marker="↑"; break;
+        case "project_only": marker="↓"; break;
+        case "review": marker="?"; break;
+        case "out_of_scope": marker="⊘"; break;
+        case "na": marker="—"; break;
+        default: marker="◯"; break;
+      }
+      if(item.splitChildren && item.splitChildren.length){
+        L.push(`    ✂  [DIVIDIDO]   ${n}${ref}`);
+      } else if(item.splitFrom){
+        const parent=findItem(item.splitFrom);
+        const parentName=parent?parent.item.name:"?";
+        L.push(`    ${marker}  [${tag}]   ${n}${ref}  ↩ de "${parentName}"${note}`);
+      } else {
+        L.push(`    ${marker}  [${tag}]   ${n}${ref}${note}`);
+      }
+    });
+  });
+
+  // ── 4. Notas por área ─────────────────────────────────────────
   const aN=p.areas.filter(a=>a.notes&&a.notes.trim());
   if(aN.length){
-    L.push(S,"OBSERVAÇÕES POR ÁREA",S);
-    aN.forEach(a=>{ L.push("\n"+a.name.toUpperCase()); L.push("  "+a.notes); });
     L.push("");
+    L.push(S);
+    L.push(`${todos.length?4:3}.  OBSERVAÇÕES POR ÁREA`);
+    L.push(S);
+    aN.forEach(a=>{ L.push(""); L.push("▸ "+a.name.toUpperCase()); L.push("  "+a.notes); });
   }
 
-  if(p.notes&&p.notes.trim()) L.push(S,"NOTAS GERAIS",S,p.notes,"");
-  L.push(S,"Relatório gerado pelo EAPCheck · Biasi Engenharia","Projeto: "+EAP.subtitle+" | "+EAP.client,S);
+  // ── 5. Revisões ───────────────────────────────────────────────
+  if(p.revisions && p.revisions.length){
+    L.push("");
+    L.push(S);
+    L.push(`${todos.length?5:4}.  HISTÓRICO DE REVISÕES DO PROJETO`);
+    L.push(S);
+    p.revisions.forEach(r=>{
+      L.push("");
+      L.push("▸ "+r.label+(r.label===p.revision?"  ← REVISÃO ATUAL (conferida)":""));
+      if(r.date) L.push("  Data: "+r.date);
+      if(r.notes) L.push("  Mudanças: "+r.notes);
+    });
+  }
+
+  // ── 6. ORIENTAÇÕES PARA A PRÓXIMA EAP ─────────────────────────
+  L.push("");
+  L.push(S);
+  L.push(`${todos.length?6:5}.  ORIENTAÇÕES — O QUE NÃO REPETIR NA PRÓXIMA EAP`);
+  L.push(S);
+  const guidance=[];
+  if(splitSources.length)  guidance.push("• Não juntar itens compostos em uma única linha. Ex.: 'Pétala em poste' → quebrar em 'Pétala 150W' + 'Poste H=8m'. Cada componente tem fornecedor, instalação e mão-de-obra diferentes.");
+  if(corrs.length)         guidance.push("• Padronizar a nomenclatura conforme o projeto. Sempre que possível, copie o nome exatamente como está na prancha.");
+  if(oos.length)           guidance.push("• Antes de listar um item, confirmar se ele é do escopo Biasi. Itens de terceiros (ex.: equipamentos do cliente, mobiliário) não devem entrar — ou devem entrar marcados como 'fornecimento de terceiros'.");
+  if(eapOnly.length)       guidance.push("• Sempre conferir contra a última revisão do projeto. Itens removidos do projeto não podem permanecer na EAP.");
+  if(projOnly.length)      guidance.push("• Varrer prancha por prancha para garantir cobertura. Faltaram itens que estavam claramente no projeto.");
+  if(missingAreas.length)  guidance.push("• Mapear TODAS as áreas/pavimentos do projeto antes de detalhar itens. Áreas inteiras foram esquecidas.");
+  if(reviewItems.length)   guidance.push("• Quando houver dúvida sobre escopo de um item, marcar na EAP e perguntar antes de quantificar.");
+  if(!guidance.length)     guidance.push("• Sem orientações de melhoria — EAP entregue dentro do padrão esperado. 👏");
+  guidance.forEach(g=>L.push(g));
+
+  L.push("");
+  L.push(S);
+  L.push("Relatório gerado pelo EAPCheck v11 · Biasi Engenharia");
+  L.push("Projeto: "+EAP.subtitle+" | "+EAP.client);
+  L.push("Revisão conferida: "+(p.revision||"R0")+" · Data: "+date);
+  L.push(S);
+
   return L.join("\n");
 }
 
@@ -1196,23 +1837,23 @@ function downloadReport(){
   const txt=$("rTa")?.value||buildReport();
   const blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
   const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download=`eapcheck-${slug(ST.proj.name)}-relatorio.txt`;
+  const a=document.createElement("a"); a.href=url; a.download=`eapcheck-${slug(ST.proj.name)}-rev-${slug(ST.proj.revision||"R0")}-manual.txt`;
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),500);
-  toast("Relatório baixado ✓");
+  toast("Manual baixado ✓");
 }
 
 function resetAll(){
-  if(!confirm("Zerar toda a conferência e voltar tudo para pendente?")) return;
+  if(!confirm("Zerar toda a conferência e voltar tudo para pendente?\n(Áreas adicionadas, splits e revisões também serão perdidos.)")) return;
   localStorage.removeItem(SK);
   ST.proj=seed(); ST.selId=ST.proj.areas[0]?.id||null; ST.query=""; ST.filter="all";
-  ST.openExpands={}; ST.openAreaNotes={}; ST.editingId=null;
+  ST.openExpands={}; ST.openAreaNotes={}; ST.editingId=null; ST.splitTargetId=null; ST.pendingImg=null;
   render(); toast("Conferência zerada.");
 }
 
 function toast(msg){
   const el=$("toast"); el.textContent=msg; el.classList.add("show");
-  clearTimeout(window.__tt); window.__tt=setTimeout(()=>el.classList.remove("show"),2600);
+  clearTimeout(window.__tt); window.__tt=setTimeout(()=>el.classList.remove("show"),2800);
 }
 
 /* ── BIND ───────────────────────────────────────────────────────── */
@@ -1227,6 +1868,19 @@ function bind(){
     if(t.closest("#resetBtn"))   { resetAll(); return; }
     if(t.closest("#rCopy"))      { copyReport(); return; }
     if(t.closest("#rDownload"))  { downloadReport(); return; }
+    if(t.closest("#revBtn")||t.closest("#newRevBtn")){ openRevisionModal(); return; }
+    if(t.closest("#revSaveBtn")) { createRevision(); return; }
+    if(t.closest("#splitAddBtn")){ splitAddInput(); return; }
+    if(t.closest("#splitSaveBtn")){ saveSplit(); return; }
+
+    const setRev=t.closest("[data-set-rev]");
+    if(setRev){ setCurrentRevision(setRev.dataset.setRev); return; }
+
+    const splitRm=t.closest("[data-split-rm-idx]");
+    if(splitRm){ splitRemoveInput(parseInt(splitRm.dataset.splitRmIdx,10)); return; }
+
+    const splitItem=t.closest("[data-split-item]");
+    if(splitItem){ openSplitModal(splitItem.dataset.splitItem); return; }
 
     const fc=t.closest("[data-filter]");
     if(fc){ ST.filter=fc.dataset.filter; render(); return; }
@@ -1234,7 +1888,22 @@ function bind(){
     const ab=t.closest("[data-area]");
     if(ab){ ST.selId=ab.dataset.area; render(); return; }
 
-    if(t.closest("[data-add-area]")){ $("areaForm").reset(); showModal("areaModal"); return; }
+    if(t.closest("[data-add-area]")){
+      $("areaForm").reset();
+      ST.pendingImg=null;
+      renderImgPreview();
+      showModal("areaModal");
+      return;
+    }
+
+    if(t.closest("#aaImgDrop")){ $("aaImg")?.click(); return; }
+    if(t.closest("#aaImgRm")){ ST.pendingImg=null; renderImgPreview(); return; }
+
+    const editPR=t.closest("[data-edit-projref]");
+    if(editPR){ editProjRef(editPR.dataset.editProjref); return; }
+
+    const rmImg=t.closest("[data-rm-img]");
+    if(rmImg){ removeAreaImg(rmImg.dataset.rmImg); return; }
 
     const addBtn=t.closest("[data-add-item]");
     if(addBtn){
@@ -1242,7 +1911,7 @@ function bind(){
       $("itemForm").reset();
       const disc=addBtn.dataset.addItem;
       const sub=addBtn.dataset.sub;
-      if(disc&&disc!=="true"){ const sel=$("iDisc"); if(sel) sel.value=disc; }
+      if(disc&&disc!=="true"&&disc!==""){ const sel=$("iDisc"); if(sel) sel.value=disc; }
       if(sub){ const si=$("iSub"); if(si) si.value=sub; }
       showModal("itemModal"); return;
     }
@@ -1253,7 +1922,6 @@ function bind(){
     if(stb){
       const f=findItem(stb.dataset.iid);
       if(f){
-        // toggle: clicking active status resets to pending
         f.item.status=f.item.status===stb.dataset.st?"pending":stb.dataset.st;
         save(); render();
       }
@@ -1306,12 +1974,28 @@ function bind(){
     if(an){ const a=ST.proj.areas.find(x=>x.id===an.dataset.areaNotes); if(a){ a.notes=an.value; save(); } }
   });
 
+  document.addEventListener("change",async e=>{
+    if(e.target.id==="aaImg"){
+      const file=e.target.files[0]; if(!file) return;
+      try{
+        toast("Comprimindo imagem…");
+        ST.pendingImg=await compressImage(file,900,0.72);
+        renderImgPreview();
+        toast("Imagem pronta ✓");
+      }catch(err){ console.error(err); toast("Erro ao processar imagem."); }
+    }
+  });
+
   document.addEventListener("keydown",e=>{
     if(ST.editingId){
       if(e.key==="Enter"){ e.preventDefault(); saveEdit(ST.editingId); return; }
       if(e.key==="Escape"){ e.preventDefault(); cancelEdit(); return; }
     }
-    if(e.key==="Escape"){ closeModal("itemModal"); closeModal("areaModal"); closeModal("reportModal"); closeDiff(); }
+    if(e.key==="Escape"){
+      closeModal("itemModal"); closeModal("areaModal");
+      closeModal("reportModal"); closeModal("splitModal");
+      closeModal("revisionModal"); closeDiff();
+    }
   });
 
   $("itemForm").addEventListener("submit",addItem);
