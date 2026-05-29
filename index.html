@@ -522,6 +522,63 @@ button{cursor:pointer}
 .pdf-foot{padding:18px 54px;background:#13324a;color:#8cbdd2;font-size:11px;display:flex;justify-content:space-between;align-items:center}
 .pdf-foot b{color:#fff}
 
+/* ── REVISION DIFF TIMELINE ─────────────────────────────────────── */
+.rdiff-modal{width:min(720px,100%);max-height:92vh;background:var(--panel);border:1px solid var(--b2);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+.rdiff-head{padding:17px 22px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.rdiff-head h2{font-size:18px;font-weight:700;letter-spacing:-.04em}
+.rdiff-body{flex:1;overflow-y:auto;padding:20px 22px}
+.rdiff-body::-webkit-scrollbar{width:5px}
+.rdiff-body::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+
+/* timeline connector */
+.rdiff-tl{position:relative;padding-left:32px}
+.rdiff-tl::before{content:"";position:absolute;left:11px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,var(--brand),var(--blue),var(--violet));border-radius:2px}
+
+/* revision node */
+.rdiff-node{position:relative;margin-bottom:26px}
+.rdiff-node:last-child{margin-bottom:0}
+.rdiff-dot{position:absolute;left:-32px;top:2px;width:22px;height:22px;border-radius:50%;background:var(--panel);border:2.5px solid var(--brand);display:grid;place-items:center;z-index:2}
+.rdiff-dot svg{width:11px;height:11px;color:var(--brand)}
+.rdiff-node.current .rdiff-dot{background:var(--brand);border-color:var(--brand)}
+.rdiff-node.current .rdiff-dot svg{color:#041209}
+
+.rdiff-label{display:flex;align-items:center;gap:9px;margin-bottom:10px;flex-wrap:wrap}
+.rdiff-rev{font-family:var(--mono);font-size:15px;font-weight:700;color:var(--brand)}
+.rdiff-date{font-size:12px;color:var(--muted)}
+.rdiff-cur{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--brand);background:var(--blo);border:1px solid var(--bhi);padding:2px 7px;border-radius:4px}
+.rdiff-notes{font-size:13px;color:var(--soft);line-height:1.5;margin-bottom:10px;padding:9px 12px;border-radius:var(--rs);background:color-mix(in srgb,var(--p2) 50%,transparent);border:1px solid var(--b1)}
+
+/* diff stats bar */
+.rdiff-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.rdstat{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px}
+.rdstat.add{color:var(--brand);background:var(--blo);border:1px solid var(--bhi)}
+.rdstat.rem{color:var(--red);background:var(--rlo);border:1px solid var(--rhi)}
+.rdstat.chg{color:var(--amber);background:var(--alo);border:1px solid var(--ahi)}
+.rdstat.spl{color:var(--blue);background:var(--bllo);border:1px solid var(--blhi)}
+.rdstat.oos{color:var(--orange);background:var(--olo);border:1px solid var(--ohi)}
+.rdstat.sts{color:var(--violet);background:var(--vlo);border:1px solid var(--vhi)}
+.rdstat svg{width:11px;height:11px}
+
+/* diff items list */
+.rdiff-changes{display:flex;flex-direction:column;gap:5px}
+.rdc{display:flex;align-items:flex-start;gap:9px;padding:8px 11px;border-radius:var(--rs);border:1px solid var(--b1);background:color-mix(in srgb,var(--card) 60%,transparent);font-size:12.5px;line-height:1.4}
+.rdc-icon{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;flex-shrink:0;font-size:12px;font-weight:700}
+.rdc-icon.add{background:var(--blo);color:var(--brand)}
+.rdc-icon.rem{background:var(--rlo);color:var(--red)}
+.rdc-icon.chg{background:var(--alo);color:var(--amber)}
+.rdc-icon.spl{background:var(--bllo);color:var(--blue)}
+.rdc-icon.sts{background:var(--vlo);color:var(--violet)}
+.rdc-icon.oos{background:var(--olo);color:var(--orange)}
+.rdc-body{flex:1;min-width:0}
+.rdc-name{font-weight:600;color:var(--tx)}
+.rdc-detail{font-size:11.5px;color:var(--muted);margin-top:2px}
+.rdc-arrow{color:var(--muted);margin:0 4px}
+
+.rdiff-empty{text-align:center;padding:20px;color:var(--muted);font-size:13px}
+.rdiff-summary{padding:14px;border-radius:var(--r);background:color-mix(in srgb,var(--p2) 40%,transparent);border:1px solid var(--b1);margin-top:16px;text-align:center}
+.rdiff-summary strong{color:var(--brand);font-size:22px;display:block;margin-bottom:4px}
+.rdiff-summary span{font-size:12px;color:var(--muted)}
+
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media(max-width:1100px){
   .workspace{grid-template-columns:240px 1fr}
@@ -831,11 +888,30 @@ button{cursor:pointer}
   </div>
 </div>
 
+<!-- REVISION DIFF MODAL (timeline) -->
+<div class="layer hidden" id="revDiffModal">
+  <div class="rdiff-modal">
+    <div class="rdiff-head">
+      <h2>Histórico de mudanças entre revisões</h2>
+      <button class="dclose" type="button" data-close="revDiffModal">
+        <svg viewBox="0 0 12 12" fill="none"><path d="M3 3l6 6M9 3l-6 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="rdiff-body" id="revDiffBody"></div>
+  </div>
+</div>
+
 <!-- REVISION MODAL -->
 <div class="layer hidden" id="revisionModal">
   <div class="modal">
     <h2>Controle de revisões</h2>
     <p>Quando o projeto subir de revisão (R0 → R1 → R2…), registre aqui o que mudou. Os itens já marcados ficam com o selo da revisão em que foram conferidos.</p>
+    <div style="margin-bottom:12px">
+      <button class="mbtn sec" id="openDiffBtn" type="button" style="width:100%;justify-content:center">
+        <svg viewBox="0 0 12 12" fill="none" style="width:12px;height:12px"><path d="M6 1v10M1 6h4M7 6h4M3 3l3 3-3 3M9 3l-3 3 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Ver histórico de mudanças entre revisões
+      </button>
+    </div>
     <div class="field"><label>Revisões já registradas</label>
       <div class="rev-list" id="revList"></div>
     </div>
@@ -1964,9 +2040,206 @@ function createRevision(){
   const label=$("revInputLabel").value.trim(), date=$("revInputDate").value.trim()||today(), notes=$("revInputNotes").value.trim();
   if(!label){ toast("Informe o rótulo (ex.: R1)."); return; }
   if(ST.proj.revisions.some(r=>r.label.toLowerCase()===label.toLowerCase())){ toast("Já existe uma revisão com esse rótulo."); return; }
-  ST.proj.revisions.push({label,date,notes}); ST.proj.revision=label;
+  // auto-snapshot current state before switching
+  snapshotCurrentRev();
+  ST.proj.revisions.push({label,date,notes,snapshot:null}); ST.proj.revision=label;
   $("revInputLabel").value=""; $("revInputNotes").value="";
   save(); renderRevList(); render(); toast(`Revisão ${label} criada e ativada ✓`);
+}
+
+/* ── REVISION SNAPSHOTS & DIFF ──────────────────────────────────── */
+function takeSnapshot(){
+  const items=[];
+  walkP(ST.proj,(item,area,disc,sub)=>{
+    items.push({
+      id:item.id, name:item.name, correctedName:item.correctedName||"",
+      status:item.status, origin:item.origin, ref:item.ref||"",
+      area:area.name, disc:disc.name, sub:sub.name,
+      splitFrom:item.splitFrom||null,
+      splitChildren:item.splitChildren?item.splitChildren.length:0,
+      addedInRev:item.addedInRev||"R0"
+    });
+  });
+  const areas=ST.proj.areas.map(a=>({
+    id:a.id, name:a.name, origin:a.origin, addedInRev:a.addedInRev||"R0",
+    projectRef:a.projectRef||"", hasImage:!!a.imageData
+  }));
+  const c=projCnt();
+  return {ts:nowISO(),items,areas,counts:{...c}};
+}
+function snapshotCurrentRev(){
+  const cur=ST.proj.revision||"R0";
+  const rev=ST.proj.revisions.find(r=>r.label===cur);
+  if(rev) rev.snapshot=takeSnapshot();
+}
+// auto-snapshot on save if we don't have one yet for current rev
+const _origSave=save;
+save=function(){
+  if(ST.proj){
+    const cur=ST.proj.revision||"R0";
+    const rev=ST.proj.revisions.find(r=>r.label===cur);
+    if(rev&&!rev.snapshot) rev.snapshot=takeSnapshot();
+  }
+  _origSave();
+};
+
+function diffSnapshots(older,newer){
+  if(!older||!newer) return null;
+  const changes=[];
+  const oldMap=new Map(older.items.map(i=>[i.id,i]));
+  const newMap=new Map(newer.items.map(i=>[i.id,i]));
+  // added items
+  newer.items.forEach(ni=>{
+    if(!oldMap.has(ni.id)){
+      changes.push({type:"add",icon:"+",name:ni.correctedName||ni.name,detail:`${ni.area} / ${ni.disc} / ${ni.sub}`,origin:ni.origin});
+    }
+  });
+  // removed items
+  older.items.forEach(oi=>{
+    if(!newMap.has(oi.id)){
+      changes.push({type:"rem",icon:"−",name:oi.correctedName||oi.name,detail:`${oi.area} / ${oi.disc} / ${oi.sub}`});
+    }
+  });
+  // changed items
+  newer.items.forEach(ni=>{
+    const oi=oldMap.get(ni.id); if(!oi) return;
+    // status changed
+    if(oi.status!==ni.status){
+      const from=SC[oi.status]?SC[oi.status].short:oi.status;
+      const to=SC[ni.status]?SC[ni.status].short:ni.status;
+      changes.push({type:"sts",icon:"↔",name:ni.correctedName||ni.name,detail:`${from} → ${to}`,loc:`${ni.area} / ${ni.disc}`});
+    }
+    // nomenclature changed
+    if((oi.correctedName||"")!==(ni.correctedName||"") && ni.correctedName){
+      changes.push({type:"chg",icon:"✎",name:oi.name,detail:`→ "${ni.correctedName}"`,loc:`${ni.area}`});
+    }
+    // split happened
+    if(!oi.splitChildren && ni.splitChildren>0){
+      changes.push({type:"spl",icon:"✂",name:ni.name,detail:`dividido em ${ni.splitChildren} itens`,loc:`${ni.area}`});
+    }
+    // marked out of scope
+    if(oi.status!=="out_of_scope" && ni.status==="out_of_scope"){
+      changes.push({type:"oos",icon:"⊘",name:ni.correctedName||ni.name,detail:"marcado fora do escopo",loc:`${ni.area}`});
+    }
+  });
+  // added areas
+  const oldAreaIds=new Set(older.areas.map(a=>a.id));
+  newer.areas.forEach(na=>{
+    if(!oldAreaIds.has(na.id)){
+      changes.push({type:"add",icon:"+",name:`Área: ${na.name}`,detail:na.origin==="project"?"Faltou na EAP":"Área nova"});
+    }
+  });
+  // removed areas
+  const newAreaIds=new Set(newer.areas.map(a=>a.id));
+  older.areas.forEach(oa=>{
+    if(!newAreaIds.has(oa.id)){
+      changes.push({type:"rem",icon:"−",name:`Área: ${oa.name}`,detail:"Área removida"});
+    }
+  });
+  return {
+    changes,
+    oldCounts:older.counts,
+    newCounts:newer.counts,
+    addCount:changes.filter(c=>c.type==="add").length,
+    remCount:changes.filter(c=>c.type==="rem").length,
+    chgCount:changes.filter(c=>c.type==="chg").length,
+    stsCount:changes.filter(c=>c.type==="sts").length,
+    splCount:changes.filter(c=>c.type==="spl").length,
+    oosCount:changes.filter(c=>c.type==="oos").length
+  };
+}
+
+function openRevDiff(){
+  const body=$("revDiffBody"); if(!body) return;
+  const revs=ST.proj.revisions||[];
+  // ensure current rev has snapshot
+  snapshotCurrentRev(); save();
+
+  if(revs.length<1){ body.innerHTML=`<div class="rdiff-empty">Nenhuma revisão registrada.</div>`; showModal("revDiffModal"); return; }
+
+  const cur=ST.proj.revision||"R0";
+  let html=`<div class="rdiff-tl">`;
+
+  revs.forEach((rev,idx)=>{
+    const isCur=rev.label===cur;
+    const prevRev=idx>0?revs[idx-1]:null;
+    const diff=prevRev&&prevRev.snapshot&&rev.snapshot?diffSnapshots(prevRev.snapshot,rev.snapshot):null;
+
+    const dotSvg=isCur
+      ?`<svg viewBox="0 0 11 11" fill="none"><path d="M3 5.5l2 2 3-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+      :`<svg viewBox="0 0 11 11" fill="none"><circle cx="5.5" cy="5.5" r="2" fill="currentColor"/></svg>`;
+
+    html+=`<div class="rdiff-node ${isCur?"current":""}">
+      <div class="rdiff-dot">${dotSvg}</div>
+      <div class="rdiff-label">
+        <span class="rdiff-rev">${esc(rev.label)}</span>
+        <span class="rdiff-date">${esc(rev.date||"")}</span>
+        ${isCur?`<span class="rdiff-cur">Revisão atual</span>`:""}
+      </div>`;
+
+    if(rev.notes) html+=`<div class="rdiff-notes">${esc(rev.notes)}</div>`;
+
+    if(idx===0){
+      // first revision — show initial state
+      if(rev.snapshot){
+        const c=rev.snapshot.counts;
+        html+=`<div class="rdiff-stats">
+          <span class="rdstat add"><svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> ${c.total} itens</span>
+          <span class="rdstat add">${rev.snapshot.areas.length} áreas</span>
+          ${c.match?`<span class="rdstat sts">✓ ${c.match} confirmados</span>`:""}
+        </div>
+        <div class="rdiff-empty" style="padding:10px;font-size:12px">Carga inicial da EAP — ponto de partida.</div>`;
+      } else {
+        html+=`<div class="rdiff-empty" style="padding:10px;font-size:12px">Sem snapshot salvo para esta revisão. Faça uma alteração e salve para registrar.</div>`;
+      }
+    } else if(diff){
+      // show diff stats
+      const badges=[];
+      if(diff.addCount) badges.push(`<span class="rdstat add"><svg viewBox="0 0 11 11" fill="none"><path d="M5.5 1v9M1 5.5h9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> ${diff.addCount} adicionado${diff.addCount>1?"s":""}</span>`);
+      if(diff.remCount) badges.push(`<span class="rdstat rem"><svg viewBox="0 0 11 11" fill="none"><path d="M2 5.5h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> ${diff.remCount} removido${diff.remCount>1?"s":""}</span>`);
+      if(diff.stsCount) badges.push(`<span class="rdstat sts"><svg viewBox="0 0 11 11" fill="none"><path d="M2 4l3.5 3L9 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> ${diff.stsCount} status alterado${diff.stsCount>1?"s":""}</span>`);
+      if(diff.chgCount) badges.push(`<span class="rdstat chg">✎ ${diff.chgCount} renomeado${diff.chgCount>1?"s":""}</span>`);
+      if(diff.splCount) badges.push(`<span class="rdstat spl">✂ ${diff.splCount} dividido${diff.splCount>1?"s":""}</span>`);
+      if(diff.oosCount) badges.push(`<span class="rdstat oos">⊘ ${diff.oosCount} fora escopo</span>`);
+      if(badges.length) html+=`<div class="rdiff-stats">${badges.join("")}</div>`;
+
+      if(diff.changes.length){
+        html+=`<div class="rdiff-changes">`;
+        diff.changes.forEach(ch=>{
+          const iconCls={add:"add",rem:"rem",chg:"chg",spl:"spl",sts:"sts",oos:"oos"}[ch.type]||"chg";
+          html+=`<div class="rdc">
+            <div class="rdc-icon ${iconCls}">${esc(ch.icon)}</div>
+            <div class="rdc-body">
+              <div class="rdc-name">${esc(ch.name)}</div>
+              <div class="rdc-detail">${esc(ch.detail)}${ch.loc?` <span style="color:var(--dim)">· ${esc(ch.loc)}</span>`:""}</div>
+            </div>
+          </div>`;
+        });
+        html+=`</div>`;
+      } else {
+        html+=`<div class="rdiff-empty" style="padding:10px;font-size:12px">Nenhuma mudança detectada entre ${esc(prevRev.label)} e ${esc(rev.label)}.</div>`;
+      }
+    } else if(!prevRev?.snapshot||!rev.snapshot){
+      html+=`<div class="rdiff-empty" style="padding:10px;font-size:12px">Snapshot não disponível — faça alterações e salve para gerar o histórico automaticamente.</div>`;
+    }
+
+    html+=`</div>`;
+  });
+
+  // summary
+  const first=revs[0], last=revs[revs.length-1];
+  if(first?.snapshot&&last?.snapshot&&revs.length>1){
+    const totalDiff=diffSnapshots(first.snapshot,last.snapshot);
+    if(totalDiff){
+      html+=`</div><div class="rdiff-summary">
+        <strong>${totalDiff.changes.length} mudanças</strong>
+        <span>entre ${esc(first.label)} e ${esc(last.label)} · ${revs.length} revisões</span>
+      </div>`;
+    } else { html+=`</div>`; }
+  } else { html+=`</div>`; }
+
+  body.innerHTML=html;
+  showModal("revDiffModal");
 }
 
 /* ── DIFF PANEL ─────────────────────────────────────────────────── */
@@ -2316,6 +2589,7 @@ function bind(){
     if(t.closest("#rCopy")){ copyReport(); return; }
     if(t.closest("#rPdf")){ downloadPdf(); return; }
     if(t.closest("#revBtn")||t.closest("#newRevBtn")){ openRevisionModal(); return; }
+    if(t.closest("#openDiffBtn")){ closeModal("revisionModal"); openRevDiff(); return; }
     if(t.closest("#revSaveBtn")){ createRevision(); return; }
     if(t.closest("#splitAddBtn")){ splitAddInput(); return; }
     if(t.closest("#splitSaveBtn")){ saveSplit(); return; }
@@ -2396,7 +2670,7 @@ function bind(){
       if(e.key==="Escape"){ e.preventDefault(); cancelEdit(); return; }
     }
     if(e.key==="Escape"){
-      ["itemModal","areaModal","reportModal","splitModal","revisionModal","projModal","importModal","delAreaModal"].forEach(closeModal);
+      ["itemModal","areaModal","reportModal","splitModal","revisionModal","projModal","importModal","delAreaModal","revDiffModal"].forEach(closeModal);
       closeDiff();
     }
   });
