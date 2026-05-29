@@ -3,70 +3,160 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>EAPCheck v11 · Alfalog</title>
+<title>EAPCheck · Biasi Engenharia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.2/html2pdf.bundle.min.js"></script>
 <style>
 /* ── TOKENS ─────────────────────────────────────────────────────── */
 :root{
-  --bg:#060d15; --surf:#0a1720; --panel:#0e1d2c; --p2:#122030; --card:#0c1926;
-  --b1:rgba(100,160,220,.1); --b2:rgba(100,160,220,.2); --b3:rgba(100,160,220,.32);
-  --tx:#e3f1fa; --soft:#85b8ce; --muted:#4d748c; --dim:#2a4f68;
+  --bg:#050b12; --surf:#0a1620; --panel:#0d1c2a; --p2:#12212f; --card:#0b1825;
+  --b1:rgba(110,170,230,.1); --b2:rgba(110,170,230,.2); --b3:rgba(110,170,230,.34);
+  --tx:#e6f2fb; --soft:#8cbdd2; --muted:#52788f; --dim:#2c5168;
   --brand:#2de69a; --blo:rgba(45,230,154,.09); --bhi:rgba(45,230,154,.22);
-  --blue:#34bcf0; --bllo:rgba(52,188,240,.09); --blhi:rgba(52,188,240,.22);
+  --blue:#36bdf2; --bllo:rgba(54,189,242,.09); --blhi:rgba(54,189,242,.22);
   --amber:#f5b731; --alo:rgba(245,183,49,.09); --ahi:rgba(245,183,49,.24);
-  --red:#e85c6a; --rlo:rgba(232,92,106,.09); --rhi:rgba(232,92,106,.22);
-  --violet:#a48ff7; --vlo:rgba(164,143,247,.1); --vhi:rgba(164,143,247,.22);
-  --orange:#ff8a4d; --olo:rgba(255,138,77,.09); --ohi:rgba(255,138,77,.24);
-  --shadow:0 26px 80px rgba(0,0,0,.55);
+  --red:#ec5d6b; --rlo:rgba(236,93,107,.09); --rhi:rgba(236,93,107,.22);
+  --violet:#a78bfa; --vlo:rgba(167,139,250,.1); --vhi:rgba(167,139,250,.22);
+  --orange:#ff8a4d; --olo:rgba(255,138,77,.1); --ohi:rgba(255,138,77,.24);
+  --shadow:0 28px 84px rgba(0,0,0,.58);
+  --shadow-sm:0 8px 28px rgba(0,0,0,.35);
   --sans:'Space Grotesk',system-ui,sans-serif;
   --mono:'JetBrains Mono',monospace;
-  --r:14px; --rs:9px; --rl:20px;
+  --r:14px; --rs:9px; --rl:22px;
 }
 [data-theme="light"]{
-  --bg:#eef2f7; --surf:#e5eaf1; --panel:#ffffff; --p2:#f4f6fa; --card:#fafbfd;
-  --b1:rgba(20,50,90,.09); --b2:rgba(20,50,90,.18); --b3:rgba(20,50,90,.3);
-  --tx:#0f1d2b; --soft:#2c4e6a; --muted:#6a90ab; --dim:#9ab8cc;
-  --brand:#0b9460; --blo:rgba(11,148,96,.09); --bhi:rgba(11,148,96,.2);
+  --bg:#eef2f7; --surf:#e6ebf2; --panel:#ffffff; --p2:#f4f7fb; --card:#fbfcfe;
+  --b1:rgba(20,50,90,.1); --b2:rgba(20,50,90,.18); --b3:rgba(20,50,90,.3);
+  --tx:#0d1b29; --soft:#2c4e6a; --muted:#6a90ab; --dim:#9ab8cc;
+  --brand:#0a9460; --blo:rgba(10,148,96,.09); --bhi:rgba(10,148,96,.2);
   --blue:#0a78b2; --bllo:rgba(10,120,178,.09); --blhi:rgba(10,120,178,.2);
-  --amber:#8a5e00; --alo:rgba(138,94,0,.09); --ahi:rgba(138,94,0,.2);
-  --red:#bf2e38; --rlo:rgba(191,46,56,.07); --rhi:rgba(191,46,56,.18);
-  --violet:#5c3fc4; --vlo:rgba(92,63,196,.08); --vhi:rgba(92,63,196,.18);
+  --amber:#9a6800; --alo:rgba(154,104,0,.09); --ahi:rgba(154,104,0,.2);
+  --red:#c42d39; --rlo:rgba(196,45,57,.07); --rhi:rgba(196,45,57,.18);
+  --violet:#5f3fc9; --vlo:rgba(95,63,201,.08); --vhi:rgba(95,63,201,.18);
   --orange:#d65a1c; --olo:rgba(214,90,28,.08); --ohi:rgba(214,90,28,.2);
-  --shadow:0 26px 80px rgba(10,30,60,.12);
+  --shadow:0 28px 84px rgba(10,30,60,.14);
+  --shadow-sm:0 8px 28px rgba(10,30,60,.08);
 }
 
 /* ── RESET ──────────────────────────────────────────────────────── */
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden}
-body{font-family:var(--sans);font-size:15px;color:var(--tx);background:var(--bg);line-height:1.45}
-[data-theme="dark"] body{background:radial-gradient(ellipse 70% 30% at 8% 0%,rgba(45,230,154,.045),transparent 55%),radial-gradient(ellipse 50% 22% at 92% 0%,rgba(52,188,240,.045),transparent 55%),var(--bg)}
+html,body{height:100%}
+body{font-family:var(--sans);font-size:15px;color:var(--tx);background:var(--bg);line-height:1.45;overflow:hidden}
+[data-theme="dark"] body{background:radial-gradient(ellipse 60% 32% at 6% -4%,rgba(45,230,154,.06),transparent 60%),radial-gradient(ellipse 52% 26% at 96% -2%,rgba(54,189,242,.06),transparent 60%),var(--bg)}
+[data-theme="light"] body{background:radial-gradient(ellipse 60% 32% at 6% -4%,rgba(10,148,96,.07),transparent 60%),radial-gradient(ellipse 52% 26% at 96% -2%,rgba(10,120,178,.07),transparent 60%),var(--bg)}
 button,input,select,textarea{font:inherit;color:inherit;border:none;background:none;outline:none}
 button{cursor:pointer}
 .hidden{display:none!important}
+::selection{background:var(--bhi);color:var(--tx)}
 
-/* ── APP SHELL ──────────────────────────────────────────────────── */
+/* ── VIEW SWITCH ────────────────────────────────────────────────── */
+#viewHome,#viewAudit{height:100vh}
+#viewAudit{display:flex;flex-direction:column}
+
+/* ════════════════════════════════════════════════════════════════ */
+/* HOME SCREEN                                                        */
+/* ════════════════════════════════════════════════════════════════ */
+.home{height:100vh;overflow-y:auto;display:flex;flex-direction:column}
+.home::-webkit-scrollbar{width:8px}
+.home::-webkit-scrollbar-thumb{background:var(--b1);border-radius:4px}
+
+.home-top{display:flex;align-items:center;gap:10px;padding:18px 30px;position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(20px);border-bottom:1px solid var(--b1)}
+.home-brand{display:flex;align-items:center;gap:11px;margin-right:auto}
+.home-logo{width:36px;height:36px;border-radius:11px;background:linear-gradient(135deg,var(--brand),var(--blue));display:grid;place-items:center;box-shadow:0 0 0 1px rgba(45,230,154,.3),0 8px 24px rgba(45,230,154,.22)}
+.home-logo svg{width:17px;height:17px}
+.home-bname{font-size:16px;font-weight:700;letter-spacing:-.03em}
+.home-bname em{font-style:normal;color:var(--brand)}
+.home-bsub{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
+
+.home-hero{padding:46px 30px 26px;max-width:1240px;margin:0 auto;width:100%}
+.hero-eye{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:var(--brand);font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.hero-eye::before{content:"";width:24px;height:1.5px;background:var(--brand);border-radius:2px}
+.hero-title{font-size:42px;font-weight:700;letter-spacing:-.05em;line-height:1.05;margin-bottom:12px}
+.hero-title span{background:linear-gradient(120deg,var(--brand),var(--blue));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hero-sub{font-size:16px;color:var(--soft);max-width:580px;line-height:1.55}
+
+.home-stats{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+.hstat{display:flex;align-items:center;gap:12px;padding:14px 18px;border-radius:var(--r);background:color-mix(in srgb,var(--panel) 60%,transparent);border:1px solid var(--b1);min-width:150px}
+.hstat-ico{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;flex-shrink:0}
+.hstat-ico svg{width:18px;height:18px}
+.hstat-ico.g{background:var(--blo);color:var(--brand)} .hstat-ico.b{background:var(--bllo);color:var(--blue)} .hstat-ico.a{background:var(--alo);color:var(--amber)} .hstat-ico.r{background:var(--rlo);color:var(--red)}
+.hstat-num{font-size:22px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.hstat-lbl{font-size:11.5px;color:var(--muted);margin-top:3px}
+
+.home-section{max-width:1240px;margin:0 auto;width:100%;padding:14px 30px 60px}
+.hs-head{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.hs-title{font-size:17px;font-weight:700;letter-spacing:-.02em}
+.hs-count{font-family:var(--mono);font-size:12px;color:var(--muted);background:color-mix(in srgb,var(--p2) 60%,transparent);border:1px solid var(--b1);padding:2px 9px;border-radius:999px}
+.hs-search{margin-left:auto;position:relative}
+.hs-search input{width:240px;background:color-mix(in srgb,var(--panel) 60%,transparent);border:1px solid var(--b1);border-radius:999px;padding:9px 14px 9px 36px;font-size:13px;color:var(--tx);transition:.14s}
+.hs-search input:focus{border-color:var(--b2);width:280px}
+.hs-search input::placeholder{color:var(--muted)}
+.hs-search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--muted)}
+
+/* project grid */
+.proj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(296px,1fr));gap:18px}
+
+.pcard{position:relative;border-radius:var(--rl);border:1px solid var(--b1);background:color-mix(in srgb,var(--card) 72%,transparent);padding:0;overflow:hidden;cursor:pointer;transition:transform .18s cubic-bezier(.3,1,.4,1),border-color .18s,box-shadow .18s;text-align:left;display:flex;flex-direction:column}
+.pcard:hover{transform:translateY(-4px);border-color:var(--b3);box-shadow:var(--shadow-sm)}
+.pcard-accent{height:5px;background:linear-gradient(90deg,var(--brand),var(--blue))}
+.pcard.c-blue .pcard-accent{background:linear-gradient(90deg,var(--blue),#7c5cff)}
+.pcard.c-amber .pcard-accent{background:linear-gradient(90deg,var(--amber),var(--orange))}
+.pcard.c-violet .pcard-accent{background:linear-gradient(90deg,var(--violet),var(--blue))}
+.pcard.c-red .pcard-accent{background:linear-gradient(90deg,var(--red),var(--orange))}
+.pcard-body{padding:18px 19px 16px;flex:1;display:flex;flex-direction:column}
+.pcard-top{display:flex;align-items:flex-start;gap:13px;margin-bottom:14px}
+.pcard-ring{position:relative;width:52px;height:52px;flex-shrink:0}
+.pcard-ring svg{transform:rotate(-90deg)}
+.pcard-ring .ring-pct{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--mono);font-size:12px;font-weight:700;letter-spacing:-.02em}
+.pcard-titles{min-width:0;flex:1}
+.pcard-name{font-size:17px;font-weight:700;letter-spacing:-.03em;line-height:1.15;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-client{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pcard-meta{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.pmeta{font-family:var(--mono);font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);border:1px solid var(--b1)}
+.pmeta.g{color:var(--brand);background:var(--blo);border-color:var(--bhi)}
+.pmeta.r{color:var(--red);background:var(--rlo);border-color:var(--rhi)}
+.pmeta.a{color:var(--amber);background:var(--alo);border-color:var(--ahi)}
+.pcard-bar{height:5px;border-radius:3px;background:var(--b1);overflow:hidden;margin-top:auto}
+.pcard-fill{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s}
+.pcard-foot{display:flex;align-items:center;justify-content:space-between;padding:11px 19px;border-top:1px solid var(--b1);background:color-mix(in srgb,var(--p2) 30%,transparent)}
+.pcard-date{font-size:11px;color:var(--muted)}
+.pcard-actions{display:flex;gap:3px;opacity:0;transition:.14s}
+.pcard:hover .pcard-actions{opacity:1}
+.pca{width:28px;height:28px;border-radius:7px;display:grid;place-items:center;color:var(--muted);transition:.12s;background:transparent}
+.pca:hover{background:color-mix(in srgb,var(--p2) 90%,transparent);color:var(--tx)}
+.pca.del:hover{color:var(--red);background:var(--rlo)}
+.pca svg{width:13px;height:13px}
+.pcard-open{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:var(--brand)}
+.pcard-open svg{width:12px;height:12px}
+
+/* new project card */
+.pcard-new{border:1.5px dashed var(--b2);background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;min-height:236px;padding:24px;cursor:pointer;border-radius:var(--rl);transition:.16s;color:var(--muted)}
+.pcard-new:hover{border-color:var(--brand);color:var(--brand);background:var(--blo);transform:translateY(-4px)}
+.pcard-new-ic{width:54px;height:54px;border-radius:16px;border:1.5px solid currentColor;display:grid;place-items:center}
+.pcard-new-ic svg{width:24px;height:24px}
+.pcard-new strong{font-size:15px;font-weight:700}
+.pcard-new span{font-size:12px;text-align:center;line-height:1.45;max-width:200px}
+
+.home-empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted);border:1px dashed var(--b2);border-radius:var(--rl);font-size:14px}
+
+/* ════════════════════════════════════════════════════════════════ */
+/* AUDIT — TOPBAR                                                     */
+/* ════════════════════════════════════════════════════════════════ */
 .app{height:100vh;display:grid;grid-template-rows:58px 1fr 40px}
-
-/* ── TOPBAR ─────────────────────────────────────────────────────── */
-.topbar{
-  display:flex;align-items:center;gap:7px;padding:0 16px;
-  background:color-mix(in srgb,var(--panel) 92%,transparent);
-  backdrop-filter:blur(22px);border-bottom:1px solid var(--b1);
-  position:relative;z-index:30;
-}
+.topbar{display:flex;align-items:center;gap:7px;padding:0 16px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(22px);border-bottom:1px solid var(--b1);position:relative;z-index:30}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 13px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);transition:.12s;margin-right:4px}
+.back-btn:hover{border-color:var(--b2);color:var(--tx);transform:translateX(-2px)}
+.back-btn svg{width:13px;height:13px}
 .brand{display:flex;align-items:center;gap:9px;margin-right:auto;min-width:0}
 .logo{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--brand),var(--blue));display:grid;place-items:center;flex-shrink:0;box-shadow:0 0 0 1px rgba(45,230,154,.3)}
 .logo svg{width:14px;height:14px}
 .brand-name{font-size:14.5px;font-weight:700;letter-spacing:-.03em;white-space:nowrap}
-.brand-name em{font-style:normal;color:var(--brand)}
 .brand-client{font-size:11.5px;color:var(--muted);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brand-rev{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:6px;font-family:var(--mono);font-size:10.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);margin-left:6px;cursor:pointer;transition:.12s}
 .brand-rev:hover{background:color-mix(in srgb,var(--blue) 16%,transparent)}
-
-/* topbar buttons */
-.tb{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);transition:.12s;white-space:nowrap;cursor:pointer}
+.tb{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-size:12.5px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 60%,transparent);transition:.12s;white-space:nowrap}
 .tb:hover{border-color:var(--b2);color:var(--tx);background:color-mix(in srgb,var(--p2) 90%,transparent)}
 .tb svg{width:12.5px;height:12.5px;flex-shrink:0}
 .tb.ico{padding:6px;width:32px;justify-content:center;border-radius:var(--rs)}
@@ -78,10 +168,8 @@ button{cursor:pointer}
 .tb.danger:hover{background:color-mix(in srgb,var(--red) 12%,transparent)}
 .tb-sep{width:1px;height:20px;background:var(--b1);flex-shrink:0}
 
-/* ── WORKSPACE ──────────────────────────────────────────────────── */
+/* ── WORKSPACE / SIDEBAR ────────────────────────────────────────── */
 .workspace{display:grid;grid-template-columns:272px 1fr;min-height:0;overflow:hidden}
-
-/* ── SIDEBAR ────────────────────────────────────────────────────── */
 .sidebar{display:flex;flex-direction:column;border-right:1px solid var(--b1);background:color-mix(in srgb,var(--surf) 80%,transparent);overflow:hidden;min-height:0}
 .sb-proj{padding:14px 15px 12px;border-bottom:1px solid var(--b1);flex-shrink:0}
 .sb-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);margin-bottom:4px;font-weight:600}
@@ -94,24 +182,19 @@ button{cursor:pointer}
 .sbs.r{color:var(--red);background:var(--rlo);border:1px solid var(--rhi)}
 .sbs.o{color:var(--orange);background:var(--olo);border:1px solid var(--ohi)}
 .sb-bar{height:3px;border-radius:2px;background:var(--b1);overflow:hidden}
-.sb-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s ease}
-
+.sb-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s}
 .sb-search{padding:10px 12px;border-bottom:1px solid var(--b1);flex-shrink:0}
 .sb-search input{width:100%;background:color-mix(in srgb,var(--p2) 70%,transparent);border:1px solid var(--b1);border-radius:var(--rs);padding:7px 11px;font-size:13px;color:var(--tx);transition:.12s}
 .sb-search input:focus{border-color:var(--b2);background:color-mix(in srgb,var(--p2) 90%,transparent)}
 .sb-search input::placeholder{color:var(--muted)}
-
 .sb-filters{padding:8px 11px;border-bottom:1px solid var(--b1);display:flex;gap:5px;flex-wrap:wrap;flex-shrink:0}
-.chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:600;border:1px solid var(--b1);color:var(--muted);background:transparent;cursor:pointer;transition:.12s}
+.chip{display:inline-flex;align-items:center;padding:4px 10px;border-radius:999px;font-size:11.5px;font-weight:600;border:1px solid var(--b1);color:var(--muted);background:transparent;transition:.12s}
 .chip:hover{color:var(--soft);border-color:var(--b2)}
 .chip.active{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
-
 .areas-list{flex:1;overflow-y:auto;padding:7px 9px}
 .areas-list::-webkit-scrollbar{width:3px}
 .areas-list::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
-
-/* area button */
-.ab{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;padding:10px 11px;border-radius:var(--r);border:1px solid transparent;margin-bottom:3px;cursor:pointer;transition:.12s;background:transparent;position:relative;padding-left:16px}
+.ab{display:flex;flex-direction:column;gap:5px;width:100%;text-align:left;padding:10px 11px;border-radius:var(--r);border:1px solid transparent;margin-bottom:3px;transition:.12s;background:transparent;position:relative;padding-left:16px}
 .ab::before{content:"";position:absolute;left:4px;top:50%;transform:translateY(-50%);width:3px;height:62%;border-radius:2px;background:var(--dim);transition:.12s}
 .ab.health-ok::before{background:var(--brand)}
 .ab.health-pending::before{background:var(--amber)}
@@ -124,13 +207,11 @@ button{cursor:pointer}
 .ab-pct{font-family:var(--mono);font-size:10.5px;font-weight:600;color:var(--muted);flex-shrink:0}
 .ab.active .ab-pct{color:var(--soft)}
 .ab-bar{height:2.5px;border-radius:1px;background:var(--b1)}
-.ab-fill{height:100%;border-radius:1px;background:var(--brand);transition:width .4s ease}
-.ab-fill.issue{background:var(--red)}
-.ab-fill.pend{background:var(--amber)}
+.ab-fill{height:100%;border-radius:1px;background:var(--brand);transition:width .4s}
+.ab-fill.issue{background:var(--red)} .ab-fill.pend{background:var(--amber)}
 .ab-sub{font-size:11px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-
 .sb-foot{padding:9px;flex-shrink:0;border-top:1px solid var(--b1);display:flex;flex-direction:column;gap:5px}
-.sb-add{display:flex;align-items:center;gap:7px;width:100%;padding:9px 11px;border-radius:var(--rs);border:1px dashed var(--b2);color:var(--muted);font-size:12.5px;font-weight:600;cursor:pointer;transition:.12s;background:transparent}
+.sb-add{display:flex;align-items:center;gap:7px;width:100%;padding:9px 11px;border-radius:var(--rs);border:1px dashed var(--b2);color:var(--muted);font-size:12.5px;font-weight:600;transition:.12s;background:transparent}
 .sb-add:hover{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
 .sb-add svg{width:12px;height:12px;flex-shrink:0}
 .sb-add.rev{color:var(--blue);border-color:var(--blhi);background:var(--bllo)}
@@ -141,8 +222,6 @@ button{cursor:pointer}
 .content-scroll{flex:1;overflow-y:auto;padding:0 0 24px}
 .content-scroll::-webkit-scrollbar{width:5px}
 .content-scroll::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
-
-/* area header */
 .ah{padding:22px 26px 16px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--panel) 75%,transparent);flex-shrink:0;position:sticky;top:0;z-index:10;backdrop-filter:blur(16px)}
 .ah-eye{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.13em;color:var(--muted);font-weight:600;margin-bottom:5px}
 .ah-title{font-size:26px;font-weight:700;letter-spacing:-.05em;line-height:1.1;margin-bottom:7px}
@@ -156,13 +235,11 @@ button{cursor:pointer}
 .badge.o{color:var(--orange);background:var(--olo);border-color:var(--ohi)}
 .badge.b{color:var(--muted);background:color-mix(in srgb,var(--p2) 50%,transparent);border-color:var(--b1)}
 .ah-actions{display:flex;gap:7px;align-items:center;flex-shrink:0}
-.abtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 50%,transparent);transition:.12s;cursor:pointer}
+.abtn{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:999px;font-size:13px;font-weight:600;border:1px solid var(--b1);color:var(--soft);background:color-mix(in srgb,var(--p2) 50%,transparent);transition:.12s}
 .abtn:hover{border-color:var(--b2);color:var(--tx)}
 .abtn svg{width:12px;height:12px}
 .abtn.green{background:var(--blo);border-color:var(--bhi);color:var(--brand);font-weight:700}
 .abtn.green:hover{filter:brightness(1.08)}
-
-/* area project ref strip */
 .proj-ref-strip{margin-top:10px;display:flex;align-items:center;gap:8px;padding:7px 11px;border-radius:var(--rs);background:var(--bllo);border:1px solid var(--blhi);font-size:12px}
 .proj-ref-strip svg{width:13px;height:13px;color:var(--blue);flex-shrink:0}
 .proj-ref-strip strong{color:var(--blue);font-weight:700}
@@ -170,23 +247,15 @@ button{cursor:pointer}
 .proj-ref-strip .ref-edit:hover{color:var(--blue)}
 .proj-image-wrap{margin-top:8px;border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);background:var(--p2);position:relative;max-width:520px}
 .proj-image-wrap img{display:block;width:100%;height:auto;max-height:280px;object-fit:contain;background:#000}
-.proj-image-rm{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:13px;cursor:pointer}
+.proj-image-rm{position:absolute;top:7px;right:7px;width:26px;height:26px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:13px}
 .proj-image-rm:hover{background:var(--red)}
-
-/* ── CONTENT ────────────────────────────────────────────────────── */
 .content{padding:16px 26px 10px}
-
-/* discipline card */
 .dc{border:1px solid var(--b1);border-radius:var(--r);margin-bottom:12px;overflow:hidden;background:color-mix(in srgb,var(--card) 72%,transparent)}
-.dc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;cursor:pointer;user-select:none;transition:.12s;gap:11px}
+.dc-head{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;user-select:none;transition:.12s;gap:11px}
 .dc-head:hover{background:color-mix(in srgb,var(--p2) 50%,transparent)}
 .dc-left{display:flex;align-items:center;gap:10px}
 .dc-dot{width:9px;height:9px;border-radius:50%;background:var(--brand);flex-shrink:0}
-.dc-dot.d{background:var(--blue)}
-.dc-dot.s{background:var(--amber)}
-.dc-dot.h{background:#2dccc8}
-.dc-dot.i{background:var(--red)}
-.dc-dot.e{background:var(--violet)}
+.dc-dot.d{background:var(--blue)} .dc-dot.s{background:var(--amber)} .dc-dot.h{background:#2dccc8} .dc-dot.i{background:var(--red)} .dc-dot.e{background:var(--violet)}
 .dc-name{font-size:14.5px;font-weight:700;letter-spacing:-.02em}
 .dc-right{display:flex;align-items:center;gap:9px;flex-shrink:0}
 .dc-meta{font-size:11.5px;color:var(--muted);font-family:var(--mono)}
@@ -195,29 +264,25 @@ button{cursor:pointer}
 .dc.collapsed .dc-body{display:none}
 .dc.collapsed .dc-chev{transform:rotate(-90deg)}
 .dc-body{padding:0 12px 12px}
-
-/* subsystem */
 .sub{margin-top:10px}
 .sub-head{display:flex;align-items:center;justify-content:space-between;padding:0 5px 7px;border-bottom:1px solid var(--b1);margin-bottom:5px}
 .sub-name{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:var(--muted)}
 .sub-right{display:flex;align-items:center;gap:7px}
 .sub-count{font-family:var(--mono);font-size:10.5px;color:var(--dim);background:color-mix(in srgb,var(--p2) 60%,transparent);border:1px solid var(--b1);border-radius:4px;padding:1.5px 6px}
-.sub-add{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);cursor:pointer;transition:.12s;opacity:.75}
+.sub-add{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:6px;font-size:11.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);transition:.12s;opacity:.75}
 .sub-add:hover{opacity:1;background:color-mix(in srgb,var(--blue) 14%,transparent)}
 .sub-add svg{width:10px;height:10px}
 
-/* ── ITEM CARD ──────────────────────────────────────────────────── */
+/* item */
 .item{border:1px solid var(--b1);border-left:3px solid var(--dim);border-radius:var(--r);padding:13px 15px;margin-bottom:6px;background:color-mix(in srgb,var(--card) 50%,transparent);transition:border-left-color .15s,background .15s}
-.item.match       {border-left-color:var(--brand); background:color-mix(in srgb,var(--brand) 3%,transparent)}
-.item.eap_only    {border-left-color:var(--amber); background:color-mix(in srgb,var(--amber) 3%,transparent)}
-.item.project_only{border-left-color:var(--red);   background:color-mix(in srgb,var(--red)   3%,transparent)}
-.item.review      {border-left-color:var(--violet);background:color-mix(in srgb,var(--violet) 3%,transparent)}
+.item.match{border-left-color:var(--brand);background:color-mix(in srgb,var(--brand) 3%,transparent)}
+.item.eap_only{border-left-color:var(--amber);background:color-mix(in srgb,var(--amber) 3%,transparent)}
+.item.project_only{border-left-color:var(--red);background:color-mix(in srgb,var(--red) 3%,transparent)}
+.item.review{border-left-color:var(--violet);background:color-mix(in srgb,var(--violet) 3%,transparent)}
 .item.out_of_scope{border-left-color:var(--orange);background:color-mix(in srgb,var(--orange) 3%,transparent)}
-.item.na          {border-left-color:var(--dim); opacity:.65}
-.item.split-source{border-left-color:var(--blue); background:color-mix(in srgb,var(--blue) 4%,transparent);opacity:.85}
+.item.na{border-left-color:var(--dim);opacity:.65}
+.item.split-source{border-left-color:var(--blue);background:color-mix(in srgb,var(--blue) 4%,transparent);opacity:.9}
 .item.split-source .it-name{text-decoration:line-through;text-decoration-color:var(--muted);text-decoration-thickness:1px}
-
-/* item top row */
 .it-top{display:flex;align-items:center;gap:6px;margin-bottom:7px;flex-wrap:wrap}
 .otag{font-family:var(--mono);font-size:8px;text-transform:uppercase;letter-spacing:.11em;font-weight:700;padding:2.5px 6px;border-radius:4px;flex-shrink:0}
 .otag.eap{color:var(--brand);background:var(--blo);border:1px solid var(--bhi)}
@@ -228,79 +293,77 @@ button{cursor:pointer}
 .rev-tag{font-family:var(--mono);font-size:8.5px;font-weight:700;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);padding:1.5px 5px;border-radius:3px;flex-shrink:0}
 .it-spacer{flex:1}
 .it-btns{display:flex;align-items:center;gap:4px}
-.pencil{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;opacity:0;transition:.12s}
+.pencil{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;font-size:11px;font-weight:600;color:var(--muted);opacity:0;transition:.12s}
 .item:hover .pencil{opacity:1}
 .pencil:hover{color:var(--amber);background:var(--alo)}
 .pencil.split-btn:hover{color:var(--blue);background:var(--bllo)}
 .pencil svg{width:10px;height:10px}
-.item-rm{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:11px;color:var(--muted);cursor:pointer;transition:.12s;opacity:0}
+.item-rm{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:5px;font-size:11px;color:var(--muted);transition:.12s;opacity:0}
 .item:hover .item-rm{opacity:1}
 .item-rm:hover{color:var(--red);background:var(--rlo)}
-
-/* item name */
 .it-name{font-size:15.5px;font-weight:600;letter-spacing:-.025em;line-height:1.32;margin-bottom:9px}
 .it-corrected{font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:7px;line-height:1.4}
 .it-split-info{font-size:11.5px;color:var(--blue);background:var(--bllo);border:1px solid var(--blhi);border-radius:var(--rs);padding:6px 9px;margin-bottom:8px;line-height:1.4}
 .it-split-info b{color:var(--blue)}
-
-/* inline edit */
 .name-edit-wrap{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:9px}
 .name-input{font-size:15.5px;font-weight:600;letter-spacing:-.025em;border:1.5px solid var(--brand);border-radius:7px;padding:5px 11px;background:color-mix(in srgb,var(--blo) 70%,transparent);color:var(--tx);min-width:180px;flex:1;max-width:520px}
-.edit-ok{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--brand);color:#051409;cursor:pointer;flex-shrink:0}
+.edit-ok{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--brand);color:#051409;flex-shrink:0}
+[data-theme="light"] .edit-ok{color:#fff}
 .edit-ok:hover{filter:brightness(1.08)}
-.edit-cancel{padding:5px 11px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);cursor:pointer;flex-shrink:0}
-
-/* status picker — below the name */
+.edit-cancel{padding:5px 11px;border-radius:6px;font-size:12.5px;font-weight:700;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);flex-shrink:0}
 .spk{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
-.spk-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-size:12.5px;font-weight:600;border:1.5px solid transparent;cursor:pointer;transition:.12s;white-space:nowrap;background:color-mix(in srgb,var(--p2) 50%,transparent);color:var(--muted)}
+.spk-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:7px;font-size:12.5px;font-weight:600;border:1.5px solid transparent;transition:.12s;white-space:nowrap;background:color-mix(in srgb,var(--p2) 50%,transparent);color:var(--muted)}
 .spk-btn:hover{transform:translateY(-1px)}
-.spk-btn.match       {color:var(--brand); border-color:color-mix(in srgb,var(--brand) 32%,transparent); background:var(--blo)}
-.spk-btn.eap_only    {color:var(--amber); border-color:color-mix(in srgb,var(--amber) 32%,transparent); background:var(--alo)}
-.spk-btn.project_only{color:var(--red);   border-color:color-mix(in srgb,var(--red)   32%,transparent); background:var(--rlo)}
-.spk-btn.review      {color:var(--violet);border-color:color-mix(in srgb,var(--violet) 32%,transparent);background:var(--vlo)}
+.spk-btn.match{color:var(--brand);border-color:color-mix(in srgb,var(--brand) 32%,transparent);background:var(--blo)}
+.spk-btn.eap_only{color:var(--amber);border-color:color-mix(in srgb,var(--amber) 32%,transparent);background:var(--alo)}
+.spk-btn.project_only{color:var(--red);border-color:color-mix(in srgb,var(--red) 32%,transparent);background:var(--rlo)}
+.spk-btn.review{color:var(--violet);border-color:color-mix(in srgb,var(--violet) 32%,transparent);background:var(--vlo)}
 .spk-btn.out_of_scope{color:var(--orange);border-color:color-mix(in srgb,var(--orange) 32%,transparent);background:var(--olo)}
-.spk-btn.na          {color:var(--muted); border-color:var(--b1); background:color-mix(in srgb,var(--p2) 30%,transparent)}
+.spk-btn.na{color:var(--muted);border-color:var(--b1);background:color-mix(in srgb,var(--p2) 30%,transparent)}
 .spk-btn.inactive{color:var(--muted);border-color:var(--b1);background:transparent}
 .spk-btn.inactive:hover{border-color:var(--b2);color:var(--soft)}
 .spk-btn.active-ring{box-shadow:0 0 0 2px currentColor}
 .spk-sep{width:1px;height:18px;background:var(--b2);margin:0 2px}
-.spk-ref{display:inline-flex;align-items:center;gap:4px;padding:7px 11px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--b1);background:transparent;cursor:pointer;transition:.12s}
+.spk-ref{display:inline-flex;align-items:center;gap:4px;padding:7px 11px;border-radius:7px;font-size:11.5px;font-weight:600;color:var(--muted);border:1.5px solid var(--b1);background:transparent;transition:.12s}
 .spk-ref:hover{color:var(--soft);border-color:var(--b2)}
 .spk-ref.open{color:var(--blue);border-color:var(--blhi);background:var(--bllo)}
 .spk-ref svg{width:11px;height:11px}
-
-/* ref/obs fields */
 .ix-fields{display:none;gap:7px;flex-wrap:wrap;margin-top:10px;padding-top:10px;border-top:1px solid var(--b1)}
 .ix-fields.open{display:flex}
 .finput{height:32px;border:1px solid var(--b1);border-radius:var(--rs);padding:0 11px;background:color-mix(in srgb,var(--panel) 65%,transparent);font-size:12.5px;color:var(--tx);flex:1;min-width:140px;max-width:340px;transition:.12s}
 .finput:focus{border-color:var(--brand)}
 .finput::placeholder{color:var(--muted)}
-
-/* ── SUMMARY BAR ────────────────────────────────────────────────── */
 .sumbar{border-top:1px solid var(--b1);padding:0 18px;background:color-mix(in srgb,var(--panel) 92%,transparent);backdrop-filter:blur(14px);display:flex;align-items:center;gap:12px;flex-wrap:nowrap;font-size:11.5px;color:var(--muted);overflow:hidden;height:40px}
 .sumbar strong{color:var(--tx)}
 .sum-prog{flex:1;max-width:140px;height:3.5px;border-radius:2px;background:var(--b1);overflow:hidden;flex-shrink:0}
-.sum-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s ease}
+.sum-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--brand),var(--blue));transition:width .5s}
 .sum-sep{width:1px;height:16px;background:var(--b1);flex-shrink:0}
 
-/* ── TOAST ──────────────────────────────────────────────────────── */
+/* ── TOAST / MODALS ─────────────────────────────────────────────── */
 .toast{position:fixed;bottom:54px;left:50%;z-index:100;pointer-events:none;transform:translate(-50%,8px);opacity:0;background:color-mix(in srgb,var(--panel) 96%,transparent);border:1px solid var(--b2);backdrop-filter:blur(18px);border-radius:999px;padding:9px 17px;font-size:13.5px;font-weight:600;box-shadow:var(--shadow);transition:.18s;white-space:nowrap}
 .toast.show{opacity:1;transform:translate(-50%,0)}
-
-/* ── LAYER & MODALS ─────────────────────────────────────────────── */
 .layer{position:fixed;inset:0;z-index:60;background:rgba(2,8,16,.78);backdrop-filter:blur(12px);display:grid;place-items:center;padding:18px}
 .modal{width:min(560px,100%);background:var(--panel);border:1px solid var(--b2);border-radius:22px;padding:22px 24px;box-shadow:var(--shadow);max-height:92vh;overflow-y:auto}
 .modal h2{font-size:19px;font-weight:700;letter-spacing:-.04em;margin-bottom:4px}
 .modal p{font-size:13px;color:var(--soft);line-height:1.55;margin-bottom:16px}
 .form{display:grid;gap:12px}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .field label{display:block;font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;margin-bottom:5px}
 .field input,.field select,.field textarea{width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;background:color-mix(in srgb,var(--p2) 65%,transparent);font-size:13.5px;color:var(--tx);transition:.12s}
 .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand)}
 .field textarea{min-height:74px;resize:vertical;line-height:1.5}
 .field select option{background:var(--panel)}
 .field .field-hint{display:block;font-size:11px;color:var(--muted);margin-top:5px;line-height:1.45}
+.color-pick{display:flex;gap:8px;flex-wrap:wrap}
+.color-opt{width:34px;height:34px;border-radius:10px;border:2px solid transparent;cursor:pointer;transition:.12s}
+.color-opt.sel{border-color:var(--tx);transform:scale(1.08)}
+.color-opt.c-green{background:linear-gradient(135deg,var(--brand),var(--blue))}
+.color-opt.c-blue{background:linear-gradient(135deg,var(--blue),#7c5cff)}
+.color-opt.c-amber{background:linear-gradient(135deg,var(--amber),var(--orange))}
+.color-opt.c-violet{background:linear-gradient(135deg,var(--violet),var(--blue))}
+.color-opt.c-red{background:linear-gradient(135deg,var(--red),var(--orange))}
 .mfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--b1)}
-.mbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;transition:.12s}
+.mbtn{display:inline-flex;align-items:center;gap:6px;padding:9px 15px;border-radius:999px;font-size:13.5px;font-weight:600;transition:.12s}
 .mbtn.ghost{border:1px solid var(--b1);color:var(--soft);background:transparent}
 .mbtn.ghost:hover{border-color:var(--b2);color:var(--tx)}
 .mbtn.prim{background:var(--brand);color:#041209;border:none;font-weight:700}
@@ -308,19 +371,17 @@ button{cursor:pointer}
 .mbtn.prim:hover{filter:brightness(1.06)}
 .mbtn.sec{background:var(--bllo);color:var(--blue);border:1px solid var(--blhi)}
 .mbtn.sec:hover{filter:brightness(1.08)}
-
-/* image upload */
-.img-drop{border:1.5px dashed var(--b2);border-radius:var(--r);padding:16px;text-align:center;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--p2) 40%,transparent)}
+.mbtn.danger{background:var(--rlo);color:var(--red);border:1px solid var(--rhi)}
+.mbtn.danger:hover{filter:brightness(1.08)}
+.img-drop{border:1.5px dashed var(--b2);border-radius:var(--r);padding:16px;text-align:center;transition:.12s;background:color-mix(in srgb,var(--p2) 40%,transparent)}
 .img-drop:hover{border-color:var(--brand);background:var(--blo)}
 .img-drop svg{width:24px;height:24px;color:var(--muted);margin-bottom:6px}
 .img-drop strong{display:block;font-size:13px;color:var(--tx);margin-bottom:3px}
 .img-drop span{display:block;font-size:11px;color:var(--muted)}
 .img-preview{position:relative;border-radius:var(--r);overflow:hidden;border:1px solid var(--b1);max-height:240px;background:#000}
 .img-preview img{display:block;width:100%;height:auto;max-height:240px;object-fit:contain}
-.img-preview-rm{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px;cursor:pointer}
+.img-preview-rm{position:absolute;top:7px;right:7px;width:28px;height:28px;border-radius:6px;background:rgba(0,0,0,.7);color:#fff;border:1px solid rgba(255,255,255,.2);display:grid;place-items:center;font-size:14px}
 .img-preview-rm:hover{background:var(--red)}
-
-/* split modal */
 .split-orig{padding:11px 13px;border:1px solid var(--blhi);background:var(--bllo);border-radius:var(--r);margin-bottom:14px}
 .split-orig .so-eye{font-family:var(--mono);font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:var(--blue);font-weight:700;margin-bottom:3px}
 .split-orig .so-name{font-size:14.5px;font-weight:600;color:var(--tx)}
@@ -330,13 +391,11 @@ button{cursor:pointer}
 .split-num{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--blue);width:22px;flex-shrink:0;text-align:center}
 .split-row input{flex:1;border:1px solid var(--b1);border-radius:var(--rs);padding:9px 11px;background:color-mix(in srgb,var(--p2) 65%,transparent);font-size:13.5px;color:var(--tx);transition:.12s}
 .split-row input:focus{border-color:var(--brand)}
-.split-row .split-rm{width:30px;height:30px;border-radius:6px;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);display:grid;place-items:center;cursor:pointer;flex-shrink:0;font-size:13px}
+.split-row .split-rm{width:30px;height:30px;border-radius:6px;background:var(--rlo);color:var(--red);border:1px solid var(--rhi);display:grid;place-items:center;flex-shrink:0;font-size:13px}
 .split-row .split-rm:hover{background:color-mix(in srgb,var(--red) 16%,transparent)}
-.split-add-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);background:var(--bllo);border:1px dashed var(--blhi);cursor:pointer;transition:.12s}
+.split-add-btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:8px;font-size:12px;font-weight:600;color:var(--blue);background:var(--bllo);border:1px dashed var(--blhi);transition:.12s}
 .split-add-btn:hover{background:color-mix(in srgb,var(--blue) 14%,transparent)}
 .split-add-btn svg{width:10px;height:10px}
-
-/* revision modal */
 .rev-list{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;max-height:220px;overflow-y:auto}
 .rev-row{display:flex;align-items:flex-start;gap:9px;padding:9px 11px;border:1px solid var(--b1);border-radius:var(--rs);background:color-mix(in srgb,var(--p2) 40%,transparent)}
 .rev-row.current{border-color:var(--bhi);background:var(--blo)}
@@ -345,8 +404,8 @@ button{cursor:pointer}
 .rev-content .rev-date{font-size:10px;color:var(--muted);margin-top:2px}
 .rev-cur-tag{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--brand);background:var(--blo);border:1px solid var(--bhi);padding:2px 6px;border-radius:3px;flex-shrink:0}
 
-/* ── REPORT MODAL ───────────────────────────────────────────────── */
-.rmodal{width:min(940px,100%);max-height:92vh;background:var(--panel);border:1px solid var(--b2);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
+/* report modal */
+.rmodal{width:min(960px,100%);max-height:92vh;background:var(--panel);border:1px solid var(--b2);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}
 .rhead{padding:17px 22px;border-bottom:1px solid var(--b1);display:flex;align-items:center;justify-content:space-between;gap:13px;flex-shrink:0}
 .rhead h2{font-size:18px;font-weight:700;letter-spacing:-.04em}
 .rhead-right{display:flex;align-items:center;gap:8px}
@@ -354,17 +413,24 @@ button{cursor:pointer}
 .rprog.done{color:var(--brand);border-color:var(--bhi);background:var(--blo)}
 .rinputs{padding:13px 22px;border-bottom:1px solid var(--b1);flex-shrink:0;display:grid;grid-template-columns:1fr 1fr;gap:11px}
 .rwarn{margin:10px 22px 0;padding:10px 13px;background:var(--alo);border:1px solid var(--ahi);border-radius:var(--rs);font-size:12.5px;color:var(--amber);line-height:1.45;flex-shrink:0}
-.rpreview{flex:1;overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.rtabs{display:flex;gap:4px;padding:10px 22px 0;flex-shrink:0}
+.rtab{padding:7px 14px;border-radius:9px 9px 0 0;font-size:12.5px;font-weight:600;color:var(--muted);border:1px solid transparent;border-bottom:none;transition:.12s}
+.rtab:hover{color:var(--soft)}
+.rtab.active{color:var(--tx);background:color-mix(in srgb,var(--card) 90%,transparent);border-color:var(--b1)}
+.rpreview{flex:1;overflow:hidden;min-height:0;display:flex;flex-direction:column;border-top:1px solid var(--b1)}
 .rta{flex:1;width:100%;resize:none;font-family:var(--mono);font-size:11.5px;line-height:1.65;padding:16px 22px;border:none;background:color-mix(in srgb,var(--card) 90%,transparent);color:var(--tx);overflow-y:auto}
 .rta::-webkit-scrollbar{width:5px}
 .rta::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
+.rdoc-scroll{flex:1;overflow-y:auto;background:#3a4654;padding:20px}
+.rdoc-scroll::-webkit-scrollbar{width:8px}
+.rdoc-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2);border-radius:4px}
 .rfoot{padding:13px 22px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:8px;flex-shrink:0}
 .rfoot small{color:var(--muted);font-size:11.5px;margin-right:auto}
-.dclose{width:30px;height:30px;border-radius:8px;border:1px solid var(--b1);display:grid;place-items:center;color:var(--muted);cursor:pointer;transition:.12s;background:transparent}
+.dclose{width:30px;height:30px;border-radius:8px;border:1px solid var(--b1);display:grid;place-items:center;color:var(--muted);transition:.12s;background:transparent}
 .dclose:hover{color:var(--tx);border-color:var(--b2)}
 .dclose svg{width:13px;height:13px}
 
-/* ── DIFF PANEL ─────────────────────────────────────────────────── */
+/* diff panel */
 .dlayer{position:fixed;inset:0;z-index:50;pointer-events:none}
 .dlayer.open{pointer-events:auto}
 .dbackdrop{position:absolute;inset:0;background:rgba(2,8,16,.5);opacity:0;transition:opacity .22s}
@@ -376,7 +442,7 @@ button{cursor:pointer}
 .dbody{flex:1;overflow-y:auto;padding:9px 11px;display:flex;flex-direction:column;gap:5px}
 .dbody::-webkit-scrollbar{width:3px}
 .dbody::-webkit-scrollbar-thumb{background:var(--b1);border-radius:3px}
-.di{border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;cursor:pointer;transition:.12s;background:color-mix(in srgb,var(--card) 80%,transparent)}
+.di{border:1px solid var(--b1);border-radius:var(--r);padding:10px 12px;transition:.12s;background:color-mix(in srgb,var(--card) 80%,transparent)}
 .di:hover{border-color:var(--b2);transform:translateX(-3px)}
 .ditag{font-family:var(--mono);font-size:8.5px;text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:4px}
 .ditag.a{color:var(--amber)} .ditag.r{color:var(--red)} .ditag.v{color:var(--violet)} .ditag.o{color:var(--orange)}
@@ -384,34 +450,86 @@ button{cursor:pointer}
 .disub{font-size:11px;color:var(--muted)}
 .dempty{text-align:center;color:var(--muted);padding:30px 14px;font-size:13px;line-height:1.6}
 .dfoot{padding:11px;border-top:1px solid var(--b1);flex-shrink:0}
-
-/* ── AREA NOTES ─────────────────────────────────────────────────── */
 .area-notes{margin:10px 26px 4px}
-.anotes-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:11.5px;font-weight:600;color:var(--muted);border:1px solid var(--b1);background:transparent;cursor:pointer;transition:.12s;margin-bottom:5px}
+.anotes-toggle{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;font-size:11.5px;font-weight:600;color:var(--muted);border:1px solid var(--b1);background:transparent;transition:.12s;margin-bottom:5px}
 .anotes-toggle:hover{color:var(--soft);border-color:var(--b2)}
 .anotes-toggle svg{width:12px;height:12px}
 .anotes-ta{display:none;width:100%;border:1px solid var(--b1);border-radius:var(--r);padding:10px 13px;background:color-mix(in srgb,var(--p2) 60%,transparent);font-size:13px;color:var(--tx);resize:vertical;min-height:78px;transition:.12s;line-height:1.5}
 .anotes-ta.open{display:block}
 .anotes-ta:focus{border-color:var(--brand)}
-.anotes-ta::placeholder{color:var(--muted)}
-
-/* ── EMPTY ──────────────────────────────────────────────────────── */
 .empty{border:1px dashed var(--b2);border-radius:var(--r);padding:28px 20px;text-align:center;color:var(--muted);font-size:13.5px;line-height:1.6}
-
-/* ── LEGEND STRIP ───────────────────────────────────────────────── */
 .legend{display:flex;align-items:center;gap:14px;padding:10px 26px;border-bottom:1px solid var(--b1);background:color-mix(in srgb,var(--p2) 32%,transparent);flex-wrap:wrap;flex-shrink:0}
 .legend-label{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:600;flex-shrink:0}
 .leg-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--soft);white-space:nowrap}
 .leg-dot{width:8px;height:8px;border-radius:2px;flex-shrink:0}
 .leg-dot.g{background:var(--brand)} .leg-dot.a{background:var(--amber)} .leg-dot.r{background:var(--red)} .leg-dot.v{background:var(--violet)} .leg-dot.o{background:var(--orange)} .leg-dot.m{background:var(--muted)}
 
+/* ════════════════════════════════════════════════════════════════ */
+/* PDF DOCUMENT (light, print-friendly, rendered off-screen)         */
+/* ════════════════════════════════════════════════════════════════ */
+#pdfStage{position:fixed;left:-9999px;top:0;width:794px;background:#fff}
+.pdfdoc{width:794px;background:#fff;color:#16202b;font-family:var(--sans);padding:0}
+.pdfdoc *{box-sizing:border-box}
+.pdf-cover{padding:54px 54px 30px;background:linear-gradient(135deg,#0d1c2a,#13324a);color:#fff;position:relative;overflow:hidden}
+.pdf-cover::after{content:"";position:absolute;right:-60px;top:-60px;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(45,230,154,.34),transparent 70%)}
+.pdf-cover-eye{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#2de69a;font-weight:600;margin-bottom:14px}
+.pdf-cover h1{font-size:32px;font-weight:700;letter-spacing:-.04em;line-height:1.1;margin-bottom:6px;position:relative;z-index:1}
+.pdf-cover .pc-proj{font-size:16px;color:#8cbdd2;margin-bottom:22px}
+.pdf-cover-grid{display:flex;gap:28px;flex-wrap:wrap;position:relative;z-index:1}
+.pcg-item{font-size:12.5px;color:#c4dcec}
+.pcg-item b{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#5e8aa3;margin-bottom:3px;font-weight:600}
+.pdf-verdict{margin:0;padding:16px 54px;font-size:14px;font-weight:600;color:#fff;display:flex;align-items:center;gap:10px}
+.pdf-verdict.ok{background:#0a9460} .pdf-verdict.warn{background:#d98a16} .pdf-verdict.part{background:#5b7790}
+.pdf-body{padding:30px 54px 40px}
+.pdf-sec{margin-bottom:26px;page-break-inside:avoid}
+.pdf-sec-h{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e6ebf1}
+.pdf-sec-n{width:26px;height:26px;border-radius:7px;background:#13324a;color:#fff;display:grid;place-items:center;font-size:13px;font-weight:700;flex-shrink:0}
+.pdf-sec-t{font-size:16px;font-weight:700;letter-spacing:-.02em;color:#13324a}
+.pdf-stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.pst{flex:1;min-width:108px;border:1px solid #e6ebf1;border-radius:12px;padding:12px 14px;background:#fafbfc}
+.pst-n{font-size:24px;font-weight:700;letter-spacing:-.03em;line-height:1}
+.pst-l{font-size:11px;color:#5e7286;margin-top:4px;line-height:1.3}
+.pst.g{border-color:#bbedd6;background:#f0fbf6} .pst.g .pst-n{color:#0a9460}
+.pst.a{border-color:#f3e2b0;background:#fdf9ed} .pst.a .pst-n{color:#b07d0a}
+.pst.r{border-color:#f4c9ce;background:#fdf0f1} .pst.r .pst-n{color:#c42d39}
+.pst.o{border-color:#fad6c0;background:#fef4ee} .pst.o .pst-n{color:#d65a1c}
+.pst.b{border-color:#e6ebf1;background:#f7f9fb} .pst.b .pst-n{color:#42566a}
+.pdf-todo{border:1px solid #e6ebf1;border-radius:13px;padding:0;margin-bottom:12px;overflow:hidden;page-break-inside:avoid}
+.pdf-todo-h{padding:11px 16px;display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:700;color:#fff}
+.pdf-todo-h.split{background:#2d7fb5} .pdf-todo-h.corr{background:#b07d0a} .pdf-todo-h.oos{background:#d65a1c} .pdf-todo-h.eo{background:#b07d0a} .pdf-todo-h.po{background:#c42d39} .pdf-todo-h.area{background:#0a9460} .pdf-todo-h.rev{background:#5f3fc9}
+.pdf-todo-why{padding:10px 16px;font-size:12px;color:#42566a;background:#f7f9fb;line-height:1.5;border-bottom:1px solid #eef1f5}
+.pdf-todo-body{padding:8px 16px 12px}
+.pdf-li{font-size:12.5px;line-height:1.5;padding:6px 0;border-bottom:1px solid #f2f4f7}
+.pdf-li:last-child{border-bottom:none}
+.pdf-li .li-from{color:#8a3a3a;font-weight:600}
+.pdf-li .li-to{color:#0a7a50;font-weight:600}
+.pdf-li .li-loc{font-size:10.5px;color:#7e92a6;font-family:var(--mono)}
+.pdf-li .li-arrow{display:inline-block;margin:0 6px;color:#9ab}
+.pdf-li-sub{padding-left:16px;font-size:12px;color:#42566a;line-height:1.6}
+.pdf-img{margin-top:8px;border:1px solid #e6ebf1;border-radius:8px;overflow:hidden;max-width:420px}
+.pdf-img img{display:block;width:100%;height:auto}
+.pdf-inv-area{margin-bottom:14px;page-break-inside:avoid}
+.pdf-inv-h{font-size:13px;font-weight:700;color:#13324a;padding:7px 12px;background:#eef3f7;border-radius:8px;margin-bottom:6px;display:flex;align-items:center;justify-content:space-between}
+.pdf-inv-h .inv-new{font-size:10px;font-weight:700;color:#0a9460;background:#dff5ec;padding:2px 8px;border-radius:5px}
+.pdf-inv-row{display:flex;align-items:flex-start;gap:9px;font-size:12px;padding:5px 12px;line-height:1.4}
+.pdf-inv-dot{width:16px;flex-shrink:0;font-weight:700;text-align:center}
+.pdf-inv-dot.match{color:#0a9460} .pdf-inv-dot.eap_only{color:#b07d0a} .pdf-inv-dot.project_only{color:#c42d39} .pdf-inv-dot.review{color:#5f3fc9} .pdf-inv-dot.out_of_scope{color:#d65a1c} .pdf-inv-dot.na{color:#9ab} .pdf-inv-dot.pending{color:#b8c2cc} .pdf-inv-dot.split{color:#2d7fb5}
+.pdf-inv-name{flex:1}
+.pdf-inv-name .inv-tag{font-size:10px;color:#7e92a6}
+.pdf-guide{background:#f0fbf6;border:1px solid #bbedd6;border-radius:13px;padding:16px 18px}
+.pdf-guide-li{font-size:12.5px;color:#1d4a38;line-height:1.55;padding:5px 0;display:flex;gap:8px}
+.pdf-guide-li::before{content:"→";color:#0a9460;font-weight:700;flex-shrink:0}
+.pdf-foot{padding:18px 54px;background:#13324a;color:#8cbdd2;font-size:11px;display:flex;justify-content:space-between;align-items:center}
+.pdf-foot b{color:#fff}
+
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media(max-width:1100px){
   .workspace{grid-template-columns:240px 1fr}
   .rinputs{grid-template-columns:1fr}
+  .hero-title{font-size:34px}
 }
 @media(max-width:760px){
-  html,body{overflow:auto}
+  body{overflow:auto}
   .app{height:auto;min-height:100vh;grid-template-rows:58px auto 40px}
   .workspace{grid-template-columns:1fr;overflow:visible}
   .sidebar{max-height:280px;border-right:none;border-bottom:1px solid var(--b1)}
@@ -420,90 +538,127 @@ button{cursor:pointer}
   .brand-client{display:none}
   .dpanel{width:100vw}
   .legend{display:none}
+  .frow{grid-template-columns:1fr}
+  .hero-title{font-size:28px}
+  .hs-search input{width:150px}
+  .hs-search input:focus{width:170px}
 }
 </style>
 </head>
 <body>
-<div class="app">
-
-<!-- TOPBAR -->
-<header class="topbar">
-  <div class="brand">
-    <div class="logo">
-      <svg viewBox="0 0 13 13" fill="none"><path d="M2 4h9M2 6.5h5.5M2 9h7" stroke="#041209" stroke-width="1.7" stroke-linecap="round"/></svg>
+<!-- ════════════════════════════════════════════════ HOME ══════ -->
+<div id="viewHome" class="home">
+  <header class="home-top">
+    <div class="home-brand">
+      <div class="home-logo">
+        <svg viewBox="0 0 14 14" fill="none"><path d="M2 4h10M2 7h6M2 10h8" stroke="#041209" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </div>
+      <div>
+        <div class="home-bname">EAP<em>Check</em></div>
+        <div class="home-bsub">Biasi Engenharia · Conferência de EAPs</div>
+      </div>
     </div>
-    <span class="brand-name">EAPCheck <em>·</em></span>
-    <span class="brand-client">N.E. LOGÍSTICA LTDA.</span>
-    <button class="brand-rev" id="revBtn" type="button" title="Controle de revisões">
-      <svg viewBox="0 0 12 12" fill="none" style="width:10px;height:10px"><path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-      <span id="revLabel">R0</span>
+    <button class="tb" id="homeImportBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v7M3 5l3 3 3-3M2 10h8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Importar EAP
     </button>
+    <button class="tb ico" id="homeThemeBtn" title="Alternar tema" type="button">
+      <svg id="homeThemeIco" viewBox="0 0 14 14" fill="none"></svg>
+    </button>
+  </header>
+
+  <div class="home-hero">
+    <div class="hero-eye">Painel de conferência</div>
+    <h1 class="hero-title">Suas <span>EAPs</span> em conferência</h1>
+    <p class="hero-sub">Escolha uma EAP para auditar contra o projeto, ou crie uma nova. Cada conferência gera um manual de mudanças pronto para enviar a quem montou a EAP.</p>
+    <div class="home-stats" id="homeStats"></div>
   </div>
 
-  <button class="tb" id="diffBtn" type="button">
-    <svg viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5h9M1.5 6h6M1.5 8.5h7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-    Divergências
-  </button>
-
-  <button class="tb" id="nextBtn" type="button">
-    <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    Próxima pendência
-  </button>
-
-  <button class="tb green" id="reportBtn" type="button">
-    <svg viewBox="0 0 12 12" fill="none"><path d="M3 1h6l2 2v8H3V1z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 5h4M5 7h3M5 9h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
-    Gerar Relatório
-  </button>
-
-  <div class="tb-sep"></div>
-
-  <button class="tb ico" id="themeBtn" title="Alternar tema" type="button">
-    <svg id="themeIco" viewBox="0 0 14 14" fill="none"></svg>
-  </button>
-
-  <button class="tb danger" id="resetBtn" type="button">Zerar</button>
-</header>
-
-<!-- WORKSPACE -->
-<div class="workspace">
-
-  <!-- SIDEBAR -->
-  <aside class="sidebar">
-    <div class="sb-proj">
-      <div class="sb-eye">EAP Real · BiasiHub</div>
-      <div class="sb-title">Alfalog</div>
-      <div class="sb-meta">N.E. LOGÍSTICA LTDA. · Goiânia, GO<br>Recebido em 28/05/2026</div>
-      <div class="sb-stats" id="sbStats"></div>
-      <div class="sb-bar"><div class="sb-fill" id="sbFill" style="width:0%"></div></div>
+  <div class="home-section">
+    <div class="hs-head">
+      <span class="hs-title">Projetos</span>
+      <span class="hs-count" id="hsCount">0</span>
+      <div class="hs-search">
+        <svg viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.2" stroke="currentColor" stroke-width="1.4"/><path d="M9.2 9.2L12 12" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <input id="homeSearch" placeholder="Buscar projeto ou cliente…" autocomplete="off">
+      </div>
     </div>
-    <div class="sb-search">
-      <input id="areaSearch" placeholder="Buscar área…" autocomplete="off">
-    </div>
-    <div class="sb-filters">
-      <button class="chip active" data-filter="all" type="button">Todas</button>
-      <button class="chip" data-filter="pending" type="button">Pendentes</button>
-      <button class="chip" data-filter="issue" type="button">Divergências</button>
-      <button class="chip" data-filter="ok" type="button">Concluídas</button>
-    </div>
-    <div class="areas-list" id="areasList"></div>
-    <div class="sb-foot">
-      <button class="sb-add" data-add-area type="button">
-        <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-        Área faltou na EAP
-      </button>
-      <button class="sb-add rev" id="newRevBtn" type="button">
-        <svg viewBox="0 0 12 12" fill="none"><path d="M2 6a4 4 0 117 2.6M9 5V2M9 5h-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        Nova revisão (R1, R2…)
-      </button>
-    </div>
-  </aside>
-
-  <!-- MAIN -->
-  <main class="main" id="mainArea"></main>
+    <div class="proj-grid" id="projGrid"></div>
+  </div>
 </div>
 
-<!-- SUMMARY BAR -->
-<div class="sumbar" id="sumBar"></div>
+<!-- ════════════════════════════════════════════════ AUDIT ═════ -->
+<div id="viewAudit" class="hidden">
+<div class="app">
+  <header class="topbar">
+    <button class="back-btn" id="backBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M7 2L3 6l4 4M3 6h7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      EAPs
+    </button>
+    <div class="brand">
+      <div class="logo">
+        <svg viewBox="0 0 13 13" fill="none"><path d="M2 4h9M2 6.5h5.5M2 9h7" stroke="#041209" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </div>
+      <span class="brand-name" id="brandName">EAPCheck</span>
+      <span class="brand-client" id="brandClient"></span>
+      <button class="brand-rev" id="revBtn" type="button" title="Controle de revisões">
+        <svg viewBox="0 0 12 12" fill="none" style="width:10px;height:10px"><path d="M6 1.5v9M1.5 6h9" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span id="revLabel">R0</span>
+      </button>
+    </div>
+    <button class="tb" id="diffBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M1.5 3.5h9M1.5 6h6M1.5 8.5h7.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      Divergências
+    </button>
+    <button class="tb" id="nextBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M2 6h8M7 3l3 3-3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Próxima pendência
+    </button>
+    <button class="tb green" id="reportBtn" type="button">
+      <svg viewBox="0 0 12 12" fill="none"><path d="M3 1h6l2 2v8H3V1z" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 5h4M5 7h3M5 9h2" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Gerar Relatório
+    </button>
+    <div class="tb-sep"></div>
+    <button class="tb ico" id="themeBtn" title="Alternar tema" type="button">
+      <svg id="themeIco" viewBox="0 0 14 14" fill="none"></svg>
+    </button>
+    <button class="tb danger" id="resetBtn" type="button">Zerar</button>
+  </header>
+
+  <div class="workspace">
+    <aside class="sidebar">
+      <div class="sb-proj">
+        <div class="sb-eye" id="sbEye">EAP · Conferência</div>
+        <div class="sb-title" id="sbTitle">—</div>
+        <div class="sb-meta" id="sbMeta"></div>
+        <div class="sb-stats" id="sbStats"></div>
+        <div class="sb-bar"><div class="sb-fill" id="sbFill" style="width:0%"></div></div>
+      </div>
+      <div class="sb-search">
+        <input id="areaSearch" placeholder="Buscar área…" autocomplete="off">
+      </div>
+      <div class="sb-filters">
+        <button class="chip active" data-filter="all" type="button">Todas</button>
+        <button class="chip" data-filter="pending" type="button">Pendentes</button>
+        <button class="chip" data-filter="issue" type="button">Divergências</button>
+        <button class="chip" data-filter="ok" type="button">Concluídas</button>
+      </div>
+      <div class="areas-list" id="areasList"></div>
+      <div class="sb-foot">
+        <button class="sb-add" data-add-area type="button">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Adicionar área
+        </button>
+        <button class="sb-add rev" id="newRevBtn" type="button">
+          <svg viewBox="0 0 12 12" fill="none"><path d="M2 6a4 4 0 117 2.6M9 5V2M9 5h-3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Nova revisão (R1, R2…)
+        </button>
+      </div>
+    </aside>
+    <main class="main" id="mainArea"></main>
+  </div>
+  <div class="sumbar" id="sumBar"></div>
+</div>
 </div>
 
 <!-- TOAST -->
@@ -529,11 +684,65 @@ button{cursor:pointer}
   </div>
 </div>
 
+<!-- NEW PROJECT MODAL -->
+<div class="layer hidden" id="projModal">
+  <form class="modal" id="projForm">
+    <h2 id="projModalTitle">Nova EAP</h2>
+    <p>Crie uma conferência nova para outro projeto. Depois adicione as áreas e os itens da EAP recebida.</p>
+    <div class="form">
+      <div class="field"><label>Nome do projeto / obra</label><input id="pName" required placeholder="Ex.: Galpão Logístico Sul, CD Anápolis…"></div>
+      <div class="frow">
+        <div class="field"><label>Cliente</label><input id="pClient" placeholder="Ex.: Construtora XYZ Ltda."></div>
+        <div class="field"><label>Cidade / UF</label><input id="pCity" placeholder="Ex.: Goiânia, GO"></div>
+      </div>
+      <div class="frow">
+        <div class="field"><label>Origem da EAP</label><input id="pSource" placeholder="Ex.: BiasiHub, Planilha, E-mail"></div>
+        <div class="field"><label>Recebida em</label><input id="pReceived" placeholder="DD/MM/AAAA"></div>
+      </div>
+      <div class="field"><label>Cor do projeto</label>
+        <div class="color-pick" id="pColorPick">
+          <div class="color-opt c-green sel" data-color="c-green"></div>
+          <div class="color-opt c-blue" data-color="c-blue"></div>
+          <div class="color-opt c-amber" data-color="c-amber"></div>
+          <div class="color-opt c-violet" data-color="c-violet"></div>
+          <div class="color-opt c-red" data-color="c-red"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="projModal">Cancelar</button>
+      <button class="mbtn prim" type="submit" id="projSaveBtn">Criar EAP</button>
+    </div>
+  </form>
+</div>
+
+<!-- IMPORT MODAL -->
+<div class="layer hidden" id="importModal">
+  <div class="modal">
+    <h2>Importar EAP (.json)</h2>
+    <p>Cole o conteúdo de um arquivo exportado pelo EAPCheck, ou selecione o arquivo. Útil para passar uma conferência de um computador para outro.</p>
+    <div class="form">
+      <div class="field">
+        <label>Arquivo .json</label>
+        <input id="importFile" type="file" accept="application/json,.json">
+      </div>
+      <div class="field">
+        <label>Ou cole o conteúdo aqui</label>
+        <textarea id="importText" placeholder='{"name":"…","areas":[…]}' style="min-height:120px;font-family:var(--mono);font-size:11.5px"></textarea>
+      </div>
+    </div>
+    <div class="mfoot">
+      <button class="mbtn ghost" type="button" data-close="importModal">Cancelar</button>
+      <button class="mbtn prim" id="importBtn" type="button">Importar</button>
+    </div>
+  </div>
+</div>
+
 <!-- ADD ITEM MODAL -->
 <div class="layer hidden" id="itemModal">
   <form class="modal" id="itemForm">
     <h2>Registrar item</h2>
-    <p>Encontrou algo no projeto que não estava na EAP? Registre aqui — vai virar uma orientação no relatório.</p>
+    <p>Encontrou algo no projeto que não estava na EAP? Ou quer inserir uma linha da EAP manualmente? Registre aqui.</p>
     <div class="form">
       <div class="field">
         <label>Origem do item</label>
@@ -543,14 +752,16 @@ button{cursor:pointer}
         </select>
       </div>
       <div class="field"><label>Nome do item</label><input id="iName" required placeholder="Ex.: Eletrocalha, Quadro, CFTV…"></div>
-      <div class="field">
-        <label>Disciplina</label>
-        <select id="iDisc">
-          <option>Elétrica</option><option>Instrumentação</option><option>SPDA</option>
-          <option>Ar Comprimido</option><option>Incêndio</option><option>Outros</option>
-        </select>
+      <div class="frow">
+        <div class="field">
+          <label>Disciplina</label>
+          <select id="iDisc">
+            <option>Elétrica</option><option>Instrumentação</option><option>SPDA</option>
+            <option>Ar Comprimido</option><option>Incêndio</option><option>Outros</option>
+          </select>
+        </div>
+        <div class="field"><label>Etapa / Subsistema</label><input id="iSub" placeholder="Ex.: Iluminação, Tomadas…"></div>
       </div>
-      <div class="field"><label>Etapa / Subsistema</label><input id="iSub" placeholder="Ex.: Iluminação, Tomadas, Quadros…"></div>
       <div class="field"><label>Prancha / Referência no projeto</label><input id="iRef" placeholder="Ex.: ELE-003, folha 7"></div>
       <div class="field"><label>Observação</label><textarea id="iNote" placeholder="O que você encontrou no projeto…"></textarea></div>
     </div>
@@ -564,21 +775,30 @@ button{cursor:pointer}
 <!-- ADD AREA MODAL -->
 <div class="layer hidden" id="areaModal">
   <form class="modal" id="areaForm">
-    <h2>Área que faltou na EAP</h2>
-    <p>Achou uma área no projeto que não está na EAP? Cadastra aqui — anexa o print da marcação na planta e diga em qual prancha ela aparece. Tudo isso vai pro relatório.</p>
+    <h2>Adicionar área</h2>
+    <p>Área do projeto (ou que faltou na EAP). Anexa o print da marcação na planta e diga em qual prancha ela aparece — tudo isso vai pro relatório.</p>
     <div class="form">
-      <div class="field"><label>Nome da área</label><input id="aaName" required placeholder="Ex.: Sala técnica externa, Mezanino..."></div>
-      <div class="field"><label>Tipo / categoria</label><input id="aaType" placeholder="Ex.: Técnica, Operacional, Pavimento"></div>
+      <div class="frow">
+        <div class="field"><label>Nome da área</label><input id="aaName" required placeholder="Ex.: Sala técnica, Mezanino…"></div>
+        <div class="field"><label>Tipo / categoria</label><input id="aaType" placeholder="Ex.: Técnica, Pavimento"></div>
+      </div>
+      <div class="field">
+        <label>Status da área</label>
+        <select id="aaOrigin">
+          <option value="project">Faltou na EAP (achei só no projeto)</option>
+          <option value="eap">Área normal da EAP</option>
+        </select>
+      </div>
       <div class="field">
         <label>Em qual projeto / prancha está?</label>
         <input id="aaProjRef" placeholder="Ex.: Arquitetônico R02 — Planta Pavto. Superior, prancha A-04">
-        <span class="field-hint">Anota onde você viu essa área marcada (nome do arquivo, prancha, página).</span>
+        <span class="field-hint">Anota onde você viu essa área marcada (arquivo, prancha, página).</span>
       </div>
       <div class="field">
         <label>Print da marcação na planta (opcional)</label>
         <div id="aaImgWrap"></div>
         <input id="aaImg" type="file" accept="image/*" style="display:none">
-        <span class="field-hint">Anexa um print da planta com a área destacada/circulada — vira anexo do relatório.</span>
+        <span class="field-hint">Anexa um print da planta com a área destacada — vira anexo do relatório.</span>
       </div>
       <div class="field"><label>Observação</label><textarea id="aaDesc" placeholder="Por que estava faltando? O que tem nessa área?"></textarea></div>
     </div>
@@ -589,7 +809,7 @@ button{cursor:pointer}
   </form>
 </div>
 
-<!-- SPLIT ITEM MODAL -->
+<!-- SPLIT MODAL -->
 <div class="layer hidden" id="splitModal">
   <div class="modal" id="splitWrap">
     <h2>Dividir item em vários</h2>
@@ -621,8 +841,10 @@ button{cursor:pointer}
     </div>
     <div class="form" style="border-top:1px solid var(--b1);padding-top:14px;margin-top:8px">
       <div style="font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:700">Criar nova revisão</div>
-      <div class="field"><label>Rótulo (ex.: R1, R2, REV-A)</label><input id="revInputLabel" placeholder="R1"></div>
-      <div class="field"><label>Data (DD/MM/AAAA)</label><input id="revInputDate" placeholder="28/05/2026"></div>
+      <div class="frow">
+        <div class="field"><label>Rótulo</label><input id="revInputLabel" placeholder="R1"></div>
+        <div class="field"><label>Data</label><input id="revInputDate" placeholder="DD/MM/AAAA"></div>
+      </div>
       <div class="field"><label>O que mudou nesta revisão?</label><textarea id="revInputNotes" placeholder="Ex.: Removeu o pavimento técnico; alterou luminária do galpão para 180W; incluiu Mezanino."></textarea></div>
     </div>
     <div class="mfoot">
@@ -636,7 +858,7 @@ button{cursor:pointer}
 <div class="layer hidden" id="reportModal">
   <div class="rmodal">
     <div class="rhead">
-      <h2>Manual de mudanças — Conferência EAP × Projeto</h2>
+      <h2>Manual de Mudanças — Conferência EAP × Projeto</h2>
       <div class="rhead-right">
         <span class="rprog" id="rProg">0% conferido</span>
         <button class="dclose" type="button" data-close="reportModal">
@@ -649,23 +871,30 @@ button{cursor:pointer}
       <div class="field"><label>Para (responsável pela EAP)</label><input id="rTo" placeholder="Nome de quem preencheu a EAP"></div>
     </div>
     <div id="rWarn" class="rwarn hidden"></div>
+    <div class="rtabs">
+      <button class="rtab active" data-rtab="doc" type="button">📄 Documento (PDF)</button>
+      <button class="rtab" data-rtab="txt" type="button">📝 Texto (WhatsApp/e-mail)</button>
+    </div>
     <div class="rpreview">
-      <textarea class="rta" id="rTa" readonly spellcheck="false"></textarea>
+      <div class="rdoc-scroll" id="rDocScroll"></div>
+      <textarea class="rta hidden" id="rTa" readonly spellcheck="false"></textarea>
     </div>
     <div class="rfoot">
-      <small>Copie o texto e envie por e-mail ou WhatsApp — é um guia do que o responsável precisa corrigir.</small>
+      <small>O PDF é um guia visual do que o responsável precisa corrigir na próxima EAP.</small>
       <button class="mbtn ghost" type="button" data-close="reportModal">Fechar</button>
-      <button class="mbtn sec" id="rDownload" type="button">⬇ Baixar .txt</button>
-      <button class="mbtn prim" id="rCopy" type="button">Copiar relatório</button>
+      <button class="mbtn sec" id="rCopy" type="button">Copiar texto</button>
+      <button class="mbtn prim" id="rPdf" type="button">⬇ Baixar PDF</button>
     </div>
   </div>
 </div>
 
+<!-- PDF STAGE (off-screen render target) -->
+<div id="pdfStage"></div>
+
 <script>
-/* ── EAP DATA ───────────────────────────────────────────────────── */
-const EAP = {
-  subtitle:"Novo Galpão ALFALOG", client:"N.E. LOGÍSTICA LTDA.",
-  totalAreas:14, totalItems:59,
+/* ── ALFALOG EAP SEED DATA ──────────────────────────────────────── */
+const ALFALOG = {
+  subtitle:"Novo Galpão ALFALOG", client:"N.E. LOGÍSTICA LTDA.", city:"Goiânia, GO",
   areas:[
     {area:"Galpão",items:[
       {code:"EAP.01.01",disciplina:"ELÉTRICA",etapa:"Iluminação",servico:"Luminária highbay 150W",unidade:"un"},
@@ -758,27 +987,31 @@ const EAP = {
 };
 
 /* ── STATE / CONFIG ─────────────────────────────────────────────── */
-const SK = "eapcheck:v11:alfalog";
-const TK = "eapcheck:v11:theme";
+const RK = "eapcheck:v12:projects";
+const TK = "eapcheck:v12:theme";
 
 const SC = {
-  match:        {label:"EAP e projeto batem — confirmado",          short:"Confirmado"},
-  eap_only:     {label:"Está só na EAP — não achei no projeto",     short:"Só na EAP"},
-  project_only: {label:"Achei no projeto — não estava na EAP",      short:"Só no projeto"},
-  review:       {label:"Dúvida — precisa revisar",                  short:"Dúvida"},
-  out_of_scope: {label:"Fora do escopo Biasi",                      short:"Fora do escopo"},
-  na:           {label:"Não se aplica a este projeto",              short:"N/A"},
-  pending:      {label:"Ainda não conferido",                       short:"Pendente"}
+  match:        {label:"EAP e projeto batem — confirmado",         short:"Confirmado"},
+  eap_only:     {label:"Está só na EAP — não achei no projeto",    short:"Só na EAP"},
+  project_only: {label:"Achei no projeto — não estava na EAP",     short:"Só no projeto"},
+  review:       {label:"Dúvida — precisa revisar",                 short:"Dúvida"},
+  out_of_scope: {label:"Fora do escopo Biasi",                     short:"Fora do escopo"},
+  na:           {label:"Não se aplica a este projeto",             short:"N/A"},
+  pending:      {label:"Ainda não conferido",                      short:"Pendente"}
 };
 const EAP_KEYS  = ["match","eap_only","project_only","review","out_of_scope","na"];
 const PROJ_KEYS = ["project_only","match","review","out_of_scope","na"];
 const DISC_CLS  = {Elétrica:"",Instrumentação:"d",SPDA:"s","Ar Comprimido":"h",Incêndio:"i",Outros:"e"};
 
 const ST = {
-  proj:null, selId:null, query:"", filter:"all",
-  modalAreaId:null, modalDiscName:null,
+  view:"home",
+  projects:[],
+  proj:null,
+  selId:null, query:"", filter:"all", homeQuery:"",
+  modalAreaId:null,
   editingId:null, splitTargetId:null,
-  pendingImg:null,
+  pendingImg:null, projColor:"c-green", editingProjId:null,
+  reportTab:"doc",
   openExpands:{}, openAreaNotes:{}
 };
 
@@ -786,32 +1019,54 @@ const ST = {
 const $ = id => document.getElementById(id);
 function uid(p){ return `${p}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2,7)}`; }
 function esc(v){ return String(v??"").replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':"&quot;"}[c])); }
-function slug(v){ return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"alfalog"; }
+function slug(v){ return String(v||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/(^-|-$)/g,"")||"eap"; }
 function fmtDisc(raw){ const m={"ELÉTRICA":"Elétrica","AR COMPRIMIDO":"Ar Comprimido","INSTRUMENTAÇÃO":"Instrumentação","INCÊNDIO":"Incêndio","SPDA":"SPDA"}; const k=String(raw||"").trim().toUpperCase(); return m[k]||(k?k.charAt(0)+k.slice(1).toLowerCase():"Outros"); }
 function today(){ return new Date().toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"}); }
+function nowISO(){ return new Date().toISOString(); }
+function fmtRel(iso){
+  if(!iso) return "";
+  const d=new Date(iso), now=new Date(), diff=(now-d)/1000;
+  if(diff<60) return "agora há pouco";
+  if(diff<3600) return Math.floor(diff/60)+" min atrás";
+  if(diff<86400) return Math.floor(diff/3600)+"h atrás";
+  if(diff<172800) return "ontem";
+  if(diff<604800) return Math.floor(diff/86400)+" dias atrás";
+  return d.toLocaleDateString("pt-BR",{day:"2-digit",month:"2-digit",year:"numeric"});
+}
 
 /* ── MODEL ──────────────────────────────────────────────────────── */
-function mkItem(name,status,ref,note,origin,custom){
+function mkItem(name,status,ref,note,origin,custom,rev){
   return {
     id:uid("i"), name, correctedName:"", status:status||"pending",
     ref:ref||"", note:note||"", origin:origin||"eap", custom:Boolean(custom),
-    splitFrom:null, splitChildren:[],
-    revNote:"", addedInRev: ST.proj && ST.proj.revision ? ST.proj.revision : "R0"
+    splitFrom:null, splitChildren:[], revNote:"", addedInRev:rev||"R0"
   };
 }
 function mkSub(name,items){ return {id:uid("s"),name,items:items||[]}; }
 function mkDisc(name,subs){ return {id:uid("d"),name,subsystems:subs||[]}; }
-function mkArea(name,type,count,desc,discs,origin,projectRef,imageData){
+function mkArea(name,type,count,desc,discs,origin,projectRef,imageData,rev){
   return {
     id:uid("a"), name, type, m2:count, description:desc,
     origin:origin||"eap", notes:"", disciplines:discs||[],
-    projectRef:projectRef||"", imageData:imageData||null,
-    addedInRev: ST.proj && ST.proj.revision ? ST.proj.revision : "R0"
+    projectRef:projectRef||"", imageData:imageData||null, addedInRev:rev||"R0"
+  };
+}
+function mkProject(opts){
+  opts=opts||{};
+  return {
+    id:uid("p"), name:opts.name||"Nova EAP", client:opts.client||"", city:opts.city||"",
+    source:opts.source||"", receivedAt:opts.receivedAt||today(),
+    color:opts.color||"c-green",
+    notes:"", reviewer:"", eapAuthor:"",
+    revision:"R0",
+    revisions:[{label:"R0",date:opts.receivedAt||today(),notes:"EAP inicial"}],
+    areas:opts.areas||[],
+    createdAt:nowISO(), updatedAt:nowISO()
   };
 }
 
-function seed(){
-  const areas=EAP.areas.map(g=>{
+function seedAlfalog(){
+  const areas=ALFALOG.areas.map(g=>{
     const dm=new Map();
     g.items.forEach(r=>{
       const dn=fmtDisc(r.disciplina);
@@ -820,47 +1075,44 @@ function seed(){
       let s=d.subsystems.find(x=>x.name===r.etapa);
       if(!s){ s=mkSub(r.etapa||"Geral",[]); d.subsystems.push(s); }
       const ref=[r.code,r.unidade].filter(Boolean).join(" · ");
-      const it=mkItem(r.servico||r.code,"pending",ref,"","eap",false);
-      it.addedInRev="R0";
-      s.items.push(it);
+      s.items.push(mkItem(r.servico||r.code,"pending",ref,"","eap",false,"R0"));
     });
-    const a=mkArea(g.area,"BiasiHub",g.items.length,g.items.length+" linhas importadas.",Array.from(dm.values()),"eap","",null);
-    a.addedInRev="R0";
-    return a;
+    return mkArea(g.area,"BiasiHub",g.items.length,g.items.length+" linhas importadas.",Array.from(dm.values()),"eap","",null,"R0");
   });
-  return {
-    id:"alfalog", name:"Alfalog", client:EAP.client, city:"Goiânia, GO",
-    source:"BiasiHub", receivedAt:"28/05/2026",
-    notes:"", reviewer:"", eapAuthor:"",
-    revision:"R0",
-    revisions:[{label:"R0",date:"28/05/2026",notes:"EAP inicial importada do BiasiHub"}],
-    areas
-  };
+  const p=mkProject({
+    name:"Alfalog", client:ALFALOG.client, city:ALFALOG.city,
+    source:"BiasiHub", receivedAt:"28/05/2026", color:"c-green", areas
+  });
+  p.id="alfalog";
+  p.subtitle=ALFALOG.subtitle;
+  p.revisions=[{label:"R0",date:"28/05/2026",notes:"EAP inicial importada do BiasiHub"}];
+  return p;
 }
 
-function norm(p){
+function normProject(p){
+  p.id=p.id||uid("p");
+  p.name=p.name||"EAP sem nome"; p.client=p.client||""; p.city=p.city||"";
+  p.source=p.source||""; p.receivedAt=p.receivedAt||today();
+  p.color=p.color||"c-green";
   p.notes=p.notes||""; p.reviewer=p.reviewer||""; p.eapAuthor=p.eapAuthor||"";
   p.revision=p.revision||"R0";
-  if(!Array.isArray(p.revisions)||!p.revisions.length){
-    p.revisions=[{label:"R0",date:"28/05/2026",notes:"EAP inicial importada do BiasiHub"}];
-  }
-  p.areas=p.areas||[];
+  p.createdAt=p.createdAt||nowISO(); p.updatedAt=p.updatedAt||nowISO();
+  if(!Array.isArray(p.revisions)||!p.revisions.length) p.revisions=[{label:"R0",date:p.receivedAt,notes:"EAP inicial"}];
+  p.areas=Array.isArray(p.areas)?p.areas:[];
   p.areas.forEach(a=>{
-    a.notes=a.notes||""; a.disciplines=a.disciplines||[];
-    a.projectRef=a.projectRef||""; a.imageData=a.imageData||null;
-    a.addedInRev=a.addedInRev||"R0";
+    a.id=a.id||uid("a"); a.notes=a.notes||""; a.projectRef=a.projectRef||"";
+    a.imageData=a.imageData||null; a.addedInRev=a.addedInRev||"R0";
+    a.disciplines=Array.isArray(a.disciplines)?a.disciplines:[];
     a.disciplines.forEach(d=>{
-      d.subsystems=d.subsystems||[];
+      d.id=d.id||uid("d"); d.subsystems=Array.isArray(d.subsystems)?d.subsystems:[];
       d.subsystems.forEach(s=>{
-        s.items=s.items||[];
+        s.id=s.id||uid("s"); s.items=Array.isArray(s.items)?s.items:[];
         s.items.forEach(i=>{
           i.id=i.id||uid("i"); i.status=i.status||"pending"; i.origin=i.origin||"eap";
           i.ref=i.ref||""; i.note=i.note||""; i.correctedName=i.correctedName||"";
-          i.custom=Boolean(i.custom);
-          i.splitFrom=i.splitFrom||null;
+          i.custom=Boolean(i.custom); i.splitFrom=i.splitFrom||null;
           i.splitChildren=Array.isArray(i.splitChildren)?i.splitChildren:[];
-          i.revNote=i.revNote||"";
-          i.addedInRev=i.addedInRev||"R0";
+          i.revNote=i.revNote||""; i.addedInRev=i.addedInRev||"R0";
         });
       });
     });
@@ -869,25 +1121,28 @@ function norm(p){
 }
 
 /* ── PERSISTENCE ────────────────────────────────────────────────── */
-function load(){
+function loadAll(){
   document.documentElement.dataset.theme=localStorage.getItem(TK)||"dark";
-  syncThemeIcon();
+  syncThemeIcons();
   try{
-    const s=JSON.parse(localStorage.getItem(SK)||"null");
-    if(s&&s.id==="alfalog"&&Array.isArray(s.areas)){ ST.proj=norm(s); return; }
+    const raw=JSON.parse(localStorage.getItem(RK)||"null");
+    if(raw && Array.isArray(raw) && raw.length){ ST.projects=raw.map(normProject); return; }
   }catch(e){ console.warn(e); }
-  ST.proj=seed();
+  ST.projects=[seedAlfalog()];
+  saveAll();
+}
+function saveAll(){
+  try{ localStorage.setItem(RK,JSON.stringify(ST.projects)); }
+  catch(e){ console.warn("storage cheio",e); toast("Storage cheio — imagens muito grandes. Remova alguma."); }
 }
 function save(){
-  try{ localStorage.setItem(SK,JSON.stringify(ST.proj)); }
-  catch(e){
-    console.warn("storage cheio",e);
-    toast("Storage cheio — imagens muito grandes. Remova alguma.");
-  }
+  if(ST.proj){ ST.proj.updatedAt=nowISO(); }
+  saveAll();
 }
 
 /* ── TRAVERSAL & COUNTS ─────────────────────────────────────────── */
 function walk(cb){ ST.proj.areas.forEach(a=>a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>cb(i,a,d,s))))); }
+function walkP(p,cb){ p.areas.forEach(a=>a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>cb(i,a,d,s))))); }
 function aItems(a){ const o=[]; a&&a.disciplines.forEach(d=>d.subsystems.forEach(s=>s.items.forEach(i=>o.push({item:i,disc:d,sub:s})))); return o; }
 function cnt(list){
   const c={total:list.length,pending:0,match:0,eap_only:0,project_only:0,review:0,out_of_scope:0,na:0,done:0,issues:0,split:0};
@@ -901,6 +1156,7 @@ function cnt(list){
   return c;
 }
 function projCnt(){ const l=[]; walk(i=>l.push({item:i})); return cnt(l); }
+function projCntOf(p){ const l=[]; walkP(p,i=>l.push({item:i})); return cnt(l); }
 function aCnt(a){ return cnt(aItems(a)); }
 function health(c){ return c.issues?"issue":c.pending?"pending":"ok"; }
 function statLabel(c){ if(c.issues)return`${c.issues} divergência${c.issues===1?"":"s"}`; if(c.pending)return`${c.pending} pendente${c.pending===1?"":"s"}`; return"Conferido ✓"; }
@@ -909,7 +1165,6 @@ function findItem(id){ let f=null; walk((i,a,d,s)=>{ if(i.id===id) f={item:i,are
 function findOrDisc(a,n){ let d=a.disciplines.find(x=>x.name===n); if(!d){d=mkDisc(n,[]);a.disciplines.push(d);} return d; }
 function findOrSub(d,n){ const k=(n||"").trim()||"Outros"; let s=d.subsystems.find(x=>x.name.toLowerCase()===k.toLowerCase()); if(!s){s=mkSub(k,[]);d.subsystems.push(s);} return s; }
 function diffs(){ const o=[]; walk((item,area,disc,sub)=>{ if(["eap_only","project_only","review"].includes(item.status)) o.push({item,area,disc,sub}); }); return o; }
-
 function filteredAreas(){
   const q=ST.query.trim().toLowerCase();
   return ST.proj.areas.filter(a=>{
@@ -919,23 +1174,226 @@ function filteredAreas(){
 }
 
 /* ── THEME ──────────────────────────────────────────────────────── */
-function syncThemeIcon(){
-  const dark=document.documentElement.dataset.theme==="dark";
-  const ico=$("themeIco"); if(!ico) return;
-  ico.innerHTML=dark
+function themeSvg(dark){
+  return dark
     ?`<circle cx="7" cy="7" r="2.8" stroke="currentColor" stroke-width="1.4"/><path d="M7 1v1M7 12v1M1 7h1M12 7h1M2.93 2.93l.7.7M10.37 10.37l.7.7M2.93 11.07l.7-.7M10.37 3.63l.7-.7" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>`
     :`<path d="M10 7.5a4.5 4.5 0 01-6.7-2.1A5 5 0 1010 7.5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>`;
 }
+function syncThemeIcons(){
+  const dark=document.documentElement.dataset.theme==="dark";
+  const a=$("themeIco"), b=$("homeThemeIco");
+  if(a) a.innerHTML=themeSvg(dark);
+  if(b) b.innerHTML=themeSvg(dark);
+}
 function toggleTheme(){
   const n=document.documentElement.dataset.theme==="dark"?"light":"dark";
-  document.documentElement.dataset.theme=n; localStorage.setItem(TK,n); syncThemeIcon(); render();
+  document.documentElement.dataset.theme=n; localStorage.setItem(TK,n); syncThemeIcons();
+  if(ST.view==="home") renderHome(); else render();
 }
 
-/* ── RENDER ─────────────────────────────────────────────────────── */
+/* ── VIEW ROUTING ───────────────────────────────────────────────── */
+function goHome(){
+  ST.view="home"; ST.proj=null;
+  $("viewAudit").classList.add("hidden");
+  $("viewHome").classList.remove("hidden");
+  renderHome();
+}
+function openProject(id){
+  const p=ST.projects.find(x=>x.id===id); if(!p) return;
+  ST.proj=p; ST.view="audit";
+  ST.selId=p.areas[0]?.id||null; ST.query=""; ST.filter="all";
+  ST.openExpands={}; ST.openAreaNotes={}; ST.editingId=null;
+  $("viewHome").classList.add("hidden");
+  $("viewAudit").classList.remove("hidden");
+  render();
+}
+
+/* ── HOME RENDER ────────────────────────────────────────────────── */
+function ringSvg(pct,size){
+  const r=(size/2)-4, c=2*Math.PI*r, off=c*(1-pct/100);
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="var(--b1)" stroke-width="4"/>
+    <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${pct===100?'var(--brand)':'url(#rg)'}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${c.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"/>
+    <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="var(--brand)"/><stop offset="1" stop-color="var(--blue)"/></linearGradient></defs>
+  </svg>`;
+}
+
+function renderHome(){
+  // hero stats
+  let totProj=ST.projects.length, totItems=0, totDone=0, totIssues=0;
+  ST.projects.forEach(p=>{ const c=projCntOf(p); totItems+=c.total; totDone+=c.done; totIssues+=c.issues; });
+  const overall=totItems?Math.round(totDone/totItems*100):0;
+  const hs=$("homeStats");
+  if(hs){
+    hs.innerHTML=`
+      <div class="hstat"><div class="hstat-ico b"><svg viewBox="0 0 18 18" fill="none"><path d="M3 3h12v12H3zM3 7h12M7 7v8" stroke="currentColor" stroke-width="1.5"/></svg></div><div><div class="hstat-num">${totProj}</div><div class="hstat-lbl">EAPs no painel</div></div></div>
+      <div class="hstat"><div class="hstat-ico g"><svg viewBox="0 0 18 18" fill="none"><path d="M3 9l4 4 8-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><div class="hstat-num">${overall}%</div><div class="hstat-lbl">conferido no total</div></div></div>
+      <div class="hstat"><div class="hstat-ico a"><svg viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="hstat-num">${totItems-totDone}</div><div class="hstat-lbl">itens pendentes</div></div></div>
+      <div class="hstat"><div class="hstat-ico r"><svg viewBox="0 0 18 18" fill="none"><path d="M9 2l7 13H2L9 2z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M9 7v3M9 12.5v.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></div><div><div class="hstat-num">${totIssues}</div><div class="hstat-lbl">divergências abertas</div></div></div>`;
+  }
+
+  const q=ST.homeQuery.trim().toLowerCase();
+  const list=ST.projects
+    .filter(p=>!q||`${p.name} ${p.client}`.toLowerCase().includes(q))
+    .sort((a,b)=>(b.updatedAt||"").localeCompare(a.updatedAt||""));
+  $("hsCount").textContent=ST.projects.length;
+
+  const grid=$("projGrid"); if(!grid) return;
+  const cards=list.map(p=>{
+    const c=projCntOf(p);
+    const h=c.issues?"r":c.pending?"a":"g";
+    const meta=[
+      `${p.areas.length} áreas`,
+      `${c.total} itens`,
+      c.issues?`<span class="pmeta r">⚠ ${c.issues}</span>`:"",
+      (c.progress===100&&!c.issues)?`<span class="pmeta g">✓ completo</span>`:""
+    ];
+    return `<button class="pcard ${esc(p.color||'c-green')}" data-open-proj="${p.id}" type="button">
+      <div class="pcard-accent"></div>
+      <div class="pcard-body">
+        <div class="pcard-top">
+          <div class="pcard-ring">${ringSvg(c.progress,52)}<span class="ring-pct">${c.progress}%</span></div>
+          <div class="pcard-titles">
+            <div class="pcard-name">${esc(p.name)}</div>
+            <div class="pcard-client">${esc(p.client||"— sem cliente —")}</div>
+          </div>
+        </div>
+        <div class="pcard-meta">
+          <span class="pmeta">${p.areas.length} áreas</span>
+          <span class="pmeta">${c.total} itens</span>
+          ${c.issues?`<span class="pmeta r">⚠ ${c.issues} diverg.</span>`:""}
+          ${c.out_of_scope?`<span class="pmeta a">⊘ ${c.out_of_scope}</span>`:""}
+          ${(c.progress===100&&!c.issues&&c.total>0)?`<span class="pmeta g">✓ completo</span>`:""}
+        </div>
+        <div class="pcard-bar"><div class="pcard-fill" style="width:${c.progress}%"></div></div>
+      </div>
+      <div class="pcard-foot">
+        <span class="pcard-date">${esc(p.revision||"R0")} · ${esc(fmtRel(p.updatedAt))}</span>
+        <span class="pcard-actions">
+          <span class="pca" data-dup-proj="${p.id}" title="Duplicar"><svg viewBox="0 0 13 13" fill="none"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M3 7H2V2h5v1" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg></span>
+          <span class="pca" data-export-proj="${p.id}" title="Exportar .json"><svg viewBox="0 0 13 13" fill="none"><path d="M6.5 1.5v6M4 5.5l2.5 2.5L9 5.5M2.5 10.5h8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+          <span class="pca del" data-del-proj="${p.id}" title="Excluir"><svg viewBox="0 0 13 13" fill="none"><path d="M2.5 3.5h8M5 3V2h3v1M4 3.5l.5 7h4l.5-7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        </span>
+      </div>
+    </button>`;
+  }).join("");
+
+  const newCard=`<button class="pcard-new" id="newProjCard" type="button">
+    <div class="pcard-new-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div>
+    <strong>Nova EAP</strong>
+    <span>Comece uma conferência para outro projeto</span>
+  </button>`;
+
+  grid.innerHTML=(cards||(q?`<div class="home-empty">Nenhum projeto encontrado para "${esc(ST.homeQuery)}".</div>`:""))+newCard;
+}
+
+/* ── PROJECT CRUD ───────────────────────────────────────────────── */
+function openProjModal(editId){
+  ST.editingProjId=editId||null;
+  $("projForm").reset();
+  ST.projColor="c-green";
+  document.querySelectorAll("#pColorPick .color-opt").forEach(o=>o.classList.toggle("sel",o.dataset.color==="c-green"));
+  if(editId){
+    const p=ST.projects.find(x=>x.id===editId);
+    if(p){
+      $("projModalTitle").textContent="Editar EAP";
+      $("projSaveBtn").textContent="Salvar";
+      $("pName").value=p.name; $("pClient").value=p.client; $("pCity").value=p.city;
+      $("pSource").value=p.source; $("pReceived").value=p.receivedAt;
+      ST.projColor=p.color||"c-green";
+      document.querySelectorAll("#pColorPick .color-opt").forEach(o=>o.classList.toggle("sel",o.dataset.color===ST.projColor));
+    }
+  } else {
+    $("projModalTitle").textContent="Nova EAP";
+    $("projSaveBtn").textContent="Criar EAP";
+    $("pReceived").value=today();
+  }
+  showModal("projModal");
+}
+
+function saveProj(e){
+  e.preventDefault();
+  const name=$("pName").value.trim(); if(!name) return;
+  if(ST.editingProjId){
+    const p=ST.projects.find(x=>x.id===ST.editingProjId);
+    if(p){
+      p.name=name; p.client=$("pClient").value.trim(); p.city=$("pCity").value.trim();
+      p.source=$("pSource").value.trim(); p.receivedAt=$("pReceived").value.trim()||p.receivedAt;
+      p.color=ST.projColor; p.updatedAt=nowISO();
+    }
+    saveAll(); closeModal("projModal"); renderHome(); toast("EAP atualizada ✓");
+  } else {
+    const p=mkProject({
+      name, client:$("pClient").value.trim(), city:$("pCity").value.trim(),
+      source:$("pSource").value.trim()||"Manual", receivedAt:$("pReceived").value.trim()||today(),
+      color:ST.projColor, areas:[]
+    });
+    ST.projects.push(p);
+    saveAll(); closeModal("projModal");
+    toast("EAP criada — adicione as áreas ✓");
+    openProject(p.id);
+  }
+}
+
+function duplicateProj(id){
+  const p=ST.projects.find(x=>x.id===id); if(!p) return;
+  const copy=normProject(JSON.parse(JSON.stringify(p)));
+  copy.id=uid("p"); copy.name=p.name+" (cópia)";
+  copy.createdAt=nowISO(); copy.updatedAt=nowISO();
+  // give all nested ids fresh values to avoid collisions
+  copy.areas.forEach(a=>{ a.id=uid("a"); a.disciplines.forEach(d=>{ d.id=uid("d"); d.subsystems.forEach(s=>{ s.id=uid("s"); const map={}; s.items.forEach(i=>{const old=i.id;i.id=uid("i");map[old]=i.id;}); s.items.forEach(i=>{ if(i.splitFrom&&map[i.splitFrom])i.splitFrom=map[i.splitFrom]; i.splitChildren=i.splitChildren.map(c=>map[c]||c);}); }); }); });
+  ST.projects.push(copy);
+  saveAll(); renderHome(); toast("EAP duplicada ✓");
+}
+
+function deleteProj(id){
+  const p=ST.projects.find(x=>x.id===id); if(!p) return;
+  if(!confirm(`Excluir a EAP "${p.name}"?\nEssa ação não pode ser desfeita.`)) return;
+  ST.projects=ST.projects.filter(x=>x.id!==id);
+  saveAll(); renderHome(); toast("EAP excluída.");
+}
+
+function exportProj(id){
+  const p=ST.projects.find(x=>x.id===id); if(!p) return;
+  const blob=new Blob([JSON.stringify(p,null,2)],{type:"application/json;charset=utf-8"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a"); a.href=url; a.download=`eapcheck-${slug(p.name)}.json`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),500);
+  toast("EAP exportada ✓");
+}
+
+function doImport(){
+  const txt=$("importText").value.trim();
+  const finish=(obj)=>{
+    try{
+      if(Array.isArray(obj)){ obj.forEach(o=>{ const np=normProject(o); np.id=uid("p"); ST.projects.push(np); }); }
+      else { const np=normProject(obj); np.id=uid("p"); ST.projects.push(np); }
+      saveAll(); closeModal("importModal"); renderHome(); toast("EAP importada ✓");
+    }catch(err){ console.error(err); toast("JSON inválido."); }
+  };
+  if(txt){
+    try{ finish(JSON.parse(txt)); }
+    catch{ toast("JSON inválido no campo de texto."); }
+    return;
+  }
+  const file=$("importFile").files[0];
+  if(!file){ toast("Selecione um arquivo ou cole o conteúdo."); return; }
+  const reader=new FileReader();
+  reader.onload=e=>{ try{ finish(JSON.parse(e.target.result)); }catch{ toast("Arquivo JSON inválido."); } };
+  reader.readAsText(file);
+}
+
+/* ── AUDIT RENDER ───────────────────────────────────────────────── */
 function render(){
+  if(!ST.proj) return;
   if(!ST.selId||!ST.proj.areas.some(a=>a.id===ST.selId)) ST.selId=ST.proj.areas[0]?.id||null;
   document.querySelectorAll("[data-filter]").forEach(b=>b.classList.toggle("active",b.dataset.filter===ST.filter));
+  // brand
+  $("brandName").textContent=ST.proj.name;
+  $("brandClient").textContent=ST.proj.client||"";
   $("revLabel").textContent=ST.proj.revision||"R0";
+  renderSbHead();
   renderSidebar();
   renderMain();
   renderSumBar();
@@ -947,10 +1405,17 @@ function render(){
     if(inp){ inp.focus(); inp.setSelectionRange(inp.value.length,inp.value.length); }
     else ST.editingId=null;
   }
-  document.getElementById("areaSearch")?.addEventListener("input",e=>{
+  $("areaSearch")?.addEventListener("input",e=>{
     ST.query=e.target.value; renderSidebar();
     const inp=$("areaSearch"); inp?.focus(); inp?.setSelectionRange?.(inp.value.length,inp.value.length);
   });
+}
+
+function renderSbHead(){
+  const p=ST.proj;
+  $("sbEye").textContent=(p.source?p.source+" · ":"")+"Conferência";
+  $("sbTitle").textContent=p.name;
+  $("sbMeta").innerHTML=`${esc(p.client||"—")}${p.city?" · "+esc(p.city):""}<br>Recebido em ${esc(p.receivedAt||"—")}`;
 }
 
 function renderSidebar(){
@@ -967,7 +1432,10 @@ function renderSidebar(){
   const sbFill=$("sbFill"); if(sbFill) sbFill.style.width=c.progress+"%";
   const list=$("areasList"); if(!list) return;
   const areas=filteredAreas();
-  if(!areas.length){ list.innerHTML=`<div class="empty" style="margin:8px">Nenhuma área.</div>`; return; }
+  if(!areas.length){
+    list.innerHTML=`<div class="empty" style="margin:8px">${ST.proj.areas.length?'Nenhuma área no filtro.':'Nenhuma área ainda.<br>Use "Adicionar área" abaixo.'}</div>`;
+    return;
+  }
   const curRev=ST.proj.revision||"R0";
   list.innerHTML=areas.map(a=>{
     const ac=aCnt(a),h=health(ac);
@@ -984,7 +1452,14 @@ function renderSidebar(){
 function renderMain(){
   const area=selArea();
   const main=$("mainArea"); if(!main) return;
-  if(!area){ main.innerHTML=`<div class="content"><div class="empty">Nenhuma área. Use o botão no rodapé da barra lateral.</div></div>`; return; }
+  if(!area){
+    main.innerHTML=`<div class="content" style="padding-top:60px"><div class="empty">
+      <div style="font-size:30px;margin-bottom:10px">📋</div>
+      <strong style="display:block;font-size:16px;color:var(--tx);margin-bottom:6px">Nenhuma área nesta EAP ainda</strong>
+      Use o botão <b>"Adicionar área"</b> no rodapé da barra lateral para começar a montar a conferência.
+    </div></div>`;
+    return;
+  }
   const c=aCnt(area);
   const badges=[
     c.match?        `<span class="badge g">✓ ${c.match} confirmado${c.match===1?"":"s"}</span>`:"",
@@ -1014,7 +1489,7 @@ function renderMain(){
 
   main.innerHTML=`
     <div class="ah">
-      <div class="ah-eye">${esc(area.type||"")} · ${area.m2||0} itens${area.origin==="project"?" · ACHADO NO PROJETO":""}${area.addedInRev&&area.addedInRev!=="R0"?` · incluído em ${esc(area.addedInRev)}`:""}</div>
+      <div class="ah-eye">${esc(area.type||"")} · ${aItems(area).length} itens${area.origin==="project"?" · FALTOU NA EAP":""}${area.addedInRev&&area.addedInRev!=="R0"?` · incluído em ${esc(area.addedInRev)}`:""}</div>
       <div class="ah-row">
         <h2 class="ah-title">${esc(area.name)}</h2>
         <div class="ah-actions">
@@ -1092,10 +1567,10 @@ function renderItem(item){
   const isSplitSrc=item.splitChildren && item.splitChildren.length>0;
   const keys=item.origin==="project"?PROJ_KEYS:EAP_KEYS;
   let otag;
-  if(isSplitSrc)        otag=`<span class="otag split">Dividido em ${item.splitChildren.length}</span>`;
+  if(isSplitSrc)          otag=`<span class="otag split">Dividido em ${item.splitChildren.length}</span>`;
   else if(item.splitFrom) otag=`<span class="otag split">Item dividido (novo)</span>`;
   else if(item.origin==="project") otag=`<span class="otag project">Achado no projeto</span>`;
-  else                   otag=`<span class="otag eap">Linha EAP</span>`;
+  else                    otag=`<span class="otag eap">Linha EAP</span>`;
   const codeHtml=item.ref?`<span class="icode">${esc(item.ref)}</span>`:"";
   const hasCorrected=item.correctedName&&item.correctedName!==item.name;
   const displayName=esc(hasCorrected?item.correctedName:item.name);
@@ -1108,21 +1583,14 @@ function renderItem(item){
 
   let splitInfoHtml="";
   if(isSplitSrc){
-    const childNames=item.splitChildren.map(cid=>{
-      const cf=findItem(cid);
-      return cf?(cf.item.correctedName||cf.item.name):null;
-    }).filter(Boolean);
+    const childNames=item.splitChildren.map(cid=>{ const cf=findItem(cid); return cf?(cf.item.correctedName||cf.item.name):null; }).filter(Boolean);
     splitInfoHtml=`<div class="it-split-info">
       <b>↪ Item original dividido em:</b> ${childNames.map(n=>esc(n)).join(" · ")}
-      <br><small style="opacity:.8">Use isso para mostrar ao responsável que esta linha precisa virar várias na próxima EAP.</small>
+      <br><small style="opacity:.8">Use isso para mostrar que esta linha precisa virar várias na próxima EAP.</small>
     </div>`;
   } else if(item.splitFrom){
     const parent=findItem(item.splitFrom);
-    if(parent){
-      splitInfoHtml=`<div class="it-split-info">
-        <b>↩ Veio da divisão de:</b> "${esc(parent.item.name)}"
-      </div>`;
-    }
+    if(parent) splitInfoHtml=`<div class="it-split-info"><b>↩ Veio da divisão de:</b> "${esc(parent.item.name)}"</div>`;
   }
 
   const picker=keys.map(k=>{
@@ -1207,29 +1675,28 @@ function renderSumBar(){
 
 function updateReportBtn(){
   const c=projCnt(), btn=$("reportBtn"); if(!btn) return;
-  btn.classList.toggle("pulse", c.progress===100&&c.issues===0);
+  btn.classList.toggle("pulse", c.progress===100&&c.issues===0&&c.total>0);
 }
 
-/* ── ACTIONS ────────────────────────────────────────────────────── */
+/* ── MODAL HELPERS ──────────────────────────────────────────────── */
 function showModal(id){ $(id)?.classList.remove("hidden"); setTimeout(()=>$(id)?.querySelector("input,select,textarea")?.focus(),20); }
 function closeModal(id){
   $(id)?.classList.add("hidden");
-  if(id==="reportModal"){
-    const s=ST.proj;
-    s.reviewer=$("rReviewer")?.value||s.reviewer;
-    s.eapAuthor=$("rTo")?.value||s.eapAuthor;
+  if(id==="reportModal"&&ST.proj){
+    ST.proj.reviewer=$("rReviewer")?.value||ST.proj.reviewer;
+    ST.proj.eapAuthor=$("rTo")?.value||ST.proj.eapAuthor;
     save();
   }
   if(id==="areaModal"){ ST.pendingImg=null; renderImgPreview(); }
 }
 
+/* ── AREA ACTIONS ───────────────────────────────────────────────── */
 function markAreaOk(){
   const a=selArea(); if(!a) return;
   if(!confirm(`Marcar todos os pendentes de "${a.name}" como Confirmado?`)) return;
   aItems(a).forEach(({item})=>{ if(item.status==="pending") item.status="match"; });
   save(); render(); toast("Pendentes marcados como Confirmado ✓");
 }
-
 function nextPending(){
   const ci=ST.proj.areas.findIndex(a=>a.id===ST.selId);
   const ord=[...ST.proj.areas.slice(ci+1),...ST.proj.areas.slice(0,ci+1)];
@@ -1237,12 +1704,10 @@ function nextPending(){
   if(t){ ST.selId=t.id; ST.filter="all"; render(); toast("→ "+t.name); }
   else toast("✓ Tudo conferido — nenhuma pendência!");
 }
-
 function removeItem(id){
   const f=findItem(id); if(!f) return;
   if(!(f.item.custom||f.item.splitFrom)) return;
   if(!confirm(`Remover "${f.item.name}"?`)) return;
-  // unlink from parent if it was a split child
   if(f.item.splitFrom){
     const parent=findItem(f.item.splitFrom);
     if(parent) parent.item.splitChildren=parent.item.splitChildren.filter(cid=>cid!==id);
@@ -1252,17 +1717,14 @@ function removeItem(id){
   f.area.disciplines=f.area.disciplines.filter(d=>d.subsystems.length);
   save(); render(); toast("Item removido.");
 }
-
 function addItem(e){
   e.preventDefault();
   const area=ST.proj.areas.find(a=>a.id===ST.modalAreaId)||selArea(); if(!area) return;
   const name=$("iName").value.trim(); if(!name) return;
   const origin=$("iOrigin").value;
-  const discName=$("iDisc").value;
-  const subName=$("iSub").value.trim()||"Geral";
-  const d=findOrDisc(area,discName);
-  const s=findOrSub(d,subName);
-  s.items.push(mkItem(name,origin==="project"?"project_only":"pending",$("iRef").value.trim(),$("iNote").value.trim(),origin,true));
+  const d=findOrDisc(area,$("iDisc").value);
+  const s=findOrSub(d,$("iSub").value.trim()||"Geral");
+  s.items.push(mkItem(name,origin==="project"?"project_only":"pending",$("iRef").value.trim(),$("iNote").value.trim(),origin,true,ST.proj.revision||"R0"));
   save(); closeModal("itemModal"); render();
   toast(origin==="project"?"Item do projeto registrado ✓":"Item adicionado ✓");
 }
@@ -1289,14 +1751,10 @@ function compressImage(file,maxW=900,quality=0.72){
     reader.readAsDataURL(file);
   });
 }
-
 function renderImgPreview(){
   const wrap=$("aaImgWrap"); if(!wrap) return;
   if(ST.pendingImg){
-    wrap.innerHTML=`<div class="img-preview">
-      <img src="${ST.pendingImg}" alt="preview">
-      <button class="img-preview-rm" type="button" id="aaImgRm">✕</button>
-    </div>`;
+    wrap.innerHTML=`<div class="img-preview"><img src="${ST.pendingImg}" alt="preview"><button class="img-preview-rm" type="button" id="aaImgRm">✕</button></div>`;
   } else {
     wrap.innerHTML=`<div class="img-drop" id="aaImgDrop">
       <svg viewBox="0 0 24 24" fill="none"><path d="M3 17V19a2 2 0 002 2h14a2 2 0 002-2v-2M7 9l5-5 5 5M12 4v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1305,34 +1763,22 @@ function renderImgPreview(){
     </div>`;
   }
 }
-
 async function addArea(e){
   e.preventDefault();
   const name=$("aaName").value.trim(); if(!name) return;
-  const a=mkArea(
-    name,
-    $("aaType").value.trim()||"Achado no projeto",
-    0,
-    $("aaDesc").value.trim()||"Área encontrada no projeto, ausente na EAP.",
-    [],
-    "project",
-    $("aaProjRef").value.trim(),
-    ST.pendingImg
-  );
-  a.addedInRev=ST.proj.revision||"R0";
-  ST.proj.areas.push(a); ST.selId=a.id;
-  ST.pendingImg=null;
+  const origin=$("aaOrigin").value;
+  const a=mkArea(name,$("aaType").value.trim()||(origin==="project"?"Faltou na EAP":"Área"),0,
+    $("aaDesc").value.trim()||(origin==="project"?"Área encontrada no projeto, ausente na EAP.":""),
+    [],origin,$("aaProjRef").value.trim(),ST.pendingImg,ST.proj.revision||"R0");
+  ST.proj.areas.push(a); ST.selId=a.id; ST.pendingImg=null;
   save(); closeModal("areaModal"); render(); toast("Área adicionada ✓");
 }
-
 function editProjRef(areaId){
   const a=ST.proj.areas.find(x=>x.id===areaId); if(!a) return;
   const v=prompt("Em qual projeto / prancha está essa área?",a.projectRef||"");
   if(v===null) return;
-  a.projectRef=v.trim();
-  save(); render(); toast("Prancha atualizada.");
+  a.projectRef=v.trim(); save(); render(); toast("Prancha atualizada.");
 }
-
 function removeAreaImg(areaId){
   const a=ST.proj.areas.find(x=>x.id===areaId); if(!a) return;
   if(!confirm("Remover a imagem desta área?")) return;
@@ -1350,7 +1796,7 @@ function saveEdit(itemId){
 }
 function cancelEdit(){ ST.editingId=null; render(); }
 
-/* ── SPLIT ITEM ─────────────────────────────────────────────────── */
+/* ── SPLIT ──────────────────────────────────────────────────────── */
 function openSplitModal(itemId){
   ST.splitTargetId=itemId;
   const f=findItem(itemId); if(!f) return;
@@ -1359,113 +1805,71 @@ function openSplitModal(itemId){
   renderSplitInputs(2,f.item.correctedName||f.item.name);
   showModal("splitModal");
 }
-
 function renderSplitInputs(count,origName){
   const c=$("splitItemsContainer"); if(!c) return;
-  // Try to pre-split simple "X em Y" or "X com Y" or "X / Y"
   const presets=[];
-  if(origName){
-    const m=origName.match(/^(.+?)\s+(?:em|com|no|na|sobre|\/|\+)\s+(.+)$/i);
-    if(m){ presets.push(m[1].trim()); presets.push(m[2].trim()); }
-  }
+  if(origName){ const m=origName.match(/^(.+?)\s+(?:em|com|no|na|sobre|\/|\+|&|e)\s+(.+)$/i); if(m){ presets.push(m[1].trim()); presets.push(m[2].trim()); } }
   let html="";
   for(let i=0;i<count;i++){
-    const v=presets[i]||"";
-    html+=`<div class="split-row">
-      <span class="split-num">${i+1}</span>
-      <input class="split-name-input" placeholder="Nome do item ${i+1}" value="${esc(v)}">
-      <button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button>
-    </div>`;
+    html+=`<div class="split-row"><span class="split-num">${i+1}</span><input class="split-name-input" placeholder="Nome do item ${i+1}" value="${esc(presets[i]||"")}"><button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button></div>`;
   }
   c.innerHTML=html;
 }
-
 function splitAddInput(){
   const c=$("splitItemsContainer"); if(!c) return;
   const i=c.children.length;
-  const div=document.createElement("div");
-  div.className="split-row";
-  div.innerHTML=`<span class="split-num">${i+1}</span>
-    <input class="split-name-input" placeholder="Nome do item ${i+1}">
-    <button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button>`;
-  c.appendChild(div);
-  div.querySelector("input").focus();
+  const div=document.createElement("div"); div.className="split-row";
+  div.innerHTML=`<span class="split-num">${i+1}</span><input class="split-name-input" placeholder="Nome do item ${i+1}"><button class="split-rm" type="button" data-split-rm-idx="${i}">✕</button>`;
+  c.appendChild(div); div.querySelector("input").focus();
 }
-
 function splitRemoveInput(idx){
   const c=$("splitItemsContainer"); if(!c) return;
   if(c.children.length<=2){ toast("Mínimo de 2 itens."); return; }
   c.children[idx]?.remove();
-  // renumber
-  [...c.children].forEach((row,i)=>{
-    row.querySelector(".split-num").textContent=i+1;
-    row.querySelector(".split-rm").dataset.splitRmIdx=i;
-    row.querySelector("input").placeholder=`Nome do item ${i+1}`;
-  });
+  [...c.children].forEach((row,i)=>{ row.querySelector(".split-num").textContent=i+1; row.querySelector(".split-rm").dataset.splitRmIdx=i; row.querySelector("input").placeholder=`Nome do item ${i+1}`; });
 }
-
 function saveSplit(){
   const f=findItem(ST.splitTargetId); if(!f){ toast("Erro: item não encontrado."); return; }
   const names=[...document.querySelectorAll(".split-name-input")].map(i=>i.value.trim()).filter(Boolean);
   if(names.length<2){ toast("Informe pelo menos 2 itens novos."); return; }
-  // Mark original
   f.item.splitChildren=[];
-  // Add new items right after the original in the same sub
   const idx=f.sub.items.findIndex(i=>i.id===f.item.id);
   const newItems=names.map(n=>{
-    const ni=mkItem(n,"pending",f.item.ref,"",f.item.origin,true);
-    ni.splitFrom=f.item.id;
-    ni.addedInRev=ST.proj.revision||"R0";
-    f.item.splitChildren.push(ni.id);
-    return ni;
+    const ni=mkItem(n,"pending",f.item.ref,"",f.item.origin,true,ST.proj.revision||"R0");
+    ni.splitFrom=f.item.id; f.item.splitChildren.push(ni.id); return ni;
   });
   f.sub.items.splice(idx+1,0,...newItems);
-  save(); closeModal("splitModal"); render();
-  toast(`Item dividido em ${names.length} novos itens ✓`);
+  save(); closeModal("splitModal"); render(); toast(`Item dividido em ${names.length} novos itens ✓`);
 }
 
 /* ── REVISIONS ──────────────────────────────────────────────────── */
 function openRevisionModal(){
   renderRevList();
-  $("revInputLabel").value="";
-  $("revInputDate").value=today();
-  $("revInputNotes").value="";
+  $("revInputLabel").value=""; $("revInputDate").value=today(); $("revInputNotes").value="";
   showModal("revisionModal");
 }
-
 function renderRevList(){
   const wrap=$("revList"); if(!wrap) return;
-  const revs=ST.proj.revisions||[];
-  const cur=ST.proj.revision||"R0";
+  const revs=ST.proj.revisions||[], cur=ST.proj.revision||"R0";
   if(!revs.length){ wrap.innerHTML=`<div class="empty" style="padding:14px">Nenhuma revisão registrada.</div>`; return; }
   wrap.innerHTML=revs.map(r=>{
     const isCur=r.label===cur;
-    return `<div class="rev-row ${isCur?"current":""}" data-rev-label="${esc(r.label)}">
+    return `<div class="rev-row ${isCur?"current":""}">
       <span class="rev-label">${esc(r.label)}</span>
-      <div class="rev-content">
-        ${esc(r.notes||"(sem notas)")}
-        <div class="rev-date">${esc(r.date||"")}</div>
-      </div>
+      <div class="rev-content">${esc(r.notes||"(sem notas)")}<div class="rev-date">${esc(r.date||"")}</div></div>
       ${isCur?`<span class="rev-cur-tag">Atual</span>`:`<button class="mbtn ghost" style="padding:3px 9px;font-size:11px" data-set-rev="${esc(r.label)}" type="button">Tornar atual</button>`}
     </div>`;
   }).join("");
 }
-
 function setCurrentRevision(label){
   if(!ST.proj.revisions.some(r=>r.label===label)) return;
-  ST.proj.revision=label;
-  save(); render(); renderRevList();
-  toast(`Revisão atual: ${label}`);
+  ST.proj.revision=label; save(); render(); renderRevList(); toast(`Revisão atual: ${label}`);
 }
-
 function createRevision(){
-  const label=$("revInputLabel").value.trim();
-  const date=$("revInputDate").value.trim()||today();
-  const notes=$("revInputNotes").value.trim();
+  const label=$("revInputLabel").value.trim(), date=$("revInputDate").value.trim()||today(), notes=$("revInputNotes").value.trim();
   if(!label){ toast("Informe o rótulo (ex.: R1)."); return; }
   if(ST.proj.revisions.some(r=>r.label.toLowerCase()===label.toLowerCase())){ toast("Já existe uma revisão com esse rótulo."); return; }
-  ST.proj.revisions.push({label,date,notes});
-  ST.proj.revision=label;
+  ST.proj.revisions.push({label,date,notes}); ST.proj.revision=label;
   $("revInputLabel").value=""; $("revInputNotes").value="";
   save(); renderRevList(); render(); toast(`Revisão ${label} criada e ativada ✓`);
 }
@@ -1478,10 +1882,9 @@ function openDiff(){
   else{
     body.innerHTML=ds.map(d=>{
       const tagCls=d.item.status==="project_only"?"r":d.item.status==="eap_only"?"a":"v";
-      const tagLbl=SC[d.item.status].short;
       const name=d.item.correctedName||d.item.name;
       return `<div class="di" data-jump="${d.area.id}">
-        <div class="ditag ${tagCls}">${esc(tagLbl)}</div>
+        <div class="ditag ${tagCls}">${esc(SC[d.item.status].short)}</div>
         <div class="diname">${esc(d.area.name)} → ${esc(name)}</div>
         <div class="disub">${esc(d.disc.name)} / ${esc(d.sub.name)}${d.item.ref?` · ${esc(d.item.ref)}`:""}</div>
       </div>`;
@@ -1491,34 +1894,59 @@ function openDiff(){
 }
 function closeDiff(){ $("diffLayer")?.classList.remove("open"); }
 
-/* ── REPORT — "MANUAL DE MUDANÇAS" ──────────────────────────────── */
-function buildReport(){
+/* ── REPORT ANALYSIS (shared by text + PDF) ─────────────────────── */
+function codeOf(item){ return item.ref?item.ref.split(" ·")[0].trim():""; }
+function analyze(){
   const p=ST.proj, c=projCnt();
-  const reviewer=$("rReviewer")?.value||p.reviewer||"";
-  const to=$("rTo")?.value||p.eapAuthor||"";
-  const date=today();
-  const S="━".repeat(64);
-  const D="─".repeat(64);
-  const L=[];
+  const splitSources=[], corrs=[], oos=[], eapOnly=[], projOnly=[], reviewItems=[];
+  walk((item,area,disc,sub)=>{
+    if(item.splitChildren && item.splitChildren.length){
+      splitSources.push({item,area,disc,sub,children:item.splitChildren.map(cid=>{const cf=findItem(cid);return cf?(cf.item.correctedName||cf.item.name):null;}).filter(Boolean)});
+    } else if(item.correctedName && item.correctedName!==item.name){
+      corrs.push({item,area,disc,sub,code:codeOf(item)});
+    }
+    if(item.status==="out_of_scope") oos.push({item,area,disc,sub});
+    else if(item.status==="eap_only") eapOnly.push({item,area,disc,sub});
+    else if(item.status==="project_only" && !item.splitFrom) projOnly.push({item,area,disc,sub});
+    else if(item.status==="review") reviewItems.push({item,area,disc,sub});
+  });
+  const missingAreas=p.areas.filter(a=>a.origin==="project");
+  const hasAjustes=splitSources.length||corrs.length||oos.length||eapOnly.length||projOnly.length||missingAreas.length||reviewItems.length;
+  const verdict = c.pending>0 ? {k:"part",t:"Relatório PARCIAL — ainda há itens a conferir."}
+    : !hasAjustes ? {k:"ok",t:"EAP APROVADA — sem divergências, sem correções, sem itens a dividir."}
+    : {k:"warn",t:"EAP COM AJUSTES — aplique as correções abaixo na próxima versão."};
+  return {p,c,splitSources,corrs,oos,eapOnly,projOnly,reviewItems,missingAreas,hasAjustes,verdict};
+}
+function guidanceList(a){
+  const g=[];
+  if(a.splitSources.length) g.push("Não juntar itens compostos em uma única linha. Ex.: 'Pétala em poste' → quebrar em 'Pétala 150W' + 'Poste H=8m'. Cada componente tem fornecimento e mão-de-obra diferentes.");
+  if(a.corrs.length)        g.push("Padronizar a nomenclatura conforme o projeto — copie o nome exatamente como está na prancha.");
+  if(a.oos.length)          g.push("Antes de listar um item, confirmar se é do escopo Biasi. Itens de terceiros não devem entrar (ou entrar marcados como 'fornecimento de terceiros').");
+  if(a.eapOnly.length)      g.push("Sempre conferir contra a última revisão do projeto. Itens removidos do projeto não podem ficar na EAP.");
+  if(a.projOnly.length)     g.push("Varrer prancha por prancha para garantir cobertura. Faltaram itens que estavam no projeto.");
+  if(a.missingAreas.length) g.push("Mapear TODAS as áreas/pavimentos antes de detalhar itens. Áreas inteiras foram esquecidas.");
+  if(a.reviewItems.length)  g.push("Quando houver dúvida sobre escopo de um item, marcar e perguntar antes de quantificar.");
+  if(!g.length)             g.push("Sem orientações de melhoria — EAP entregue dentro do padrão esperado. 👏");
+  return g;
+}
 
-  // ── CABEÇALHO ─────────────────────────────────────────────────
+/* ── TEXT REPORT ────────────────────────────────────────────────── */
+function buildReport(){
+  const A=analyze(), p=A.p, c=A.c;
+  const reviewer=$("rReviewer")?.value||p.reviewer||"", to=$("rTo")?.value||p.eapAuthor||"", date=today();
+  const S="━".repeat(64), D="─".repeat(64);
+  const L=[];
   L.push("MANUAL DE MUDANÇAS — CONFERÊNCIA EAP × PROJETO");
-  L.push(p.name.toUpperCase()+" ("+EAP.subtitle+")");
+  L.push(p.name.toUpperCase()+(p.subtitle?" ("+p.subtitle+")":""));
   L.push(S);
-  L.push("Cliente: "+p.client+" | "+p.city);
-  L.push("EAP recebida em: "+p.receivedAt);
+  L.push("Cliente: "+(p.client||"—")+(p.city?" | "+p.city:""));
+  L.push("EAP recebida em: "+(p.receivedAt||"—"));
   L.push("Revisão de projeto conferida: "+(p.revision||"R0"));
   if(reviewer) L.push("Revisado por: "+reviewer);
-  if(to)       L.push("Para: "+to);
-  L.push("Data do relatório: "+date);
-  L.push("");
-
-  // ── RESUMO EXECUTIVO ──────────────────────────────────────────
-  L.push(S);
-  L.push("1.  RESUMO EXECUTIVO");
-  L.push(S);
-  L.push("Total de itens conferidos: "+c.total);
-  L.push("");
+  if(to) L.push("Para: "+to);
+  L.push("Data do relatório: "+date); L.push("");
+  L.push(S); L.push("1.  RESUMO EXECUTIVO"); L.push(S);
+  L.push("Total de itens conferidos: "+c.total); L.push("");
   L.push("  ✓  Confirmados (EAP e projeto batem) ......... "+c.match+(c.total?` (${Math.round(c.match/c.total*100)}%)`:""));
   L.push("  ↑  Só na EAP (sumiu do projeto) ............. "+c.eap_only);
   L.push("  ↓  Só no projeto (faltou na EAP) ............ "+c.project_only);
@@ -1527,330 +1955,234 @@ function buildReport(){
   L.push("  —  Não se aplica ............................ "+c.na);
   if(c.pending) L.push("  ⏳ AINDA NÃO CONFERIDOS ..................... "+c.pending);
   if(c.split)   L.push("  ✂  Itens DIVIDIDOS em vários ................ "+c.split);
-  L.push("");
-  const verdict =
-    c.pending>0 ? "Relatório PARCIAL — ainda há itens a conferir." :
-    (c.issues===0 && c.split===0 && !corrCount())
-      ? "EAP APROVADA — sem divergências, sem correções, sem itens a dividir."
-      : "EAP COM AJUSTES — leia os tópicos abaixo e atualize a próxima versão.";
-  L.push("Conclusão: "+verdict);
-  L.push("");
+  L.push(""); L.push("Conclusão: "+A.verdict.t); L.push("");
 
-  function corrCount(){ let n=0; walk(i=>{ if(i.correctedName&&i.correctedName!==i.name) n++; }); return n; }
-
-  // ── PRINCIPAIS AJUSTES (manual numerado) ──────────────────────
   const todos=[];
+  if(A.splitSources.length) todos.push({t:"DIVIDIR ITENS COMPOSTOS — UM ITEM PRECISA VIRAR VÁRIOS",
+    why:"Um item agrupa duas (ou mais) coisas que precisam ser quantificadas separadamente. Na próxima EAP, abra em linhas distintas.",
+    build:()=>{const o=[];A.splitSources.forEach(({item,area,disc,sub,children})=>{o.push("");o.push(`  ► "${item.name}"${codeOf(item)?" ("+codeOf(item)+")":""}`);o.push(`    Área: ${area.name} / ${disc.name} / ${sub.name}`);o.push(`    REMOVER essa linha e CRIAR em seu lugar:`);children.forEach(n=>o.push(`      • ${n}`));});return o;}});
+  if(A.corrs.length) todos.push({t:"CORRIGIR NOMENCLATURA DOS ITENS",
+    why:"Os nomes abaixo estão imprecisos na EAP. Use a nomenclatura à direita na próxima versão.",
+    build:()=>{const o=[];A.corrs.forEach(({item,code})=>{o.push("");o.push(`  ► ${code?code+": ":""}"${item.name}"`);o.push(`    →  "${item.correctedName}"`);});return o;}});
+  if(A.oos.length) todos.push({t:"ITENS FORA DO ESCOPO BIASI — REMOVER DA EAP",
+    why:"Estão na EAP mas NÃO são escopo Biasi. Tire da próxima EAP ou marque como 'fornecimento de terceiros'.",
+    build:()=>{const o=[];A.oos.forEach(({item,area,disc,sub})=>{o.push(`  ⊘ ${area.name} / ${disc.name} / ${sub.name}`);o.push(`    "${item.correctedName||item.name}"${codeOf(item)?" ("+codeOf(item)+")":""}${item.note?" — "+item.note:""}`);});return o;}});
+  if(A.eapOnly.length) todos.push({t:"ITENS SÓ NA EAP — REVISAR NO PROJETO OU REMOVER",
+    why:"Aparecem na EAP mas não achei no projeto recebido. Confirme se foram retirados; se sim, removê-los.",
+    build:()=>{const o=[];A.eapOnly.forEach(({item,area,disc,sub})=>{o.push(`  ↑ ${area.name} / ${disc.name} / ${sub.name}`);o.push(`    "${item.correctedName||item.name}"${codeOf(item)?" ("+codeOf(item)+")":""}${item.note?" — "+item.note:""}`);});return o;}});
+  if(A.projOnly.length) todos.push({t:"ITENS SÓ NO PROJETO — INCLUIR NA PRÓXIMA EAP",
+    why:"Encontrei no projeto, mas a EAP atual não lista. Precisam entrar na próxima versão.",
+    build:()=>{const o=[];A.projOnly.forEach(({item,area,disc,sub})=>{o.push(`  ↓ ${area.name} / ${disc.name} / ${sub.name}`);o.push(`    "${item.correctedName||item.name}"${item.ref?" (visto em "+item.ref+")":""}${item.note?" — "+item.note:""}`);});return o;}});
+  if(A.missingAreas.length) todos.push({t:"ÁREAS QUE FALTARAM NA EAP — INCLUIR NA PRÓXIMA VERSÃO",
+    why:"Áreas inteiras existem no projeto mas não estavam na EAP. Adicione todas (e os itens dentro).",
+    build:()=>{const o=[];A.missingAreas.forEach(a=>{o.push("");o.push(`  + ÁREA NOVA: "${a.name}"${a.type?" ("+a.type+")":""}`);if(a.projectRef)o.push(`    Onde está: ${a.projectRef}`);if(a.imageData)o.push(`    [Print anexado — ver PDF/aplicativo]`);if(a.description)o.push(`    Obs: ${a.description}`);const its=aItems(a);if(its.length){o.push(`    Itens identificados:`);its.forEach(({item,disc,sub})=>o.push(`      • [${disc.name}/${sub.name}] ${item.correctedName||item.name}${item.ref?" — "+item.ref:""}`));}});return o;}});
+  if(A.reviewItems.length) todos.push({t:"DÚVIDAS EM ABERTO — PRECISA DE RESPOSTA",
+    why:"Pontos onde precisei pausar a conferência. Responda para fecharmos.",
+    build:()=>{const o=[];A.reviewItems.forEach(({item,area,disc,sub})=>{o.push(`  ? ${area.name} / ${disc.name} / ${sub.name}`);o.push(`    "${item.correctedName||item.name}"${item.ref?" ("+item.ref+")":""}${item.note?" — "+item.note:""}`);});return o;}});
 
-  // 2. Item splits
-  const splitSources=[];
-  walk(item=>{ if(item.splitChildren && item.splitChildren.length) splitSources.push(item); });
-  if(splitSources.length){
-    todos.push({
-      title:"DIVIDIR ITENS COMPOSTOS — UM ITEM PRECISA VIRAR VÁRIOS",
-      why:"Um item está agrupando duas (ou mais) coisas que precisam ser quantificadas separadamente. Na próxima EAP, abra em linhas distintas.",
-      build:()=>{
-        const lines=[];
-        splitSources.forEach(item=>{
-          const found=findItem(item.id);
-          const code=item.ref?item.ref.split(" ·")[0].trim():"";
-          lines.push("");
-          lines.push(`  ► "${item.name}"${code?" ("+code+")":""}`);
-          if(found) lines.push(`    Área: ${found.area.name} / ${found.disc.name} / ${found.sub.name}`);
-          lines.push(`    REMOVER essa linha e CRIAR as seguintes em seu lugar:`);
-          item.splitChildren.forEach(cid=>{
-            const cf=findItem(cid);
-            if(cf){
-              const n=cf.item.correctedName||cf.item.name;
-              lines.push(`      • ${n}`);
-            }
-          });
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 3. Nomenclature corrections
-  const corrs=[];
-  walk(item=>{ if(item.correctedName&&item.correctedName!==item.name && !(item.splitChildren&&item.splitChildren.length)) corrs.push(item); });
-  if(corrs.length){
-    todos.push({
-      title:"CORRIGIR NOMENCLATURA DOS ITENS",
-      why:"Os nomes abaixo estão imprecisos ou incompletos na EAP. Use a nomenclatura à direita na próxima versão — assim a EAP fica idêntica ao projeto.",
-      build:()=>{
-        const lines=[];
-        corrs.forEach(item=>{
-          const code=item.ref?item.ref.split(" ·")[0].trim():"";
-          lines.push("");
-          lines.push(`  ► ${code?code+": ":""}"${item.name}"`);
-          lines.push(`    →  "${item.correctedName}"`);
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 4. Out of scope items
-  const oos=[];
-  walk((item,area,disc,sub)=>{ if(item.status==="out_of_scope") oos.push({item,area,disc,sub}); });
-  if(oos.length){
-    todos.push({
-      title:"ITENS FORA DO ESCOPO BIASI — REMOVER DA EAP",
-      why:"Estes itens estão na EAP mas NÃO são do escopo Biasi (provavelmente outra empresa fornece/instala). Tire da próxima EAP, ou marque claramente como 'sob responsabilidade de terceiros'.",
-      build:()=>{
-        const lines=[];
-        oos.forEach(({item,area,disc,sub})=>{
-          const code=item.ref?item.ref.split(" ·")[0].trim():"";
-          const name=item.correctedName||item.name;
-          lines.push(`  ⊘ ${area.name} / ${disc.name} / ${sub.name}`);
-          lines.push(`    "${name}"${code?" ("+code+")":""}${item.note?" — "+item.note:""}`);
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 5. Items only in EAP (not in project)
-  const eapOnly=[];
-  walk((item,area,disc,sub)=>{ if(item.status==="eap_only") eapOnly.push({item,area,disc,sub}); });
-  if(eapOnly.length){
-    todos.push({
-      title:"ITENS SÓ NA EAP — REVISAR NO PROJETO OU REMOVER",
-      why:"Estes itens aparecem na EAP, mas não achei nenhuma referência no projeto recebido. Confirma se foram retirados, ou se faltou alguma prancha. Se foram retirados de fato, removê-los na próxima EAP.",
-      build:()=>{
-        const lines=[];
-        eapOnly.forEach(({item,area,disc,sub})=>{
-          const code=item.ref?item.ref.split(" ·")[0].trim():"";
-          const name=item.correctedName||item.name;
-          lines.push(`  ↑ ${area.name} / ${disc.name} / ${sub.name}`);
-          lines.push(`    "${name}"${code?" ("+code+")":""}${item.note?" — "+item.note:""}`);
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 6. Items only in project (must be added to EAP)
-  const projOnly=[];
-  walk((item,area,disc,sub)=>{ if(item.status==="project_only" && !item.splitFrom) projOnly.push({item,area,disc,sub}); });
-  if(projOnly.length){
-    todos.push({
-      title:"ITENS SÓ NO PROJETO — INCLUIR NA PRÓXIMA EAP",
-      why:"Encontrei estes itens no projeto, mas a EAP atual não os lista. Precisam entrar na próxima versão da EAP.",
-      build:()=>{
-        const lines=[];
-        projOnly.forEach(({item,area,disc,sub})=>{
-          const name=item.correctedName||item.name;
-          lines.push(`  ↓ ${area.name} / ${disc.name} / ${sub.name}`);
-          lines.push(`    "${name}"${item.ref?" (visto em "+item.ref+")":""}${item.note?" — "+item.note:""}`);
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 7. Areas missing in EAP
-  const missingAreas=ST.proj.areas.filter(a=>a.origin==="project");
-  if(missingAreas.length){
-    todos.push({
-      title:"ÁREAS QUE FALTARAM NA EAP — INCLUIR NA PRÓXIMA VERSÃO",
-      why:"Estas áreas inteiras existem no projeto, mas não estavam na EAP recebida. Precisa adicionar todas elas (e os itens dentro) na próxima EAP.",
-      build:()=>{
-        const lines=[];
-        missingAreas.forEach(a=>{
-          lines.push("");
-          lines.push(`  + ÁREA NOVA: "${a.name}"${a.type?" ("+a.type+")":""}`);
-          if(a.projectRef) lines.push(`    Onde está no projeto: ${a.projectRef}`);
-          if(a.imageData)  lines.push(`    [Print anexado — ver aplicativo / anexo]`);
-          if(a.description) lines.push(`    Obs: ${a.description}`);
-          const its=aItems(a);
-          if(its.length){
-            lines.push(`    Itens identificados nessa área:`);
-            its.forEach(({item,disc,sub})=>{
-              const n=item.correctedName||item.name;
-              lines.push(`      • [${disc.name} / ${sub.name}] ${n}${item.ref?" — "+item.ref:""}`);
-            });
-          }
-        });
-        return lines;
-      }
-    });
-  }
-
-  // 8. Open doubts
-  const reviewItems=[];
-  walk((item,area,disc,sub)=>{ if(item.status==="review") reviewItems.push({item,area,disc,sub}); });
-  if(reviewItems.length){
-    todos.push({
-      title:"DÚVIDAS EM ABERTO — PRECISA DE RESPOSTA",
-      why:"Listei aqui o que precisei pausar a conferência. Responda para fecharmos esses pontos.",
-      build:()=>{
-        const lines=[];
-        reviewItems.forEach(({item,area,disc,sub})=>{
-          const name=item.correctedName||item.name;
-          lines.push(`  ? ${area.name} / ${disc.name} / ${sub.name}`);
-          lines.push(`    "${name}"${item.ref?" ("+item.ref+")":""}${item.note?" — "+item.note:""}`);
-        });
-        return lines;
-      }
-    });
-  }
-
-  // Write numbered sections
   if(todos.length){
-    L.push(S);
-    L.push("2.  AJUSTES NECESSÁRIOS NA PRÓXIMA EAP (manual)");
-    L.push(S);
-    L.push("Leia cada bloco abaixo e aplique as correções na próxima versão da EAP.");
-    L.push("");
-    todos.forEach((t,i)=>{
-      L.push(D);
-      L.push(`2.${i+1}  ${t.title}`);
-      L.push(D);
-      L.push("Por que: "+t.why);
-      L.push(...t.build());
-      L.push("");
-    });
+    L.push(S); L.push("2.  AJUSTES NECESSÁRIOS NA PRÓXIMA EAP"); L.push(S);
+    L.push("Leia cada bloco e aplique as correções na próxima versão da EAP."); L.push("");
+    todos.forEach((t,i)=>{ L.push(D); L.push(`2.${i+1}  ${t.t}`); L.push(D); L.push("Por que: "+t.why); L.push(...t.build()); L.push(""); });
   }
 
-  // ── 3. Inventário completo (todo item, com seu status final) ──
-  L.push(S);
-  L.push(`${todos.length?3:2}.  INVENTÁRIO COMPLETO — STATUS DE TODOS OS ITENS`);
-  L.push(S);
-  L.push("Para auditoria: lista todo item conferido com o veredito final.");
-  L.push("");
-
+  const secN=todos.length?3:2;
+  L.push(S); L.push(`${secN}.  INVENTÁRIO COMPLETO — STATUS DE TODOS OS ITENS`); L.push(S);
+  L.push("Para auditoria: todo item conferido com o veredito final."); L.push("");
   p.areas.forEach(a=>{
-    const its=aItems(a);
-    if(!its.length) return;
-    L.push("");
-    L.push("▸ "+a.name.toUpperCase()+(a.origin==="project"?"  [ÁREA NOVA — não estava na EAP]":""));
+    const its=aItems(a); if(!its.length) return;
+    L.push(""); L.push("▸ "+a.name.toUpperCase()+(a.origin==="project"?"  [ÁREA NOVA — não estava na EAP]":""));
     if(a.projectRef) L.push("    Prancha: "+a.projectRef);
     its.forEach(({item,disc,sub})=>{
-      const n=item.correctedName||item.name;
-      const tag=SC[item.status]?SC[item.status].short:item.status;
-      const ref=item.ref?" ["+item.ref+"]":"";
-      const note=item.note?" — "+item.note:"";
-      let marker;
-      switch(item.status){
-        case "match": marker="✓"; break;
-        case "eap_only": marker="↑"; break;
-        case "project_only": marker="↓"; break;
-        case "review": marker="?"; break;
-        case "out_of_scope": marker="⊘"; break;
-        case "na": marker="—"; break;
-        default: marker="◯"; break;
-      }
-      if(item.splitChildren && item.splitChildren.length){
-        L.push(`    ✂  [DIVIDIDO]   ${n}${ref}`);
-      } else if(item.splitFrom){
-        const parent=findItem(item.splitFrom);
-        const parentName=parent?parent.item.name:"?";
-        L.push(`    ${marker}  [${tag}]   ${n}${ref}  ↩ de "${parentName}"${note}`);
-      } else {
-        L.push(`    ${marker}  [${tag}]   ${n}${ref}${note}`);
-      }
+      const n=item.correctedName||item.name, tag=SC[item.status]?SC[item.status].short:item.status;
+      const ref=item.ref?" ["+item.ref+"]":"", note=item.note?" — "+item.note:"";
+      const mk={match:"✓",eap_only:"↑",project_only:"↓",review:"?",out_of_scope:"⊘",na:"—",pending:"◯"}[item.status]||"◯";
+      if(item.splitChildren && item.splitChildren.length) L.push(`    ✂  [DIVIDIDO]   ${n}${ref}`);
+      else if(item.splitFrom){ const pa=findItem(item.splitFrom); L.push(`    ${mk}  [${tag}]   ${n}${ref}  ↩ de "${pa?pa.item.name:"?"}"${note}`); }
+      else L.push(`    ${mk}  [${tag}]   ${n}${ref}${note}`);
     });
   });
 
-  // ── 4. Notas por área ─────────────────────────────────────────
   const aN=p.areas.filter(a=>a.notes&&a.notes.trim());
-  if(aN.length){
-    L.push("");
-    L.push(S);
-    L.push(`${todos.length?4:3}.  OBSERVAÇÕES POR ÁREA`);
-    L.push(S);
-    aN.forEach(a=>{ L.push(""); L.push("▸ "+a.name.toUpperCase()); L.push("  "+a.notes); });
-  }
-
-  // ── 5. Revisões ───────────────────────────────────────────────
-  if(p.revisions && p.revisions.length){
-    L.push("");
-    L.push(S);
-    L.push(`${todos.length?5:4}.  HISTÓRICO DE REVISÕES DO PROJETO`);
-    L.push(S);
-    p.revisions.forEach(r=>{
-      L.push("");
-      L.push("▸ "+r.label+(r.label===p.revision?"  ← REVISÃO ATUAL (conferida)":""));
-      if(r.date) L.push("  Data: "+r.date);
-      if(r.notes) L.push("  Mudanças: "+r.notes);
-    });
-  }
-
-  // ── 6. ORIENTAÇÕES PARA A PRÓXIMA EAP ─────────────────────────
-  L.push("");
-  L.push(S);
-  L.push(`${todos.length?6:5}.  ORIENTAÇÕES — O QUE NÃO REPETIR NA PRÓXIMA EAP`);
-  L.push(S);
-  const guidance=[];
-  if(splitSources.length)  guidance.push("• Não juntar itens compostos em uma única linha. Ex.: 'Pétala em poste' → quebrar em 'Pétala 150W' + 'Poste H=8m'. Cada componente tem fornecedor, instalação e mão-de-obra diferentes.");
-  if(corrs.length)         guidance.push("• Padronizar a nomenclatura conforme o projeto. Sempre que possível, copie o nome exatamente como está na prancha.");
-  if(oos.length)           guidance.push("• Antes de listar um item, confirmar se ele é do escopo Biasi. Itens de terceiros (ex.: equipamentos do cliente, mobiliário) não devem entrar — ou devem entrar marcados como 'fornecimento de terceiros'.");
-  if(eapOnly.length)       guidance.push("• Sempre conferir contra a última revisão do projeto. Itens removidos do projeto não podem permanecer na EAP.");
-  if(projOnly.length)      guidance.push("• Varrer prancha por prancha para garantir cobertura. Faltaram itens que estavam claramente no projeto.");
-  if(missingAreas.length)  guidance.push("• Mapear TODAS as áreas/pavimentos do projeto antes de detalhar itens. Áreas inteiras foram esquecidas.");
-  if(reviewItems.length)   guidance.push("• Quando houver dúvida sobre escopo de um item, marcar na EAP e perguntar antes de quantificar.");
-  if(!guidance.length)     guidance.push("• Sem orientações de melhoria — EAP entregue dentro do padrão esperado. 👏");
-  guidance.forEach(g=>L.push(g));
-
-  L.push("");
-  L.push(S);
-  L.push("Relatório gerado pelo EAPCheck v11 · Biasi Engenharia");
-  L.push("Projeto: "+EAP.subtitle+" | "+EAP.client);
-  L.push("Revisão conferida: "+(p.revision||"R0")+" · Data: "+date);
-  L.push(S);
-
+  if(aN.length){ L.push(""); L.push(S); L.push(`${secN+1}.  OBSERVAÇÕES POR ÁREA`); L.push(S); aN.forEach(a=>{L.push("");L.push("▸ "+a.name.toUpperCase());L.push("  "+a.notes);}); }
+  if(p.revisions && p.revisions.length){ L.push(""); L.push(S); L.push(`${secN+2}.  HISTÓRICO DE REVISÕES`); L.push(S); p.revisions.forEach(r=>{L.push("");L.push("▸ "+r.label+(r.label===p.revision?"  ← ATUAL":""));if(r.date)L.push("  Data: "+r.date);if(r.notes)L.push("  Mudanças: "+r.notes);}); }
+  L.push(""); L.push(S); L.push(`${secN+3}.  ORIENTAÇÕES — O QUE NÃO REPETIR NA PRÓXIMA EAP`); L.push(S);
+  guidanceList(A).forEach(g=>L.push("• "+g));
+  L.push(""); L.push(S); L.push("Relatório gerado pelo EAPCheck · Biasi Engenharia");
+  L.push((p.subtitle?"Projeto: "+p.subtitle+" | ":"")+(p.client||"")); L.push("Revisão conferida: "+(p.revision||"R0")+" · Data: "+date); L.push(S);
   return L.join("\n");
 }
 
+/* ── PDF DOCUMENT (HTML) ────────────────────────────────────────── */
+function buildPdfDoc(){
+  const A=analyze(), p=A.p, c=A.c;
+  const reviewer=$("rReviewer")?.value||p.reviewer||"", to=$("rTo")?.value||p.eapAuthor||"", date=today();
+  const pct=v=>c.total?Math.round(v/c.total*100):0;
+  let n=0; const num=()=>++n;
+
+  const stat=(cls,val,lbl)=>`<div class="pst ${cls}"><div class="pst-n">${val}</div><div class="pst-l">${lbl}</div></div>`;
+  const sec=(title,inner)=>`<div class="pdf-sec"><div class="pdf-sec-h"><div class="pdf-sec-n">${num()}</div><div class="pdf-sec-t">${title}</div></div>${inner}</div>`;
+
+  // todos
+  const todoBlocks=[];
+  const todo=(cls,title,why,inner)=>`<div class="pdf-todo"><div class="pdf-todo-h ${cls}">${title}</div><div class="pdf-todo-why">${why}</div><div class="pdf-todo-body">${inner}</div></div>`;
+  if(A.splitSources.length){
+    const rows=A.splitSources.map(({item,area,disc,sub,children})=>`<div class="pdf-li"><b>"${esc(item.name)}"</b> ${codeOf(item)?`<span class="li-loc">(${esc(codeOf(item))})</span>`:""}<div class="li-loc">${esc(area.name)} / ${esc(disc.name)} / ${esc(sub.name)}</div><div class="pdf-li-sub">Dividir em: ${children.map(x=>"<b>"+esc(x)+"</b>").join(" &nbsp;+&nbsp; ")}</div></div>`).join("");
+    todoBlocks.push(todo("split","✂ Dividir itens compostos ("+A.splitSources.length+")","Um item agrupa coisas que precisam ser quantificadas separadamente. Abra em linhas distintas na próxima EAP.",rows));
+  }
+  if(A.corrs.length){
+    const rows=A.corrs.map(({item,code})=>`<div class="pdf-li">${code?`<span class="li-loc">${esc(code)}</span> `:""}<span class="li-from">"${esc(item.name)}"</span><span class="li-arrow">→</span><span class="li-to">"${esc(item.correctedName)}"</span></div>`).join("");
+    todoBlocks.push(todo("corr","✎ Corrigir nomenclatura ("+A.corrs.length+")","Os nomes estão imprecisos. Use a nomenclatura corrigida — idêntica ao projeto.",rows));
+  }
+  if(A.oos.length){
+    const rows=A.oos.map(({item,area,disc,sub})=>`<div class="pdf-li"><b>"${esc(item.correctedName||item.name)}"</b><div class="li-loc">${esc(area.name)} / ${esc(disc.name)} / ${esc(sub.name)}</div>${item.note?`<div class="pdf-li-sub">${esc(item.note)}</div>`:""}</div>`).join("");
+    todoBlocks.push(todo("oos","⊘ Fora do escopo Biasi — remover ("+A.oos.length+")","Não são escopo Biasi. Remover da próxima EAP ou marcar como fornecimento de terceiros.",rows));
+  }
+  if(A.eapOnly.length){
+    const rows=A.eapOnly.map(({item,area,disc,sub})=>`<div class="pdf-li"><b>"${esc(item.correctedName||item.name)}"</b><div class="li-loc">${esc(area.name)} / ${esc(disc.name)} / ${esc(sub.name)}</div>${item.note?`<div class="pdf-li-sub">${esc(item.note)}</div>`:""}</div>`).join("");
+    todoBlocks.push(todo("eo","↑ Só na EAP — revisar ou remover ("+A.eapOnly.length+")","Aparecem na EAP mas não achei no projeto. Confirmar se foram retirados.",rows));
+  }
+  if(A.projOnly.length){
+    const rows=A.projOnly.map(({item,area,disc,sub})=>`<div class="pdf-li"><b>"${esc(item.correctedName||item.name)}"</b> ${item.ref?`<span class="li-loc">(${esc(item.ref)})</span>`:""}<div class="li-loc">${esc(area.name)} / ${esc(disc.name)} / ${esc(sub.name)}</div>${item.note?`<div class="pdf-li-sub">${esc(item.note)}</div>`:""}</div>`).join("");
+    todoBlocks.push(todo("po","↓ Só no projeto — incluir na EAP ("+A.projOnly.length+")","Encontrados no projeto, ausentes na EAP. Precisam entrar na próxima versão.",rows));
+  }
+  if(A.missingAreas.length){
+    const rows=A.missingAreas.map(a=>{
+      const its=aItems(a);
+      const itsHtml=its.length?`<div class="pdf-li-sub">${its.map(({item,disc,sub})=>`• [${esc(disc.name)}/${esc(sub.name)}] ${esc(item.correctedName||item.name)}`).join("<br>")}</div>`:"";
+      const img=a.imageData?`<div class="pdf-img"><img src="${a.imageData}"></div>`:"";
+      return `<div class="pdf-li"><b>+ ${esc(a.name)}</b>${a.type?` <span class="li-loc">(${esc(a.type)})</span>`:""}${a.projectRef?`<div class="li-loc">Onde: ${esc(a.projectRef)}</div>`:""}${a.description?`<div class="pdf-li-sub">${esc(a.description)}</div>`:""}${itsHtml}${img}</div>`;
+    }).join("");
+    todoBlocks.push(todo("area","+ Áreas que faltaram na EAP ("+A.missingAreas.length+")","Áreas inteiras existem no projeto mas não na EAP. Incluir todas, com os itens.",rows));
+  }
+  if(A.reviewItems.length){
+    const rows=A.reviewItems.map(({item,area,disc,sub})=>`<div class="pdf-li"><b>"${esc(item.correctedName||item.name)}"</b><div class="li-loc">${esc(area.name)} / ${esc(disc.name)} / ${esc(sub.name)}</div>${item.note?`<div class="pdf-li-sub">${esc(item.note)}</div>`:""}</div>`).join("");
+    todoBlocks.push(todo("rev","? Dúvidas em aberto ("+A.reviewItems.length+")","Pontos que precisam de resposta para fechar a conferência.",rows));
+  }
+
+  // inventory
+  const invHtml=p.areas.map(a=>{
+    const its=aItems(a); if(!its.length) return "";
+    const rows=its.map(({item,disc,sub})=>{
+      const n2=esc(item.correctedName||item.name), tag=SC[item.status]?SC[item.status].short:item.status;
+      const mk={match:"✓",eap_only:"↑",project_only:"↓",review:"?",out_of_scope:"⊘",na:"—",pending:"○"}[item.status]||"○";
+      if(item.splitChildren&&item.splitChildren.length)
+        return `<div class="pdf-inv-row"><div class="pdf-inv-dot split">✂</div><div class="pdf-inv-name">${n2} <span class="inv-tag">— dividido</span></div></div>`;
+      return `<div class="pdf-inv-row"><div class="pdf-inv-dot ${item.status}">${mk}</div><div class="pdf-inv-name">${n2} <span class="inv-tag">${esc(tag)} · ${esc(disc.name)}/${esc(sub.name)}${item.ref?" · "+esc(item.ref):""}</span></div></div>`;
+    }).join("");
+    return `<div class="pdf-inv-area"><div class="pdf-inv-h"><span>${esc(a.name)}</span>${a.origin==="project"?`<span class="inv-new">FALTOU NA EAP</span>`:""}</div>${rows}</div>`;
+  }).join("");
+
+  // revisions
+  const revHtml=(p.revisions||[]).map(r=>`<div class="pdf-li"><b>${esc(r.label)}</b>${r.label===p.revision?' <span class="li-to">← atual</span>':""}${r.date?` <span class="li-loc">${esc(r.date)}</span>`:""}${r.notes?`<div class="pdf-li-sub">${esc(r.notes)}</div>`:""}</div>`).join("");
+  const guideHtml=guidanceList(A).map(g=>`<div class="pdf-guide-li">${esc(g)}</div>`).join("");
+  const notesAreas=p.areas.filter(a=>a.notes&&a.notes.trim());
+  const notesHtml=notesAreas.length?notesAreas.map(a=>`<div class="pdf-li"><b>${esc(a.name)}</b><div class="pdf-li-sub">${esc(a.notes)}</div></div>`).join(""):"";
+
+  return `<div class="pdfdoc">
+    <div class="pdf-cover">
+      <div class="pdf-cover-eye">Biasi Engenharia · Manual de Mudanças</div>
+      <h1>Conferência EAP × Projeto</h1>
+      <div class="pc-proj">${esc(p.name)}${p.subtitle?" — "+esc(p.subtitle):""}</div>
+      <div class="pdf-cover-grid">
+        <div class="pcg-item"><b>Cliente</b>${esc(p.client||"—")}</div>
+        <div class="pcg-item"><b>Local</b>${esc(p.city||"—")}</div>
+        <div class="pcg-item"><b>Revisão conferida</b>${esc(p.revision||"R0")}</div>
+        <div class="pcg-item"><b>EAP recebida</b>${esc(p.receivedAt||"—")}</div>
+        <div class="pcg-item"><b>Data do relatório</b>${date}</div>
+        ${reviewer?`<div class="pcg-item"><b>Revisado por</b>${esc(reviewer)}</div>`:""}
+        ${to?`<div class="pcg-item"><b>Para</b>${esc(to)}</div>`:""}
+      </div>
+    </div>
+    <div class="pdf-verdict ${A.verdict.k}">${A.verdict.k==="ok"?"✓":A.verdict.k==="warn"?"⚠":"⏳"} ${esc(A.verdict.t)}</div>
+    <div class="pdf-body">
+      ${sec("Resumo executivo",`<div class="pdf-stats">
+        ${stat("g",c.match,"Confirmados<br>"+pct(c.match)+"% do total")}
+        ${stat("a",c.eap_only,"Só na EAP")}
+        ${stat("r",c.project_only,"Só no projeto")}
+        ${stat("o",c.out_of_scope,"Fora do escopo")}
+        ${stat("b",c.review,"Dúvidas")}
+      </div><div class="pdf-stats">
+        ${stat("b",c.total,"Total de itens")}
+        ${stat("b",c.na,"N/A")}
+        ${stat("a",c.pending,"Não conferidos")}
+        ${stat("b",c.split,"Itens divididos")}
+        ${stat("g",c.progress+"%","Progresso")}
+      </div>`)}
+      ${todoBlocks.length?sec("Ajustes necessários na próxima EAP",todoBlocks.join("")):""}
+      ${sec("Inventário completo",invHtml||'<div class="pdf-li">Nenhum item.</div>')}
+      ${notesHtml?sec("Observações por área",notesHtml):""}
+      ${revHtml?sec("Histórico de revisões",revHtml):""}
+      ${sec("Orientações — o que não repetir",`<div class="pdf-guide">${guideHtml}</div>`)}
+    </div>
+    <div class="pdf-foot"><span><b>EAPCheck</b> · Biasi Engenharia</span><span>${esc(p.name)} · ${esc(p.revision||"R0")} · ${date}</span></div>
+  </div>`;
+}
+
+/* ── REPORT UI ──────────────────────────────────────────────────── */
 function openReport(){
-  const modal=$("reportModal"); modal.classList.remove("hidden");
+  $("reportModal").classList.remove("hidden");
   $("rReviewer").value=ST.proj.reviewer||"";
   $("rTo").value=ST.proj.eapAuthor||"";
+  ST.reportTab="doc"; switchReportTab("doc");
   refreshReport();
   setTimeout(()=>$("rReviewer").focus(),20);
   const upd=()=>refreshReport();
-  $("rReviewer").addEventListener("input",upd);
-  $("rTo").addEventListener("input",upd);
+  $("rReviewer").oninput=upd; $("rTo").oninput=upd;
 }
-
+function switchReportTab(tab){
+  ST.reportTab=tab;
+  document.querySelectorAll("[data-rtab]").forEach(b=>b.classList.toggle("active",b.dataset.rtab===tab));
+  $("rDocScroll").classList.toggle("hidden",tab!=="doc");
+  $("rTa").classList.toggle("hidden",tab!=="txt");
+  $("rCopy").classList.toggle("hidden",tab!=="txt");
+  $("rPdf").classList.toggle("hidden",tab!=="doc");
+}
 function refreshReport(){
-  const c=projCnt();
-  const done=c.pending===0;
+  const c=projCnt(), done=c.pending===0;
   const prog=$("rProg"); if(prog){ prog.textContent=c.progress+"% conferido"; prog.classList.toggle("done",done); }
   const warn=$("rWarn");
-  if(!done&&warn){
-    warn.classList.remove("hidden");
-    warn.innerHTML=`<b>⚠ Atenção:</b> ${c.pending} ite${c.pending===1?"m":"ns"} ainda não conferido${c.pending===1?"":"s"}. O relatório pode estar incompleto.`;
-  } else { warn?.classList.add("hidden"); }
-  const ta=$("rTa"); if(ta) ta.value=buildReport();
+  if(!done&&warn){ warn.classList.remove("hidden"); warn.innerHTML=`<b>⚠ Atenção:</b> ${c.pending} ite${c.pending===1?"m":"ns"} ainda não conferido${c.pending===1?"":"s"}. O relatório pode estar incompleto.`; }
+  else warn?.classList.add("hidden");
+  $("rTa").value=buildReport();
+  const doc=buildPdfDoc();
+  $("rDocScroll").innerHTML=doc;
+  $("pdfStage").innerHTML=doc;
 }
-
 async function copyReport(){
   const txt=$("rTa")?.value||buildReport();
   try{ await navigator.clipboard.writeText(txt); }
-  catch{ const t=document.createElement("textarea"); t.value=txt; document.body.appendChild(t); t.select(); document.execCommand("copy"); t.remove(); }
-  toast("Relatório copiado ✓");
+  catch{ const t=document.createElement("textarea");t.value=txt;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove(); }
+  toast("Texto copiado ✓");
+}
+function downloadPdf(){
+  const el=$("pdfStage").firstElementChild;
+  if(!el){ toast("Nada para exportar."); return; }
+  if(typeof html2pdf==="undefined"){ toast("Biblioteca PDF não carregou — usando impressão."); printFallback(); return; }
+  toast("Gerando PDF…");
+  const fname=`EAPCheck-${slug(ST.proj.name)}-${slug(ST.proj.revision||"R0")}.pdf`;
+  html2pdf().set({
+    margin:0, filename:fname,
+    image:{type:"jpeg",quality:0.96},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",windowWidth:794},
+    jsPDF:{unit:"mm",format:"a4",orientation:"portrait"},
+    pagebreak:{mode:["css","legacy"]}
+  }).from(el).save().then(()=>toast("PDF baixado ✓")).catch(e=>{console.error(e);toast("Erro no PDF — tentando impressão.");printFallback();});
+}
+function printFallback(){
+  const w=window.open("","_blank");
+  const css=document.querySelector("style").textContent;
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Relatório</title><style>${css} body{overflow:auto}#pdfStage{position:static;left:0}</style></head><body><div id="pdfStage">${$("pdfStage").innerHTML}</div></body></html>`);
+  w.document.close(); setTimeout(()=>w.print(),400);
 }
 
-function downloadReport(){
-  const txt=$("rTa")?.value||buildReport();
-  const blob=new Blob([txt],{type:"text/plain;charset=utf-8"});
-  const url=URL.createObjectURL(blob);
-  const a=document.createElement("a"); a.href=url; a.download=`eapcheck-${slug(ST.proj.name)}-rev-${slug(ST.proj.revision||"R0")}-manual.txt`;
-  document.body.appendChild(a); a.click(); a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),500);
-  toast("Manual baixado ✓");
+/* ── MISC ───────────────────────────────────────────────────────── */
+function resetProject(){
+  if(!ST.proj) return;
+  if(!confirm(`Zerar a conferência de "${ST.proj.name}"?\nTodos os status voltam para pendente. Áreas adicionadas, splits e revisões permanecem.`)) return;
+  walk(item=>{ item.status="pending"; });
+  ST.editingId=null; save(); render(); toast("Conferência zerada.");
 }
-
-function resetAll(){
-  if(!confirm("Zerar toda a conferência e voltar tudo para pendente?\n(Áreas adicionadas, splits e revisões também serão perdidos.)")) return;
-  localStorage.removeItem(SK);
-  ST.proj=seed(); ST.selId=ST.proj.areas[0]?.id||null; ST.query=""; ST.filter="all";
-  ST.openExpands={}; ST.openAreaNotes={}; ST.editingId=null; ST.splitTargetId=null; ST.pendingImg=null;
-  render(); toast("Conferência zerada.");
-}
-
 function toast(msg){
   const el=$("toast"); el.textContent=msg; el.classList.add("show");
   clearTimeout(window.__tt); window.__tt=setTimeout(()=>el.classList.remove("show"),2800);
@@ -1860,114 +2192,85 @@ function toast(msg){
 function bind(){
   document.addEventListener("click",e=>{
     const t=e.target;
-    if(t.closest("#themeBtn"))   { toggleTheme(); return; }
-    if(t.closest("#diffBtn"))    { openDiff(); return; }
+
+    /* theme (both views) */
+    if(t.closest("#themeBtn")||t.closest("#homeThemeBtn")){ toggleTheme(); return; }
+
+    /* ---------- HOME ---------- */
+    if(t.closest("#homeImportBtn")){ $("importText").value=""; if($("importFile"))$("importFile").value=""; showModal("importModal"); return; }
+    if(t.closest("#importBtn")){ doImport(); return; }
+    if(t.closest("#newProjCard")){ openProjModal(null); return; }
+
+    const dup=t.closest("[data-dup-proj]"); if(dup){ e.stopPropagation(); duplicateProj(dup.dataset.dupProj); return; }
+    const exp=t.closest("[data-export-proj]"); if(exp){ e.stopPropagation(); exportProj(exp.dataset.exportProj); return; }
+    const del=t.closest("[data-del-proj]"); if(del){ e.stopPropagation(); deleteProj(del.dataset.delProj); return; }
+    const openP=t.closest("[data-open-proj]"); if(openP){ openProject(openP.dataset.openProj); return; }
+
+    const colOpt=t.closest("#pColorPick .color-opt");
+    if(colOpt){ ST.projColor=colOpt.dataset.color; document.querySelectorAll("#pColorPick .color-opt").forEach(o=>o.classList.toggle("sel",o===colOpt)); return; }
+
+    /* ---------- BACK ---------- */
+    if(t.closest("#backBtn")){ goHome(); return; }
+
+    /* ---------- AUDIT TOPBAR ---------- */
+    if(t.closest("#diffBtn")){ openDiff(); return; }
     if(t.closest("#diffClose")||t.closest("#diffBack")){ closeDiff(); return; }
-    if(t.closest("#nextBtn"))    { nextPending(); return; }
+    if(t.closest("#nextBtn")){ nextPending(); return; }
     if(t.closest("#reportBtn")||t.closest("[data-open-report]")){ openReport(); return; }
-    if(t.closest("#resetBtn"))   { resetAll(); return; }
-    if(t.closest("#rCopy"))      { copyReport(); return; }
-    if(t.closest("#rDownload"))  { downloadReport(); return; }
+    if(t.closest("#resetBtn")){ resetProject(); return; }
+    if(t.closest("#rCopy")){ copyReport(); return; }
+    if(t.closest("#rPdf")){ downloadPdf(); return; }
     if(t.closest("#revBtn")||t.closest("#newRevBtn")){ openRevisionModal(); return; }
-    if(t.closest("#revSaveBtn")) { createRevision(); return; }
+    if(t.closest("#revSaveBtn")){ createRevision(); return; }
     if(t.closest("#splitAddBtn")){ splitAddInput(); return; }
     if(t.closest("#splitSaveBtn")){ saveSplit(); return; }
 
-    const setRev=t.closest("[data-set-rev]");
-    if(setRev){ setCurrentRevision(setRev.dataset.setRev); return; }
+    const rtab=t.closest("[data-rtab]"); if(rtab){ switchReportTab(rtab.dataset.rtab); return; }
+    const setRev=t.closest("[data-set-rev]"); if(setRev){ setCurrentRevision(setRev.dataset.setRev); return; }
+    const splitRm=t.closest("[data-split-rm-idx]"); if(splitRm){ splitRemoveInput(parseInt(splitRm.dataset.splitRmIdx,10)); return; }
+    const splitItem=t.closest("[data-split-item]"); if(splitItem){ openSplitModal(splitItem.dataset.splitItem); return; }
 
-    const splitRm=t.closest("[data-split-rm-idx]");
-    if(splitRm){ splitRemoveInput(parseInt(splitRm.dataset.splitRmIdx,10)); return; }
+    const fc=t.closest("[data-filter]"); if(fc){ ST.filter=fc.dataset.filter; render(); return; }
+    const ab=t.closest("[data-area]"); if(ab){ ST.selId=ab.dataset.area; render(); return; }
 
-    const splitItem=t.closest("[data-split-item]");
-    if(splitItem){ openSplitModal(splitItem.dataset.splitItem); return; }
-
-    const fc=t.closest("[data-filter]");
-    if(fc){ ST.filter=fc.dataset.filter; render(); return; }
-
-    const ab=t.closest("[data-area]");
-    if(ab){ ST.selId=ab.dataset.area; render(); return; }
-
-    if(t.closest("[data-add-area]")){
-      $("areaForm").reset();
-      ST.pendingImg=null;
-      renderImgPreview();
-      showModal("areaModal");
-      return;
-    }
-
+    if(t.closest("[data-add-area]")){ $("areaForm").reset(); ST.pendingImg=null; renderImgPreview(); showModal("areaModal"); return; }
     if(t.closest("#aaImgDrop")){ $("aaImg")?.click(); return; }
     if(t.closest("#aaImgRm")){ ST.pendingImg=null; renderImgPreview(); return; }
 
-    const editPR=t.closest("[data-edit-projref]");
-    if(editPR){ editProjRef(editPR.dataset.editProjref); return; }
-
-    const rmImg=t.closest("[data-rm-img]");
-    if(rmImg){ removeAreaImg(rmImg.dataset.rmImg); return; }
+    const editPR=t.closest("[data-edit-projref]"); if(editPR){ editProjRef(editPR.dataset.editProjref); return; }
+    const rmImg=t.closest("[data-rm-img]"); if(rmImg){ removeAreaImg(rmImg.dataset.rmImg); return; }
 
     const addBtn=t.closest("[data-add-item]");
     if(addBtn){
-      ST.modalAreaId=ST.selId;
-      $("itemForm").reset();
-      const disc=addBtn.dataset.addItem;
-      const sub=addBtn.dataset.sub;
+      ST.modalAreaId=ST.selId; $("itemForm").reset();
+      const disc=addBtn.dataset.addItem, sub=addBtn.dataset.sub;
       if(disc&&disc!=="true"&&disc!==""){ const sel=$("iDisc"); if(sel) sel.value=disc; }
       if(sub){ const si=$("iSub"); if(si) si.value=sub; }
       showModal("itemModal"); return;
     }
-
     if(t.closest("[data-mark-ok]")){ markAreaOk(); return; }
 
     const stb=t.closest("[data-st]");
-    if(stb){
-      const f=findItem(stb.dataset.iid);
-      if(f){
-        f.item.status=f.item.status===stb.dataset.st?"pending":stb.dataset.st;
-        save(); render();
-      }
-      return;
-    }
+    if(stb){ const f=findItem(stb.dataset.iid); if(f){ f.item.status=f.item.status===stb.dataset.st?"pending":stb.dataset.st; save(); render(); } return; }
 
-    const rmb=t.closest("[data-rm]");
-    if(rmb){ removeItem(rmb.dataset.rm); return; }
+    const rmb=t.closest("[data-rm]"); if(rmb){ removeItem(rmb.dataset.rm); return; }
+    const jb=t.closest("[data-jump]"); if(jb){ ST.selId=jb.dataset.jump; ST.filter="all"; render(); closeDiff(); return; }
 
-    const jb=t.closest("[data-jump]");
-    if(jb){ ST.selId=jb.dataset.jump; ST.filter="all"; render(); closeDiff(); return; }
-
-    const cb=t.closest("[data-close]");
-    if(cb){ closeModal(cb.dataset.close); return; }
+    const cb=t.closest("[data-close]"); if(cb){ closeModal(cb.dataset.close); return; }
     if(t.classList.contains("layer")){ closeModal(t.id); return; }
 
-    const dt=t.closest("[data-tog-disc]");
-    if(dt){ document.getElementById("dc-"+dt.dataset.togDisc)?.classList.toggle("collapsed"); return; }
-
+    const dt=t.closest("[data-tog-disc]"); if(dt){ document.getElementById("dc-"+dt.dataset.togDisc)?.classList.toggle("collapsed"); return; }
     const et=t.closest("[data-tog-expand]");
-    if(et){
-      const id=et.dataset.togExpand;
-      const el=document.getElementById("ix-"+id);
-      if(el){ const o=el.classList.toggle("open"); if(o) ST.openExpands[id]=true; else delete ST.openExpands[id]; }
-      return;
-    }
-
+    if(et){ const id=et.dataset.togExpand; const el=document.getElementById("ix-"+id); if(el){ const o=el.classList.toggle("open"); if(o) ST.openExpands[id]=true; else delete ST.openExpands[id]; } return; }
     const ant=t.closest("[data-toggle-anotes]");
-    if(ant){
-      const id=ant.dataset.toggleAnotes;
-      const el=document.getElementById("anotes-"+id);
-      if(el){ const o=el.classList.toggle("open"); if(o) ST.openAreaNotes[id]=true; else delete ST.openAreaNotes[id]; }
-      return;
-    }
-
-    const pen=t.closest("[data-edit-name]");
-    if(pen){ startEdit(pen.dataset.editName); return; }
-
-    const sn=t.closest("[data-save-name]");
-    if(sn){ saveEdit(sn.dataset.saveName); return; }
-
-    const cn=t.closest("[data-cancel-name]");
-    if(cn){ cancelEdit(); return; }
+    if(ant){ const id=ant.dataset.toggleAnotes; const el=document.getElementById("anotes-"+id); if(el){ const o=el.classList.toggle("open"); if(o) ST.openAreaNotes[id]=true; else delete ST.openAreaNotes[id]; } return; }
+    const pen=t.closest("[data-edit-name]"); if(pen){ startEdit(pen.dataset.editName); return; }
+    const sn=t.closest("[data-save-name]"); if(sn){ saveEdit(sn.dataset.saveName); return; }
+    const cn=t.closest("[data-cancel-name]"); if(cn){ cancelEdit(); return; }
   });
 
   document.addEventListener("input",e=>{
+    if(e.target.id==="homeSearch"){ ST.homeQuery=e.target.value; renderHome(); const i=$("homeSearch"); i.focus(); i.setSelectionRange(i.value.length,i.value.length); return; }
     const f=e.target.closest("[data-field]");
     if(f){ const found=findItem(f.dataset.iid); if(found){ found.item[f.dataset.field]=f.value; save(); } return; }
     const an=e.target.closest("[data-area-notes]");
@@ -1977,12 +2280,8 @@ function bind(){
   document.addEventListener("change",async e=>{
     if(e.target.id==="aaImg"){
       const file=e.target.files[0]; if(!file) return;
-      try{
-        toast("Comprimindo imagem…");
-        ST.pendingImg=await compressImage(file,900,0.72);
-        renderImgPreview();
-        toast("Imagem pronta ✓");
-      }catch(err){ console.error(err); toast("Erro ao processar imagem."); }
+      try{ toast("Comprimindo imagem…"); ST.pendingImg=await compressImage(file,900,0.72); renderImgPreview(); toast("Imagem pronta ✓"); }
+      catch(err){ console.error(err); toast("Erro ao processar imagem."); }
     }
   });
 
@@ -1992,21 +2291,20 @@ function bind(){
       if(e.key==="Escape"){ e.preventDefault(); cancelEdit(); return; }
     }
     if(e.key==="Escape"){
-      closeModal("itemModal"); closeModal("areaModal");
-      closeModal("reportModal"); closeModal("splitModal");
-      closeModal("revisionModal"); closeDiff();
+      ["itemModal","areaModal","reportModal","splitModal","revisionModal","projModal","importModal"].forEach(closeModal);
+      closeDiff();
     }
   });
 
   $("itemForm").addEventListener("submit",addItem);
   $("areaForm").addEventListener("submit",addArea);
+  $("projForm").addEventListener("submit",saveProj);
 }
 
 /* ── BOOT ───────────────────────────────────────────────────────── */
-load();
-ST.selId=ST.proj.areas[0]?.id||null;
+loadAll();
 bind();
-render();
+goHome();
 </script>
 </body>
 </html>
